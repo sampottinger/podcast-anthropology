@@ -22,7 +22,7 @@ class RadiolabTests(unittest.TestCase):
         with open('radiolab_sample.xml') as f:
             test_source = f.read()
 
-        parsed_items = radiolab.serialize_rss_content(test_source)
+        parsed_items = radiolab.serialize_rss_content(test_source)['episodes']
         self.assertEqual(len(parsed_items), 2)
         
         self.assertEqual(parsed_items[0]['name'], 'Los Frikis')
