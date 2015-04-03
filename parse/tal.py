@@ -24,11 +24,12 @@ import sys
 import bs4
 import requests
 
+import common
+
 START_YEAR = 1995
 
 INDEX_PAGE_TEMPLATE = 'http://www.thisamericanlife.org/radio-archives/%d'
 EPISODE_PAGE_TEMPLATE = 'http://www.thisamericanlife.org%s'
-DEFAULT_HEADERS = {'User-Agent': 'Digital Anthropology Podcast Crawler'}
 
 USAGE_STR = 'USAGE: python tal.py [json location] [all|new]'
 
@@ -50,15 +51,6 @@ MONTH_ABBRV = {
 }
 
 
-# Thanks http://stackoverflow.com/questions/455580
-class DateJSONEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, datetime.date):
-            return obj.isoformat()
-        else:
-            return super(DateJSONEncoder, self).default(obj)
-
-
 def enumerate_index_page_locs(start_year=START_YEAR, this_year=None):
     if not this_year: this_year = datetime.date.today().year
 
@@ -72,7 +64,7 @@ def get_index_pages_raw(start_year=START_YEAR, this_year=None):
     locs = enumerate_index_page_locs(start_year, this_year)
 
     returned_requests = map(
-        lambda x: requests.get(x, headers=DEFAULT_HEADERS),
+        lambda x: requests.get(x, headers=common.DEFAULT_HEADERS),
         locs
     )
 
@@ -142,7 +134,7 @@ def process_all_episodes():
         print 'downloading episodes...'
 
     episodes_raw = map(
-        lambda x: (x, requests.get(x, headers=DEFAULT_HEADERS).text),
+        lambda x: (x, requests.get(x, headers=common.DEFAULT_HEADERS).text),
         episode_locations
     )
 
@@ -166,7 +158,7 @@ def persist_all_episodes(file_location):
     all_episodes = serialize_all_episodes()
     with open(file_location, 'w') as f:
         f.write(
-            DateJSONEncoder().encode(serialize_all_episodes())
+            common.DateJSONEncoder().encode(serialize_all_episodes())
         )
 
 
@@ -186,7 +178,7 @@ def update_episode_serialization(existing_info):
     new_locations = set(episode_locations).difference(old_locations)
 
     new_episodes_raw = map(
-        lambda x: (x, requests.get(x, headers=DEFAULT_HEADERS).text),
+        lambda x: (x, requests.get(x, headers=common.DEFAULT_HEADERS).text),
         new_locations
     )
 
@@ -207,7 +199,7 @@ def update_and_persist_episodes(file_location):
     updated_info = update_episode_serialization(existing_info)
     with open(file_location, 'w') as f:
         f.write(
-            DateJSONEncoder().encode(updated_info)
+            common.DateJSONEncoder().encode(updated_info)
         )
 
 

@@ -5,6 +5,7 @@ import unittest
 import mox
 import requests
 
+import common
 import tal
 
 
@@ -32,13 +33,13 @@ class TALTests(mox.MoxTestBase):
             ['/2013', '/2014', '/2015']
         )
 
-        requests.get('/2013', headers=tal.DEFAULT_HEADERS).AndReturn(
+        requests.get('/2013', headers=common.DEFAULT_HEADERS).AndReturn(
             FakeResponse(200, 't1')
         )
-        requests.get('/2014', headers=tal.DEFAULT_HEADERS).AndReturn(
+        requests.get('/2014', headers=common.DEFAULT_HEADERS).AndReturn(
             FakeResponse(200, 't2')
         )
-        requests.get('/2015', headers=tal.DEFAULT_HEADERS).AndReturn(
+        requests.get('/2015', headers=common.DEFAULT_HEADERS).AndReturn(
             FakeResponse(404, 't3')
         )
 
