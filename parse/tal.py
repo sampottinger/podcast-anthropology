@@ -1,3 +1,22 @@
+"""This American Life podcast history gatherer for Podcast Anthropology.
+
+Logic to download and parse the history of the This American Life podcast as
+part of the Podcast Anthropology research project. This gathers the publication
+date, location (URL), tags, and name of each podcast in the history of "TAL"
+from its first episode in 1995, serializing to a JSON file.
+
+Note that TAL is an external service (c) 1995 - 2015 Chicago Public Media & Ira
+Glass. Use with the utmost love and care. <3
+
+USAGE: python tal.py [json location] [all|new]
+    - json location: The file location where the serialization should be saved.
+    - all|new: Pass "all" to download the entire history. Pass "new" to update
+        the JSON file at json location. This will not download episodes already
+        parsed to be a good net citizen.
+
+@author Sam Pottinger (2015)
+"""
+
 import datetime
 import json
 import requests
