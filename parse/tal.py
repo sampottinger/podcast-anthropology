@@ -147,7 +147,7 @@ def persist_all_episodes(file_location):
     all_episodes = serialize_all_episodes()
     with open(file_location, 'w') as f:
         f.write(
-            DateJSONEncoder().encode(serialize_all_episodes())
+            DateJSONEncoder().encode(all_episodes)
         )
 
 
