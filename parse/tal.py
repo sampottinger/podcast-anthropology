@@ -5,7 +5,7 @@ import sys
 
 import bs4
 
-START_YEAR = 2015
+START_YEAR = 1995
 
 INDEX_PAGE_TEMPLATE = 'http://www.thisamericanlife.org/radio-archives/%d'
 EPISODE_PAGE_TEMPLATE = 'http://www.thisamericanlife.org%s'
@@ -107,17 +107,26 @@ def get_episode_info(loc, content):
 
 
 def process_all_episodes():
+    if DEBUG:
+        print 'downloading index pages...'
+
     index_pages = get_index_pages_raw()
     episode_location_sets = map(
         lambda x: get_episode_locs_from_index(x),
         index_pages
     )
     episode_locations = [loc for locs in episode_location_sets for loc in locs]
-    
+
+    if DEBUG:
+        print 'downloading episodes...'
+
     episodes_raw = map(
         lambda x: (x, requests.get(x, headers=DEFAULT_HEADERS).text),
         episode_locations
     )
+
+    if DEBUG:
+        print 'parsing episodes...'
     
     episode_info = map(
         lambda (loc, text): get_episode_info(loc, text),
