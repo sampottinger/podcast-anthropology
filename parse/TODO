@@ -1,0 +1,24 @@
+* Radiolab
+    - Date: RSS Feed
+    - Duration: RSS Feed (itunes:duration)
+    - Tags: RSS Feed (filter out shorts)
+
+* This American Life
+    - Date: Scrape
+    - Duration: Default to an hour
+    - Tags: Scrape tags
+
+* 99% Invisible
+    - Date: RSS Feed
+    - Duration: Duration
+    - Tags: RSS Feed (Will need to filter out most common)
+
+* The Memory Palace
+    - Date: RSS Feed
+    - Duration: RSS Feed
+    - Tags: Set tags
+
+* Hello Internet
+    - Date: RSS Feed
+    - Duration: RSS Feed Duration
+    - Tags: RSS Feed Description Links
