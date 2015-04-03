@@ -19,10 +19,10 @@ USAGE: python tal.py [json location] [all|new]
 
 import datetime
 import json
-import requests
 import sys
 
 import bs4
+import requests
 
 START_YEAR = 1995
 

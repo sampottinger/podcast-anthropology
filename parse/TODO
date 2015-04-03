@@ -3,11 +3,6 @@
     - Duration: RSS Feed (itunes:duration)
     - Tags: RSS Feed (filter out shorts)
 
-* This American Life
-    - Date: Scrape
-    - Duration: Default to an hour
-    - Tags: Scrape tags
-
 * 99% Invisible
     - Date: RSS Feed
     - Duration: Duration
