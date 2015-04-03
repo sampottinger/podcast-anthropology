@@ -1,22 +1,3 @@
-"""This American Life podcast history gatherer for Podcast Anthropology.
-
-Logic to download and parse the history of the This American Life podcast as
-part of the Podcast Anthropology research project. This gathers the publication
-date, location (URL), tags, and name of each podcast in the history of "TAL"
-from its first episode in 1995, serializing to a JSON file.
-
-Note that TAL is an external service (c) 1995 - 2015 Chicago Public Media & Ira
-Glass. Use with the utmost love and care. <3
-
-USAGE: python tal.py [json location] [all|new]
-    - json location: The file location where the serialization should be saved.
-    - all|new: Pass "all" to download the entire history. Pass "new" to update
-        the JSON file at json location. This will not download episodes already
-        parsed to be a good net citizen.
-
-@author Sam Pottinger (2015)
-"""
-
 import datetime
 import json
 import requests
@@ -70,7 +51,7 @@ def enumerate_index_page_locs(start_year=START_YEAR, this_year=None):
 
 def get_index_pages_raw(start_year=START_YEAR, this_year=None):
     locs = enumerate_index_page_locs(start_year, this_year)
-    
+
     returned_requests = map(
         lambda x: requests.get(x, headers=DEFAULT_HEADERS),
         locs
@@ -108,8 +89,8 @@ def get_episode_info(loc, content):
     soup = bs4.BeautifulSoup(content)
 
     episode_title = soup.find(class_='node-title').contents[0]
-    
-    date_str = soup.find(class_='date').contents[0]
+
+    date_str = soup.find(class_='top-inner').find(class_='date').contents[0]
     episode_date = interpret_date(date_str)
 
     tag_sets = soup.findAll(class_ = 'tags')
@@ -148,12 +129,12 @@ def process_all_episodes():
 
     if DEBUG:
         print 'parsing episodes...'
-    
+
     episode_info = map(
         lambda (loc, text): get_episode_info(loc, text),
         episodes_raw
     )
-    
+
     return episode_info
 
 
@@ -166,7 +147,7 @@ def persist_all_episodes(file_location):
     all_episodes = serialize_all_episodes()
     with open(file_location, 'w') as f:
         f.write(
-            DateJSONEncoder().encode(all_episodes)
+            DateJSONEncoder().encode(serialize_all_episodes())
         )
 
 
