@@ -115,7 +115,9 @@ def process_all_episodes():
         lambda x: get_episode_locs_from_index(x),
         index_pages
     )
-    episode_locations = [loc for locs in episode_location_sets for loc in locs]
+    episode_locations = set(
+        [loc for locs in episode_location_sets for loc in locs]
+    )
 
     if DEBUG:
         print 'downloading episodes...'
