@@ -77,9 +77,6 @@ def main():
         locations.extend(parse_index_page(contents))
         next_page = get_next_page(contents)
 
-    print len(locations)
-    locations = locations[:2]
-
     page_contents = map(
         lambda x: (x, requests.get(x, headers=common.DEFAULT_HEADERS).text),
         locations
