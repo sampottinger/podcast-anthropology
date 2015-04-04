@@ -35,21 +35,6 @@ USAGE_STR = 'USAGE: python tal.py [json location] [all|new]'
 
 DEBUG = True
 
-MONTH_ABBRV = {
-    'Jan': 1,
-    'Feb': 2,
-    'Mar': 3,
-    'Apr': 4,
-    'May': 5,
-    'Jun': 6,
-    'Jul': 7,
-    'Aug': 8,
-    'Sep': 9,
-    'Oct': 10,
-    'Nov': 11,
-    'Dec': 12
-}
-
 
 def enumerate_index_page_locs(start_year=START_YEAR, this_year=None):
     if not this_year: this_year = datetime.date.today().year
@@ -90,7 +75,7 @@ def get_episode_locs_from_index(content):
 
 def interpret_date(content):
     components = content.replace(',', '').split(' ')
-    month = MONTH_ABBRV[components[0]]
+    month = common.MONTH_ABBRV[components[0]]
     day = int(components[1])
     year = int(components[2])
     return datetime.date(year, month, day)

@@ -22,18 +22,6 @@ def interpret_pub_date(date_str):
     return datetime.date(components[0], components[1], components[2])
 
 
-def interpret_duration(duration_str):
-    components = duration_str.split(':')
-    seconds = 0
-    
-    num_components = len(components)
-    for i in range(0, num_components):
-        component = components[i]
-        seconds += int(component) * pow(60, (num_components - i - 1))
-
-    return seconds
-
-
 def process_item(item_soup):
     title = item_soup.find('title').contents[0].strip()
     loc = item_soup.find('guid').contents[0]
@@ -51,7 +39,7 @@ def process_item(item_soup):
         duration = 0
     else:
         duration_str = duration_soup.contents[0]
-        duration = interpret_duration(duration_str)
+        duration = common.interpret_duration(duration_str)
 
     return {
         'name': title,
