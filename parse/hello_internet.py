@@ -11,6 +11,7 @@ import common
 STEMMER = nltk.stem.snowball.SnowballStemmer('english')
 RSS_URL = 'http://feeds.podtrac.com/m2lTaLRx8AWb'
 TAG_TYPES = ['NN', 'NNP', 'NNS', 'NNPS']
+TAG_COUNT_THRESHOLD = 1
 DEFAULT_CHUNK_PATTERN = """
   NP:
       {<JJ>*<DT|PP\$>?(<NN>|<NNP>|<NNS>|<NNPS>)+}
@@ -151,7 +152,10 @@ def consolidate_tags(items, stem_mapping):
             counts[tag] = counts[tag] + 1
 
     for item in items:
-        tag_stems = filter(lambda x: counts[x] > 1, item['orig_tags'])
+        tag_stems = filter(
+            lambda x: counts[x] > TAG_COUNT_THRESHOLD,
+            item['orig_tags']
+        )
         item['tags'] = map(lambda x: stem_mapping[x], tag_stems)
 
 
