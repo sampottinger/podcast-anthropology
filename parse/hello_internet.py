@@ -1,3 +1,4 @@
+import collections
 import sys
 
 import bs4
@@ -7,20 +8,41 @@ import requests
 import common
 
 
+STEMMER = nltk.stem.snowball.SnowballStemmer('english')
 RSS_URL = 'http://feeds.podtrac.com/m2lTaLRx8AWb'
 TAG_TYPES = ['NN', 'NNP', 'NNS', 'NNPS']
-DEFAULT_CHUNK_PATTERN = 'NP: {<CD>?<DT>?(<JJ>|<NN>|<NNP>)*<POS>?(<NN>+|<NNS>|<NNP>)}'
+DEFAULT_CHUNK_PATTERN = """
+  NP:
+      {<JJ>*<DT|PP\$>?(<NN>|<NNP>|<NNS>|<NNPS>)+}
+      {(<NN>|<NNP>|<NNS>|<NNPS>)+}
+"""
 DEFAULT_CHUNKER =  nltk.RegexpParser(DEFAULT_CHUNK_PATTERN) 
 FILTERED_PHRASES = [
     'bit grumpy',
     'nonetheless',
     'grey',
     'cgp grey',
-    'brady'
+    'brady',
+    'h.i.',
+    'discuss',
+    'hello internet',
+    'people',
+    'ions',
+    'ion',
+    'talk',
+    'things',
+    'words',
+    'word',
+    'bit',
+    'a box',
+    'h.i',
+    'import',
+    'box grey',
+    'bit',
+    'thing',
+    'this episode'
 ]
-MAPPED_PHRASES = {
-    'crash corner': 'plane crash corner'
-}
+PHRASE_REPLACEMENTS = {'the star wars': 'star wars'}
 USAGE_STR = 'python hello_internet.py [out json file]'
 
 
@@ -59,39 +81,48 @@ def get_noun_phrases(description_content):
     return noun_phrases
 
 
-def get_item_tags(item_soup):
-    description_content = get_description_content(item_soup)
+def should_filter(target, stem_mapping):
+    filtered = target in FILTERED_PHRASES
+    filtered = filtered or stem_mapping[target] in FILTERED_PHRASES
+    return filtered
+
+
+def get_item_tags(title, item_soup, stem_mapping):
+    description_content = title + '. ' + get_description_content(item_soup)
+    description_content = description_content.lower()
     
     description_content = description_content.replace('(', '')
     description_content = description_content.replace(')', '')
     description_content = description_content.replace('-', '')
     description_content = description_content.replace('/', '')
+
+    for replacement in PHRASE_REPLACEMENTS:
+        description_content = description_content.replace(
+            replacement,
+            PHRASE_REPLACEMENTS[replacement]
+        )
     
     noun_phrases = get_noun_phrases(description_content)
     noun_phrases_flat = []
     for tree in noun_phrases:
-        components = map(lambda x: x[0], tree)
-        noun_phrases_flat.append((' '.join(components)).lower())
+        components = map(lambda x: x[0].encode('ascii', 'ignore'), tree)
+        stemmed_components = map(lambda x: STEMMER.stem(x), components)
+        
+        stemmed_phrase = ' '.join(stemmed_components)
+        orig_phrase = ' '.join(components)
+        
+        stem_mapping[stemmed_phrase] = orig_phrase
+        noun_phrases_flat.append(' '.join(stemmed_components))
 
-    filtered_noun_phrases = filter(
-        lambda x: not x in FILTERED_PHRASES,
+    noun_phrases_flat = filter(
+        lambda x: not should_filter(x, stem_mapping),
         noun_phrases_flat
     )
 
-    mapped_noun_phrases = map(
-        lambda x: MAPPED_PHRASES[x] if x in MAPPED_PHRASES else x,
-        filtered_noun_phrases
-    )
-
-    ascii_noun_phrases = map(
-        lambda x: x.encode('ascii', 'ignore'),
-        mapped_noun_phrases
-    )
-
-    return sorted(set(ascii_noun_phrases))
+    return sorted(set(noun_phrases_flat))
 
 
-def parse_item(item_soup):
+def parse_item(item_soup, stem_mapping):
     item_date = common.interpret_822_date(item_soup.find('pubdate').contents[0])
     
     duration_soup = item_soup.find('itunes:duration')
@@ -109,8 +140,19 @@ def parse_item(item_soup):
         'date': item_date,
         'loc': '',
         'duration': duration,
-        'tags': get_item_tags(item_soup)
-    }
+        'orig_tags': get_item_tags(title, item_soup, stem_mapping)
+    }    
+
+
+def consolidate_tags(items, stem_mapping):
+    counts = collections.defaultdict(lambda: 0)
+    for item in items:
+        for tag in item['orig_tags']:
+            counts[tag] = counts[tag] + 1
+
+    for item in items:
+        tag_stems = filter(lambda x: counts[x] > 1, item['orig_tags'])
+        item['tags'] = map(lambda x: stem_mapping[x], tag_stems)
 
 
 def parse_new_items(soup, existing_content_by_name):
@@ -128,10 +170,16 @@ def parse_new_items(soup, existing_content_by_name):
 
     new_item_soups = map(lambda x: x[1], new_item_soups_with_name)
 
-    return map(
-        lambda x: parse_item(x),
+    stem_mapping = {}
+
+    new_items = map(
+        lambda x: parse_item(x, stem_mapping),
         new_item_soups
     )
+
+    consolidate_tags(new_items, stem_mapping)
+
+    return new_items
 
 
 def main():
@@ -139,9 +187,7 @@ def main():
         print USAGE_STR
         return
 
-    #content = get_rss_content()
-    with open('hello_internet_snap') as f:
-        content = f.read()
+    content = get_rss_content()
     soup = bs4.BeautifulSoup(content)
     items = parse_new_items(soup, {})
 
