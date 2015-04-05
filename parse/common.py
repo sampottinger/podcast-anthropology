@@ -1,5 +1,6 @@
 import datetime
 import json
+import rfc822
 
 
 DEFAULT_HEADERS = {'User-Agent': 'Digital Anthropology Podcast Crawler'}
@@ -18,6 +19,11 @@ MONTH_ABBRV = {
     'Nov': 11,
     'Dec': 12
 }
+
+
+def interpret_822_date(date_str):
+    components = rfc822.parsedate_tz(date_str)
+    return datetime.date(components[0], components[1], components[2])
 
 
 def interpret_duration(duration_str):

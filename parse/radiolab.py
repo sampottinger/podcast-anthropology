@@ -1,5 +1,3 @@
-import datetime
-import rfc822
 import sys
 
 import common
@@ -17,17 +15,12 @@ def get_rss_raw():
     return requests.get(RSS_LOC, headers=DEFAULT_HEADERS).text
 
 
-def interpret_pub_date(date_str):
-    components = rfc822.parsedate_tz(date_str)
-    return datetime.date(components[0], components[1], components[2])
-
-
 def process_item(item_soup):
     title = item_soup.find('title').contents[0].strip()
     loc = item_soup.find('guid').contents[0]
 
     pub_date_raw = item_soup.find('pubdate').contents[0]
-    pub_date = interpret_pub_date(pub_date_raw)
+    pub_date = common.interpret_822_date(pub_date_raw)
 
     tags = map(
         lambda x: x.contents[0],
