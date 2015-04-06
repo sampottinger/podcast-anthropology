@@ -2,22 +2,12 @@ import collections
 import sys
 
 import bs4
-import nltk
 import requests
 
 import common
 
 
-STEMMER = nltk.stem.snowball.SnowballStemmer('english')
-RSS_URL = 'http://feeds.podtrac.com/m2lTaLRx8AWb'
-TAG_TYPES = ['NN', 'NNP', 'NNS', 'NNPS']
-TAG_COUNT_THRESHOLD = 1
-DEFAULT_CHUNK_PATTERN = """
-  NP:
-      {<JJ>*<DT|PP\$>?(<NN>|<NNP>|<NNS>|<NNPS>)+}
-      {(<NN>|<NNP>|<NNS>|<NNPS>)+}
-"""
-DEFAULT_CHUNKER =  nltk.RegexpParser(DEFAULT_CHUNK_PATTERN) 
+RSS_URL = 'http://feeds.podtrac.com/m2lTaLRx8AWb' 
 FILTERED_PHRASES = [
     'bit grumpy',
     'nonetheless',
@@ -72,55 +62,14 @@ def get_description_content(item_soup):
         return description_soup.getText().strip()
 
 
-def get_noun_phrases(description_content):
-    tokenized_description = nltk.word_tokenize(description_content)
-    tokenized_description = nltk.pos_tag(tokenized_description)
-    result = DEFAULT_CHUNKER.parse(tokenized_description)
-    trees = filter(lambda x: type(x) == nltk.tree.Tree, result)
-    noun_phrases = filter(lambda x: x.label() == 'NP', trees)
-
-    return noun_phrases
-
-
-def should_filter(target, stem_mapping):
-    filtered = target in FILTERED_PHRASES
-    filtered = filtered or stem_mapping[target] in FILTERED_PHRASES
-    return filtered
-
-
 def get_item_tags(title, item_soup, stem_mapping):
     description_content = title + '. ' + get_description_content(item_soup)
-    description_content = description_content.lower()
-    
-    description_content = description_content.replace('(', '')
-    description_content = description_content.replace(')', '')
-    description_content = description_content.replace('-', '')
-    description_content = description_content.replace('/', '')
-
-    for replacement in PHRASE_REPLACEMENTS:
-        description_content = description_content.replace(
-            replacement,
-            PHRASE_REPLACEMENTS[replacement]
-        )
-    
-    noun_phrases = get_noun_phrases(description_content)
-    noun_phrases_flat = []
-    for tree in noun_phrases:
-        components = map(lambda x: x[0].encode('ascii', 'ignore'), tree)
-        stemmed_components = map(lambda x: STEMMER.stem(x), components)
-        
-        stemmed_phrase = ' '.join(stemmed_components)
-        orig_phrase = ' '.join(components)
-        
-        stem_mapping[stemmed_phrase] = orig_phrase
-        noun_phrases_flat.append(' '.join(stemmed_components))
-
-    noun_phrases_flat = filter(
-        lambda x: not should_filter(x, stem_mapping),
-        noun_phrases_flat
+    return common.get_tags_by_nlp(
+        description_content,
+        PHRASE_REPLACEMENTS,
+        stem_mapping,
+        FILTERED_PHRASES
     )
-
-    return sorted(set(noun_phrases_flat))
 
 
 def parse_item(item_soup, stem_mapping):
@@ -142,21 +91,7 @@ def parse_item(item_soup, stem_mapping):
         'loc': '',
         'duration': duration,
         'orig_tags': get_item_tags(title, item_soup, stem_mapping)
-    }    
-
-
-def consolidate_tags(items, stem_mapping):
-    counts = collections.defaultdict(lambda: 0)
-    for item in items:
-        for tag in item['orig_tags']:
-            counts[tag] = counts[tag] + 1
-
-    for item in items:
-        tag_stems = filter(
-            lambda x: counts[x] > TAG_COUNT_THRESHOLD,
-            item['orig_tags']
-        )
-        item['tags'] = map(lambda x: stem_mapping[x], tag_stems)
+    }
 
 
 def parse_new_items(soup, existing_content_by_name):
@@ -181,7 +116,7 @@ def parse_new_items(soup, existing_content_by_name):
         new_item_soups
     )
 
-    consolidate_tags(new_items, stem_mapping)
+    common.consolidate_tags(new_items, stem_mapping, 1)
 
     return new_items
 
