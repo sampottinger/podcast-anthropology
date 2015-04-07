@@ -6,7 +6,10 @@ DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd MMM, yyyy");
 
 
 String getDurText (int seconds) {
-    return "";
+    int hours = seconds / 3600;
+    seconds = seconds % 3600;
+    int minutes = seconds / 60;
+    return str(hours) + ":" + nf(minutes, 2);
 }
 
 

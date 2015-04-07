@@ -10,7 +10,9 @@ void runIntroFirstPage () {
     numLines += getTextLines("intro_head_1").length;
     
     activeScollableEntities = new ArrayList<GraphicEntity>();
-    activeScollableEntities.add(new DescriptionMessage("intro_head_1", "intro_body_1"));
+    activeScollableEntities.add(
+        new DescriptionMessage("intro_head_1", "intro_body_1")
+    );
     
     activeScollableEntities.add(new Button(
         800,
@@ -44,7 +46,9 @@ void runIntroSecondPage () {
     numLines += getTextLines("intro_head_2").length;
     
     activeScollableEntities = new ArrayList<GraphicEntity>();
-    activeScollableEntities.add(new DescriptionMessage("intro_head_2", "intro_body_2"));
+    activeScollableEntities.add(
+        new DescriptionMessage("intro_head_2", "intro_body_2")
+    );
 
     PVector center = new PVector(500, INTRO_TEXT_Y + 18 * (numLines + 2));
     introSampleEpisode.goTo(center);
@@ -92,7 +96,9 @@ PVector placeEpisodeCluster (String showName, PVector centerPos) {
 
 void runIntroThirdPage () {
     activeScollableEntities = new ArrayList<GraphicEntity>();
-    activeScollableEntities.add(new DescriptionMessage("intro_head_3", "intro_body_3"));
+    activeScollableEntities.add(
+        new DescriptionMessage("intro_head_3", "intro_body_3")
+    );
 
     PVector center = new PVector(70, 220);
 
@@ -139,7 +145,9 @@ void runIntroFourthPage () {
     ShowBubble showBubble;
 
     activeScollableEntities = new ArrayList<GraphicEntity>();
-    activeScollableEntities.add(new DescriptionMessage("intro_head_4", "intro_body_4"));
+    activeScollableEntities.add(
+        new DescriptionMessage("intro_head_4", "intro_body_4")
+    );
 
     // Place this american life
     for (EpisodeGraphic episode : graphicEpisodes.get("This American Life")) {
@@ -150,7 +158,7 @@ void runIntroFourthPage () {
     // Place the rest
     PVector lastEnd = talEnd;
     for (int i=1; i<ORDERED_SHOW_NAMES.length; i++) {
-        PVector center = new PVector(70, lastEnd.y + 50);
+        PVector center = new PVector(70, lastEnd.y + INTER_SUMMARY_GRP_PAD);
 
         String showName = ORDERED_SHOW_NAMES[i];
         lastEnd = placeEpisodeCluster(showName, center);
@@ -190,7 +198,7 @@ void runIntroFinalPage () {
 
     PVector lastEnd = new PVector(0, START_Y_MAIN - 50);
     for (int i=0; i<ORDERED_SHOW_NAMES.length; i++) {
-        PVector center = new PVector(70, lastEnd.y + 50);
+        PVector center = new PVector(70, lastEnd.y + INTER_SUMMARY_GRP_PAD);
 
         String showName = ORDERED_SHOW_NAMES[i];
         lastEnd = placeEpisodeCluster(showName, center);

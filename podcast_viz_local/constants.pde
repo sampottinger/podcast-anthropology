@@ -16,6 +16,8 @@ final int EPISODE_HOVER_DISTANCE = 10;
 
 HashMap<String, ColorSet> SHOW_COLORS = new HashMap<String, ColorSet>();
 
+PFont FONT_10;
+
 PFont FONT_12;
 
 PFont FONT_14;
@@ -23,6 +25,8 @@ PFont FONT_14;
 final LinearScale HALO_SCALE = new LinearScale(0, 3600, 0, 300);
 
 final int HEIGHT = 650;
+
+final int INTER_SUMMARY_GRP_PAD = 60;
 
 final int INTRO_ROW_SIZE = 43;
 

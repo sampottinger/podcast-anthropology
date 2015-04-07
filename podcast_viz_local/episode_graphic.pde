@@ -27,6 +27,12 @@ class ShowBubble implements GraphicEntity {
         imageMode(CENTER);
         image(bubbleImage, pos.x, pos.y);
 
+        textFont(FONT_10);
+        fill(MID_GREY);
+
+        text(str(show.getEpisodes()) + " eps.", pos.x - 20, pos.y + 35);
+        text(getDurText(show.getDur() / show.getEpisodes()) + " avg", pos.x - 20, pos.y + 47);
+
         popStyle();
         popMatrix();
     }

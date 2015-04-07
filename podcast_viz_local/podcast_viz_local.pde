@@ -10,6 +10,7 @@ float adjustedMouseY;
 
 void setup () {
     TEXT_CONSTANTS = loadJSONObject("text.json");
+    FONT_10 = loadFont("LeagueSpartan-Bold-10.vlw");
     FONT_12 = loadFont("LeagueSpartan-Bold-12.vlw");
     FONT_14 = loadFont("LeagueSpartan-Bold-14.vlw");
 
