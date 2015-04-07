@@ -54,6 +54,16 @@ final String[] ORDERED_SHOW_NAMES = {
     "Hello Internet"
 };
 
+public enum NavSection {
+    INTRO,
+    SHOW_TIMELINE,
+    SHOW_OVERVIEW,
+    TOPIC_TIMELINE,
+    TOPIC_EXPLORER
+};
+
+HashMap NAV_QUESTIONS = new HashMap<NavSection, String>();
+
 final int SCROLL_WIDTH = 10;
 
 final int START_Y_MAIN = 70;

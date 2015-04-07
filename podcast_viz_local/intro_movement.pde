@@ -3,6 +3,7 @@ PVector talEnd;
 ShowBubble talBubble;
 boolean introDirty = true;
 int introPage = 1;
+NavSection selectedSection = NavSection.INTRO;
 
 
 void runIntroFirstPage () {
@@ -195,6 +196,7 @@ void runIntroFourthPage () {
 
 void runIntroFinalPage () {
     activeScollableEntities = new ArrayList<GraphicEntity>();
+    navActive = true;
 
     PVector lastEnd = new PVector(0, START_Y_MAIN - 50);
     for (int i=0; i<ORDERED_SHOW_NAMES.length; i++) {
