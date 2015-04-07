@@ -9,10 +9,10 @@ void runIntroFirstPage () {
     int numLines = getTextLines("intro_body_1").length;
     numLines += getTextLines("intro_head_1").length;
     
-    activeEntities = new ArrayList<GraphicEntity>();
-    activeEntities.add(new DescriptionMessage("intro_head_1", "intro_body_1"));
+    activeScollableEntities = new ArrayList<GraphicEntity>();
+    activeScollableEntities.add(new DescriptionMessage("intro_head_1", "intro_body_1"));
     
-    activeEntities.add(new Button(
+    activeScollableEntities.add(new Button(
         800,
         INTRO_TEXT_Y + 18 * numLines,
         100,
@@ -33,7 +33,7 @@ void runIntroFirstPage () {
         100,
         5000
     ));
-    activeEntities.add(introSampleEpisode);
+    activeScollableEntities.add(introSampleEpisode);
 }
 
 
@@ -43,8 +43,8 @@ void runIntroSecondPage () {
     int numLines = getTextLines("intro_body_2").length;
     numLines += getTextLines("intro_head_2").length;
     
-    activeEntities = new ArrayList<GraphicEntity>();
-    activeEntities.add(new DescriptionMessage("intro_head_2", "intro_body_2"));
+    activeScollableEntities = new ArrayList<GraphicEntity>();
+    activeScollableEntities.add(new DescriptionMessage("intro_head_2", "intro_body_2"));
 
     PVector center = new PVector(500, INTRO_TEXT_Y + 18 * (numLines + 2));
     introSampleEpisode.goTo(center);
@@ -53,9 +53,9 @@ void runIntroSecondPage () {
         5,
         5000
     ));
-    activeEntities.add(introSampleEpisode);
+    activeScollableEntities.add(introSampleEpisode);
 
-    activeEntities.add(new Button(
+    activeScollableEntities.add(new Button(
         800,
         INTRO_TEXT_Y + 18 * (numLines + 4),
         100,
@@ -91,8 +91,8 @@ PVector placeEpisodeCluster (String showName, PVector centerPos) {
 
 
 void runIntroThirdPage () {
-    activeEntities = new ArrayList<GraphicEntity>();
-    activeEntities.add(new DescriptionMessage("intro_head_3", "intro_body_3"));
+    activeScollableEntities = new ArrayList<GraphicEntity>();
+    activeScollableEntities.add(new DescriptionMessage("intro_head_3", "intro_body_3"));
 
     PVector center = new PVector(70, 220);
 
@@ -104,7 +104,7 @@ void runIntroThirdPage () {
     talEnd = placeEpisodeCluster("This American Life", center);
     for (EpisodeGraphic episode : graphicEpisodes.get("This American Life")) {
         episode.setPos(center);
-        activeEntities.add(episode);
+        activeScollableEntities.add(episode);
     }
 
     introSampleEpisode.setPos(oldSamplePos);
@@ -114,12 +114,12 @@ void runIntroThirdPage () {
         new PVector(center.x - 40, center.y + 10),
         curDataset.getShows().get("This American Life")
     );
-    activeEntities.add(talBubble);
+    activeScollableEntities.add(talBubble);
 
     // Add next button
     int numLines = getTextLines("intro_body_3").length;
     numLines += getTextLines("intro_head_3").length;
-    activeEntities.add(new Button(
+    activeScollableEntities.add(new Button(
         800,
         INTRO_TEXT_Y + 18 * numLines,
         100,
@@ -138,14 +138,14 @@ void runIntroThirdPage () {
 void runIntroFourthPage () {
     ShowBubble showBubble;
 
-    activeEntities = new ArrayList<GraphicEntity>();
-    activeEntities.add(new DescriptionMessage("intro_head_4", "intro_body_4"));
+    activeScollableEntities = new ArrayList<GraphicEntity>();
+    activeScollableEntities.add(new DescriptionMessage("intro_head_4", "intro_body_4"));
 
     // Place this american life
     for (EpisodeGraphic episode : graphicEpisodes.get("This American Life")) {
-        activeEntities.add(episode);
+        activeScollableEntities.add(episode);
     }
-    activeEntities.add(talBubble);
+    activeScollableEntities.add(talBubble);
 
     // Place the rest
     PVector lastEnd = talEnd;
@@ -156,20 +156,20 @@ void runIntroFourthPage () {
         lastEnd = placeEpisodeCluster(showName, center);
         for (EpisodeGraphic episode : graphicEpisodes.get(showName)) {
             episode.setPos(center);
-            activeEntities.add(episode);
+            activeScollableEntities.add(episode);
         }
 
         showBubble = new ShowBubble(
             new PVector(center.x - 40, center.y + 10),
             curDataset.getShows().get(showName)
         );
-        activeEntities.add(showBubble);
+        activeScollableEntities.add(showBubble);
     } 
 
     // Add next button
     int numLines = getTextLines("intro_body_4").length;
     numLines += getTextLines("intro_head_4").length;
-    activeEntities.add(new Button(
+    activeScollableEntities.add(new Button(
         800,
         INTRO_TEXT_Y + 18 * numLines,
         100,
@@ -186,7 +186,7 @@ void runIntroFourthPage () {
 
 
 void runIntroFinalPage () {
-    activeEntities = new ArrayList<GraphicEntity>();
+    activeScollableEntities = new ArrayList<GraphicEntity>();
 
     PVector lastEnd = new PVector(0, START_Y_MAIN - 50);
     for (int i=0; i<ORDERED_SHOW_NAMES.length; i++) {
@@ -195,14 +195,14 @@ void runIntroFinalPage () {
         String showName = ORDERED_SHOW_NAMES[i];
         lastEnd = placeEpisodeCluster(showName, center);
         for (EpisodeGraphic episode : graphicEpisodes.get(showName)) {
-            activeEntities.add(episode);
+            activeScollableEntities.add(episode);
         }
 
         ShowBubble showBubble = new ShowBubble(
             new PVector(center.x - 40, center.y + 10),
             curDataset.getShows().get(showName)
         );
-        activeEntities.add(showBubble);
+        activeScollableEntities.add(showBubble);
     }
 
     curScrollSlider = new Slider(
@@ -214,7 +214,7 @@ void runIntroFinalPage () {
         lastEnd.y,
         HEIGHT - DETAILS_AREA_HEIGHT - START_Y_MAIN
     );
-    activeEntities.add(curScrollSlider);
+    activeNonScollableEntities.add(curScrollSlider);
 }
 
 

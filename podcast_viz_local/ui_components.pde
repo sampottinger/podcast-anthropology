@@ -53,10 +53,10 @@ class Button implements GraphicEntity {
 
     void update () {
         boolean isOutside = false;
-        isOutside = isOutside || (mouseX < startX);
-        isOutside = isOutside || (mouseX > startX + buttonWidth);
-        isOutside = isOutside || (mouseY < startY);
-        isOutside = isOutside || (mouseY > startY + buttonHeight);
+        isOutside = isOutside || (adjustedMouseX < startX);
+        isOutside = isOutside || (adjustedMouseX > startX + buttonWidth);
+        isOutside = isOutside || (adjustedMouseY < startY);
+        isOutside = isOutside || (adjustedMouseY > startY + buttonHeight);
         hovering = !isOutside;
     }
 

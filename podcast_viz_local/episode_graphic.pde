@@ -75,7 +75,7 @@ class EpisodeGraphic implements GraphicEntity{
             moveToTargetPos();
         }
 
-        PVector distanceVec = new PVector(mouseX, mouseY);
+        PVector distanceVec = new PVector(adjustedMouseX, adjustedMouseY);
         distanceVec.sub(pos);
         hovering = distanceVec.mag() < EPISODE_HOVER_DISTANCE;
         if (hovering) {
