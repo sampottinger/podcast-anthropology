@@ -29,7 +29,7 @@ def process_item(item_soup):
 
     duration_soup = item_soup.find('itunes:duration')
     if duration_soup == None:
-        duration = 0
+        duration = 1800 if 'shorts' in tags else 3600
     else:
         duration_str = duration_soup.contents[0]
         duration = common.interpret_duration(duration_str)

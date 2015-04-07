@@ -1,0 +1,22 @@
+{
+    "This American Life": {
+        "halo": "551A6093",
+        "hover": "CC1A6093"
+    },
+    "Radiolab": {
+        "halo": "55FB591F",
+        "hover": "CCFB591F"
+    },
+    "99% Invisible": {
+        "halo": "55555555",
+        "hover": "CC555555"
+    },
+    "The Memory Palace": {
+        "halo": "55F0D532",
+        "hover": "CCF0D532"
+    },
+    "Hello Internet": {
+        "halo": "55A0A0A0",
+        "hover": "CCA0A0A0"
+    }
+}

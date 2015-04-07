@@ -179,7 +179,7 @@ def interpret_99pi_date(target):
 
 
 def process_track(target, stem_mapping):
-    name = target['title']
+    name = target['title'].replace('99% Invisible-', '')
     date = interpret_99pi_date(target['created_at'])
     loc = target['permalink']
     duration = target['duration'] / 1000
