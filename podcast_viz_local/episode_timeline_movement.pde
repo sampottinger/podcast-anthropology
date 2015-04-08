@@ -52,7 +52,7 @@ ArrayList<DateAggregationCategory> createYearAggregators () {
 }
 
 
-PVector placeAllEpisodes () {
+PVector placeAllEpisodes (float startY) {
     ArrayList<DateAggregationCategory> aggregators = createYearAggregators();
     
     for (String showName : ORDERED_SHOW_NAMES) {
@@ -73,7 +73,7 @@ PVector placeAllEpisodes () {
             targetX += TIMELINE_GROUP_START_X;
             
             int targetY = aggNum * TIMELINE_GROUP_HEIGHT;
-            targetY += TIMELINE_GROUP_START_Y;
+            targetY += startY;
             targetY += (innerGroupNum % 5) * EPISODE_DIAMETER;
             
             targetLoc = new PVector(targetX, targetY);
@@ -87,13 +87,36 @@ PVector placeAllEpisodes () {
 }
 
 
+PVector createPostingDifferencesDisplay () {
+    int i = 1;
+    for (String showName : ORDERED_SHOW_NAMES) {
+        activeScollableEntities.add(new TinyLegend(
+            TIMELINE_GROUP_START_X,
+            30 * i + START_Y_MAIN,
+            showName,
+            SHOW_COLORS.get(showName).getFill()
+        ));
+        i++;
+    }
+
+    return new PVector(5, 30 * (i + 1) + START_Y_MAIN);
+}
+
+
 void enterEpisodeTimeline () {
+    // Clear old elements
     activeNonScollableEntities = new ArrayList<GraphicEntity>();
     activeScollableEntities = new ArrayList<GraphicEntity>();
     createNavArea();
     System.gc();
 
-    PVector lastEnd = placeAllEpisodes();
+    // Create and display differences
+    PVector lastEnd = createPostingDifferencesDisplay();
+
+    // Place elements
+    lastEnd = placeAllEpisodes(lastEnd.y);
+
+    // Create slider
     curScrollSlider = new Slider(
         WIDTH - SCROLL_WIDTH,
         WIDTH,

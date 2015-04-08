@@ -1,7 +1,8 @@
 ColorSet loadColorSet (JSONObject target) {
     return new ColorSet(
         unhex(target.getString("halo")),
-        unhex(target.getString("hover"))
+        unhex(target.getString("hover")),
+        unhex(target.getString("fill"))
     );
 }
 
@@ -21,10 +22,12 @@ void loadColors () {
 class ColorSet {
     private int halo;
     private int hover;
+    private int fillColor;
 
-    ColorSet(int newHalo, int newHover) {
+    ColorSet(int newHalo, int newHover, int newFillColor) {
         halo = newHalo;
         hover = newHover;
+        fillColor = newFillColor;
     }
 
     int getHalo () {
@@ -33,5 +36,9 @@ class ColorSet {
 
     int getHover () {
         return hover;
+    }
+
+    int getFill () {
+        return fillColor;
     }
 };

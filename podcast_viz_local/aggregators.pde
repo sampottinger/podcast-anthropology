@@ -1,4 +1,34 @@
-import org.joda.time.DateTime; 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
+
+class DifferenceAggregator {
+    private HashMap<Integer, Integer> differences;
+    private DateTime lastDatetime;
+
+    DifferenceAggregator () {
+        lastDatetime = null;
+        differences = new HashMap<Integer, Integer>();
+    }
+
+    void processNewDate (DateTime target) {
+        if (lastDatetime == null) {
+            lastDatetime = target;
+            return;
+        }
+
+        int daysBetween = Days.daysBetween(lastDatetime, target).getDays();
+        if (!differences.containsKey(daysBetween)) {
+            differences.put(daysBetween, 0);
+        }
+
+        differences.put(daysBetween, differences.get(daysBetween) + 1);
+    }
+
+    HashMap<Integer, Integer> getDifferences() {
+        return differences;
+    }
+};
 
 
 class DateAggregationCategory implements Comparable<DateAggregationCategory> {

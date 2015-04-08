@@ -1,22 +1,27 @@
 {
     "This American Life": {
         "halo": "551A6093",
-        "hover": "CC1A6093"
+        "hover": "CC1A6093",
+        "fill": "FF1A6093"
     },
     "Radiolab": {
         "halo": "55FB591F",
-        "hover": "CCFB591F"
+        "hover": "CCFB591F",
+        "fill": "FFFB591F"
     },
     "99% Invisible": {
         "halo": "55333333",
-        "hover": "CC333333"
+        "hover": "CC333333",
+        "fill": "FF333333"
     },
     "The Memory Palace": {
         "halo": "55F0D532",
-        "hover": "CCF0D532"
+        "hover": "CCF0D532",
+        "fill": "FFF0D532"
     },
     "Hello Internet": {
         "halo": "55B0B0B0",
-        "hover": "CCB0B0B0"
+        "hover": "CCB0B0B0",
+        "fill": "FFB0B0B0"
     }
 }
