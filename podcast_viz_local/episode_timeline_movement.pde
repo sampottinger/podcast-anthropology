@@ -53,7 +53,7 @@ ArrayList<DateAggregationCategory> createYearAggregators () {
 
 
 PVector placeAllEpisodes () {
-    ArrayList<DateAggregationCategory> aggregators = createMonthAggregators();
+    ArrayList<DateAggregationCategory> aggregators = createYearAggregators();
     
     for (String showName : ORDERED_SHOW_NAMES) {
         for (EpisodeGraphic episode : graphicEpisodes.get(showName)) {
@@ -68,14 +68,13 @@ PVector placeAllEpisodes () {
     PVector targetLoc = null;
     for (DateAggregationCategory aggregator : aggregators) {
         int innerGroupNum = 0;
-        aggregator.sortEpisodes();
         for (EpisodeGraphic episode : aggregator.getMatchedEpisodes()) {
-            int targetX = EPISODE_DIAMETER * (innerGroupNum / 4);
+            int targetX = EPISODE_DIAMETER * (innerGroupNum / 5);
             targetX += TIMELINE_GROUP_START_X;
             
             int targetY = aggNum * TIMELINE_GROUP_HEIGHT;
             targetY += TIMELINE_GROUP_START_Y;
-            targetY += (innerGroupNum % 4) * EPISODE_DIAMETER;
+            targetY += (innerGroupNum % 5) * EPISODE_DIAMETER;
             
             targetLoc = new PVector(targetX, targetY);
             episode.goTo(targetLoc);

@@ -18,7 +18,7 @@ final PVector DEFAULT_POSITION = new PVector(-100, 300);
 
 final int DETAILS_AREA_HEIGHT = 47;
 
-final int EPISODE_HOVER_DISTANCE = 10;
+final int EPISODE_HOVER_DISTANCE = 12;
 
 final int EPISODE_DIAMETER = EPISODE_HOVER_DISTANCE * 2;
 
@@ -76,7 +76,7 @@ HashMap<NavSection, NavButtonPlacement> NAV_PLACEMENT;
 
 final int SCROLL_WIDTH = 10;
 
-final DateTime START_DATE = new DateTime(1995, 11, 1, 0, 0);
+final DateTime START_DATE = new DateTime(1995, 1, 1, 0, 0);
 
 final int START_Y_MAIN = 40;
 
@@ -86,7 +86,7 @@ final int WIDTH = 950;
 
 JSONObject TEXT_CONSTANTS;
 
-final int TIMELINE_GROUP_HEIGHT = 100;
+final int TIMELINE_GROUP_HEIGHT = EPISODE_DIAMETER * 5 + 40;
 
 final int TIMELINE_GROUP_START_X = 150;
 

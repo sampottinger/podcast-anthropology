@@ -18,7 +18,7 @@ class DateAggregationCategory implements Comparable<DateAggregationCategory> {
         DateTime candidateDate = episode.getPubDate();
 
         boolean matches = candidateDate.compareTo(startDate) >= 0;
-        matches = matches && candidateDate.compareTo(endDate) <= 0;
+        matches = matches && candidateDate.compareTo(endDate) < 0;
         if (matches) {
             episodes.add(episodeGraphic);
         }
