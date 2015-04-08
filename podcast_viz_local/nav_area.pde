@@ -17,58 +17,65 @@ class NavButtonPlacement {
 };
 
 
-void drawNavLabel (NavSection section, boolean selected) {
+NavButton createNavButton (NavSection section, boolean selected,
+    ButtonListener listener) {
+
+    int startX = NAV_PLACEMENT.get(section).getStartX();
     String targetText = NAV_QUESTIONS.get(section);
-    int x = NAV_PLACEMENT.get(section).getStartX();
+    int newWidth = NAV_PLACEMENT.get(section).getWidth();
 
-    String [] lines = split(targetText, "\n");
-
-    fill(selected ? NEAR_BLACK : MID_GREY);
-    if (lines.length == 1) {
-        text(targetText, x, 30);
-    } else {
-        text(lines[0], x, 15);
-        text(lines[1], x, 30);
-    }
-
-    if (selected) {
-        rectMode(CORNER);
-        rect(x, 34, NAV_PLACEMENT.get(section).getWidth(), 5);
-    }
+    NavButton retButton = new NavButton (
+        startX,
+        0,
+        newWidth,
+        targetText,
+        listener
+    );
+    retButton.setSelected(selected);
+    
+    return retButton;
 }
 
 
-void drawNavArea () {
-    pushMatrix();
-    pushStyle();
+void createNavArea () {
+    navBarEntities = new ArrayList<GraphicEntity>();
 
-    fill(WHITE);
-    noStroke();
-    rect(0, 0, WIDTH, START_Y_MAIN - 1);
+    navBarEntities.add(new StaticRect(
+        0,
+        0,
+        WIDTH,
+        START_Y_MAIN - 1,
+        WHITE
+    ));
 
-    textFont(FONT_14);
-
-    drawNavLabel(
+    navBarEntities.add(createNavButton(
         NavSection.INTRO,
-        selectedSection == NavSection.INTRO
-    );
-    drawNavLabel(
+        selectedSection == NavSection.INTRO,
+        null
+    ));
+    navBarEntities.add(createNavButton(
         NavSection.SHOW_TIMELINE,
-        selectedSection == NavSection.SHOW_TIMELINE
-    );
-    drawNavLabel(
+        selectedSection == NavSection.SHOW_TIMELINE,
+        new ButtonListener () {
+            public void onPress () {
+                selectedSection = NavSection.SHOW_TIMELINE;
+                enterEpisodeTimeline();
+            }
+        }
+    ));
+    navBarEntities.add(createNavButton(
         NavSection.SHOW_OVERVIEW,
-        selectedSection == NavSection.SHOW_OVERVIEW
-    );
-    drawNavLabel(
+        selectedSection == NavSection.SHOW_OVERVIEW,
+        null
+    ));
+    navBarEntities.add(createNavButton(
         NavSection.TOPIC_TIMELINE,
-        selectedSection == NavSection.TOPIC_TIMELINE
-    );
-    drawNavLabel(
+        selectedSection == NavSection.TOPIC_TIMELINE,
+        null
+    ));
+    navBarEntities.add(createNavButton(
         NavSection.TOPIC_EXPLORER,
-        selectedSection == NavSection.TOPIC_EXPLORER
-    );
-
-    popMatrix();
-    popStyle();
+        selectedSection == NavSection.TOPIC_EXPLORER,
+        null
+    ));
 }

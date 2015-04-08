@@ -1,6 +1,9 @@
 Slider curScrollSlider = null;
+
 ArrayList<GraphicEntity> activeScollableEntities = new ArrayList<GraphicEntity>();
 ArrayList<GraphicEntity> activeNonScollableEntities = new ArrayList<GraphicEntity>();
+ArrayList<GraphicEntity> navBarEntities = new ArrayList<GraphicEntity>();
+
 boolean preventDefaultCursor = false;
 boolean detailsAreaActive = false;
 boolean navActive = false;
@@ -22,7 +25,7 @@ void setup () {
     introDirty = true;
 
     runIntroFirstPage();
-    frameRate(25);
+    frameRate(30);
 }
 
 
@@ -47,6 +50,10 @@ void draw () {
         entity.update();
     }
 
+    for (GraphicEntity entity : navBarEntities) {
+        entity.update();
+    }
+
     background(BACKGROUND_COLOR);
 
     pushMatrix();
@@ -63,12 +70,12 @@ void draw () {
         entity.draw();
     }
 
-    if (detailsAreaActive) {
-        drawDetailsArea();
+    for (GraphicEntity entity : navBarEntities) {
+        entity.draw();
     }
 
-    if (navActive) {
-        drawNavArea();
+    if (detailsAreaActive) {
+        drawDetailsArea();
     }
 
     if (!preventDefaultCursor) {
@@ -85,6 +92,10 @@ void mousePressed () {
     for (GraphicEntity entity : activeNonScollableEntities) {
         entity.onPress();
     }
+
+    for (GraphicEntity entity : navBarEntities) {
+        entity.onPress();
+    }
 }
 
 
@@ -94,6 +105,10 @@ void mouseReleased () {
     }
 
     for (GraphicEntity entity : activeNonScollableEntities) {
+        entity.onRelease();
+    }
+
+    for (GraphicEntity entity : navBarEntities) {
         entity.onRelease();
     }
 }

@@ -39,7 +39,7 @@ class ShowBubble implements GraphicEntity {
 };
 
 
-class EpisodeGraphic implements GraphicEntity{
+class EpisodeGraphic implements GraphicEntity, Comparable<EpisodeGraphic>{
     private PVector pos;
     private PVector targetPos;
     private IdlingStrategy idlingStrategy;
@@ -151,6 +151,14 @@ class EpisodeGraphic implements GraphicEntity{
     void onPress () { }
 
     void onRelease () { }
+
+    Episode getEpisode () {
+        return episode;
+    }
+
+    int compareTo (EpisodeGraphic other) {
+        return episode.compareTo(other.getEpisode());
+    }
 };
 
 

@@ -194,7 +194,9 @@ void runIntroFourthPage () {
 
 
 void runIntroFinalPage () {
+    activeNonScollableEntities = new ArrayList<GraphicEntity>();
     activeScollableEntities = new ArrayList<GraphicEntity>();
+    System.gc();
     navActive = true;
 
     PVector lastEnd = new PVector(0, START_Y_MAIN - 50);
@@ -224,6 +226,8 @@ void runIntroFinalPage () {
         HEIGHT - DETAILS_AREA_HEIGHT - START_Y_MAIN
     );
     activeNonScollableEntities.add(curScrollSlider);
+
+    createNavArea();
 }
 
 
