@@ -3,7 +3,6 @@ PVector talEnd;
 ShowBubble talBubble;
 boolean introDirty = true;
 int introPage = 1;
-NavSection selectedSection = NavSection.INTRO;
 
 
 void runIntroFirstPage () {
@@ -218,10 +217,10 @@ void runIntroFinalPage () {
     curScrollSlider = new Slider(
         WIDTH - SCROLL_WIDTH,
         WIDTH,
-        DETAILS_AREA_HEIGHT + 1,
-        HEIGHT - DETAILS_AREA_HEIGHT - 1,
+        START_Y_MAIN + 1,
+        HEIGHT - DETAILS_AREA_HEIGHT - 2,
         0,
-        lastEnd.y,
+        lastEnd.y + 50,
         HEIGHT - DETAILS_AREA_HEIGHT - START_Y_MAIN
     );
     activeNonScollableEntities.add(curScrollSlider);

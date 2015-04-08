@@ -4,22 +4,14 @@ ArrayList<GraphicEntity> activeNonScollableEntities = new ArrayList<GraphicEntit
 boolean preventDefaultCursor = false;
 boolean detailsAreaActive = false;
 boolean navActive = false;
+NavSection selectedSection = NavSection.INTRO;
 
 float adjustedMouseX;
 float adjustedMouseY;
 
 
 void setup () {
-    TEXT_CONSTANTS = loadJSONObject("text.json");
-    FONT_10 = loadFont("LeagueSpartan-Bold-10.vlw");
-    FONT_12 = loadFont("LeagueSpartan-Bold-12.vlw");
-    FONT_14 = loadFont("LeagueSpartan-Bold-14.vlw");
-
-    NAV_QUESTIONS.put(NavSection.INTRO, "Intro");
-    NAV_QUESTIONS.put(NavSection.SHOW_TIMELINE, "When and how often\nwere shows released?");
-    NAV_QUESTIONS.put(NavSection.SHOW_OVERVIEW, "What shows have\nbeen released?");
-    NAV_QUESTIONS.put(NavSection.TOPIC_TIMELINE, "When did podcasts\ndiscuss what?");
-    NAV_QUESTIONS.put(NavSection.TOPIC_TIMELINE, "How are podcast\ntopics related?");
+    loadSemiConstants();
 
     loadColors();
     loadDataset();

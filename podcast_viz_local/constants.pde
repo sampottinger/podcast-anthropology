@@ -1,6 +1,6 @@
 final float ACCELERATION = 700;
 
-final int BACKGROUND_COLOR = unhex("FFEBE6E1");
+final int BACKGROUND_COLOR = unhex("FFEEEEEE");
 
 final int BLACK = unhex("FF000000");
 
@@ -26,7 +26,7 @@ final LinearScale HALO_SCALE = new LinearScale(0, 3600, 0, 300);
 
 final int HEIGHT = 650;
 
-final int INTER_SUMMARY_GRP_PAD = 60;
+final int INTER_SUMMARY_GRP_PAD = 70;
 
 final int INTRO_ROW_SIZE = 43;
 
@@ -62,14 +62,72 @@ public enum NavSection {
     TOPIC_EXPLORER
 };
 
-HashMap NAV_QUESTIONS = new HashMap<NavSection, String>();
+HashMap<NavSection, String> NAV_QUESTIONS = new HashMap<NavSection, String>();
+
+HashMap<NavSection, NavButtonPlacement> NAV_PLACEMENT;
 
 final int SCROLL_WIDTH = 10;
 
-final int START_Y_MAIN = 70;
+final int START_Y_MAIN = 40;
 
 final int WHITE = unhex("FFFFFFFF");
 
 final int WIDTH = 950;
 
 JSONObject TEXT_CONSTANTS;
+
+
+void loadSemiConstants () {
+
+    TEXT_CONSTANTS = loadJSONObject("text.json");
+
+    // Load fonts
+    FONT_10 = loadFont("LeagueSpartan-Bold-10.vlw");
+    FONT_12 = loadFont("LeagueSpartan-Bold-12.vlw");
+    FONT_14 = loadFont("LeagueSpartan-Bold-14.vlw");
+
+    // Specify text of nav sections
+    NAV_QUESTIONS.put(
+        NavSection.INTRO,
+        "Intro"
+    );
+    NAV_QUESTIONS.put(
+        NavSection.SHOW_TIMELINE,
+        "When and how often\nwere shows released?"
+    );
+    NAV_QUESTIONS.put(
+        NavSection.SHOW_OVERVIEW,
+        "What shows have\nbeen released?"
+    );
+    NAV_QUESTIONS.put(
+        NavSection.TOPIC_TIMELINE,
+        "When did podcasts\ndiscuss what?"
+    );
+    NAV_QUESTIONS.put(
+        NavSection.TOPIC_EXPLORER,
+        "How are podcast\ntopics related?"
+    );
+
+    // Create section placements
+    NAV_PLACEMENT = new HashMap<NavSection, NavButtonPlacement>();
+    NAV_PLACEMENT.put(
+        NavSection.INTRO,
+        new NavButtonPlacement(20, 40)
+    );
+    NAV_PLACEMENT.put(
+        NavSection.SHOW_TIMELINE,
+        new NavButtonPlacement(120, 180)
+    );
+    NAV_PLACEMENT.put(
+        NavSection.SHOW_OVERVIEW,
+        new NavButtonPlacement(320, 180)
+    );
+    NAV_PLACEMENT.put(
+        NavSection.TOPIC_TIMELINE,
+        new NavButtonPlacement(520, 180)
+    );
+    NAV_PLACEMENT.put(
+        NavSection.TOPIC_EXPLORER,
+        new NavButtonPlacement(720, 180)
+    );
+}

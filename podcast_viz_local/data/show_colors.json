@@ -8,15 +8,15 @@
         "hover": "CCFB591F"
     },
     "99% Invisible": {
-        "halo": "55555555",
-        "hover": "CC555555"
+        "halo": "55333333",
+        "hover": "CC333333"
     },
     "The Memory Palace": {
         "halo": "55F0D532",
         "hover": "CCF0D532"
     },
     "Hello Internet": {
-        "halo": "55A0A0A0",
-        "hover": "CCA0A0A0"
+        "halo": "55B0B0B0",
+        "hover": "CCB0B0B0"
     }
 }

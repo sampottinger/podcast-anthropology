@@ -13,6 +13,14 @@ String getDurText (int seconds) {
 }
 
 
+String getDurTextLong (int seconds) {
+    int hours = seconds / 3600;
+    seconds = seconds % 3600;
+    int minutes = seconds / 60;
+    return str(hours) + ":" + nf(minutes, 2) + ":" + nf(seconds % 60, 2);
+}
+
+
 String getDateText (DateTime dateTime) {
     return dateFormatter.print(dateTime);
 }
@@ -43,7 +51,7 @@ void drawDetailsArea () {
         fill(NEAR_BLACK);
         text(highlightedEpisode.getName(), 10, contentY);
         text(highlightedEpisode.getShow(), 300, contentY);
-        text(getDurText(highlightedEpisode.getDur()), 500, contentY);
+        text(getDurTextLong(highlightedEpisode.getDur()), 500, contentY);
         text(getDateText(highlightedEpisode.getPubDate()), 700, contentY);
     }
 
