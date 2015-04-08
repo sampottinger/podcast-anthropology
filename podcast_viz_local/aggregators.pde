@@ -5,10 +5,12 @@ import org.joda.time.Days;
 class DifferenceAggregator {
     private HashMap<Integer, Integer> differences;
     private DateTime lastDatetime;
+    private int bucketSize;
 
-    DifferenceAggregator () {
+    DifferenceAggregator (int newBucketSize) {
         lastDatetime = null;
         differences = new HashMap<Integer, Integer>();
+        bucketSize = newBucketSize;
     }
 
     void processNewDate (DateTime target) {
@@ -18,15 +20,37 @@ class DifferenceAggregator {
         }
 
         int daysBetween = Days.daysBetween(lastDatetime, target).getDays();
-        if (!differences.containsKey(daysBetween)) {
-            differences.put(daysBetween, 0);
+        int daysBetweenScaled = (daysBetween / bucketSize) * bucketSize;
+        if (!differences.containsKey(daysBetweenScaled)) {
+            differences.put(daysBetweenScaled, 0);
         }
 
-        differences.put(daysBetween, differences.get(daysBetween) + 1);
+        differences.put(
+            daysBetweenScaled,
+            differences.get(daysBetweenScaled) + 1
+        );
+
+        lastDatetime = target;
     }
 
     HashMap<Integer, Integer> getDifferences() {
         return differences;
+    }
+
+    int getMaxBucket() {
+        int globMax = 0;
+        for (int localMax : differences.keySet()) {
+            globMax = globMax > localMax ? globMax : localMax;
+        }
+        return globMax;
+    }
+
+    int getMaxBucketSize() {
+        int globMax = 0;
+        for (int localMax : differences.values()) {
+            globMax = globMax > localMax ? globMax : localMax;
+        }
+        return globMax;
     }
 };
 

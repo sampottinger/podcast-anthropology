@@ -180,14 +180,14 @@ class NavButton implements GraphicEntity {
 
 
 class StaticRect implements GraphicEntity {
-    private int startX;
-    private int startY;
-    private int rectWidth;
-    private int rectHeight;
+    private float startX;
+    private float startY;
+    private float rectWidth;
+    private float rectHeight;
     private int rectColor;
 
-    StaticRect(int newStartX, int newStartY, int newWidth, int newHeight,
-        int newColor) {
+    StaticRect(float newStartX, float newStartY, float newWidth,
+        float newHeight, int newColor) {
 
         startX = newStartX;
         startY = newStartY;
