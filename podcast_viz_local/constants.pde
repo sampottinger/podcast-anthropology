@@ -97,7 +97,7 @@ void loadSemiConstants () {
     );
     NAV_QUESTIONS.put(
         NavSection.SHOW_OVERVIEW,
-        "What shows have\nbeen released?"
+        "How has show length\nvaried?"
     );
     NAV_QUESTIONS.put(
         NavSection.TOPIC_TIMELINE,

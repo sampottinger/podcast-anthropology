@@ -27,7 +27,7 @@ void drawNavLabel (NavSection section, boolean selected) {
     if (lines.length == 1) {
         text(targetText, x, 30);
     } else {
-        text(lines[0], x, 16);
+        text(lines[0], x, 15);
         text(lines[1], x, 30);
     }
 
