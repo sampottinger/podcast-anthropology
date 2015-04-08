@@ -19,8 +19,8 @@ class DifferenceAggregator {
             return;
         }
 
-        int daysBetween = Days.daysBetween(lastDatetime, target).getDays();
-        int daysBetweenScaled = (daysBetween / bucketSize) * bucketSize;
+        float daysBetween = Days.daysBetween(lastDatetime, target).getDays();
+        int daysBetweenScaled = ceil(daysBetween / bucketSize) * bucketSize;
         if (!differences.containsKey(daysBetweenScaled)) {
             differences.put(daysBetweenScaled, 0);
         }

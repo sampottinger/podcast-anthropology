@@ -93,10 +93,12 @@ PVector createPostingDifferencesDisplay () {
 
     differences = new HashMap<String, DifferenceAggregator>();
 
+    int bodyStartY = START_Y_MAIN + 18;
+
     // Place legends and calculate aggregates
     i = 1;
     for (String showName : ORDERED_SHOW_NAMES) {
-        int y = 30 * i + START_Y_MAIN;
+        int y = 30 * i + bodyStartY;
 
         activeScollableEntities.add(new TinyLegend(
             TIMELINE_GROUP_START_X,
@@ -124,12 +126,9 @@ PVector createPostingDifferencesDisplay () {
         maxBucketSize = maxBucketSize > sizeMax ? maxBucketSize : sizeMax;
     }
 
-    LinearScale xScale = new LinearScale(
-        0,
-        maxDiff,
-        TIMELINE_GROUP_START_X + 20,
-        WIDTH - 50 - TIMELINE_GROUP_START_X
-    );
+    float startScaleX = TIMELINE_GROUP_START_X + 20;
+    float endScaleX = WIDTH - 50 - TIMELINE_GROUP_START_X;
+    LinearScale xScale = new LinearScale(0, maxDiff, startScaleX, endScaleX);
 
     LinearScale yScale = new LinearScale(
         1,
@@ -138,10 +137,12 @@ PVector createPostingDifferencesDisplay () {
         -30
     );
 
+    float barWidth = xScale.scale(5) - xScale.scale(0);
+
     // Create bars
     i = 1;
     for (String showName : ORDERED_SHOW_NAMES) {
-        int y = 30 * i + START_Y_MAIN;
+        int y = 30 * i + bodyStartY;
         float numEpisdes = curDataset.getEpisodes().get(showName).size();
 
         HashMap<Integer, Integer> counts = differences.get(
@@ -152,14 +153,33 @@ PVector createPostingDifferencesDisplay () {
             float barPercent = (counts.get(diff) / numEpisdes) * 100;
             float barHeight = yScale.scale(barPercent);
             activeScollableEntities.add(
-                new StaticRect(x, y, 5, barHeight, MID_GREY)
+                new StaticRect(x, y, barWidth - 1, barHeight, MID_GREY)
             );
         }
 
         i++;
     }
 
-    return new PVector(5, 30 * (i + 1) + START_Y_MAIN);
+    // Create title
+    activeScollableEntities.add(new Title(
+        5,
+        START_Y_MAIN,
+        WIDTH,
+        "Days between episodes"
+    ));
+
+    // Create axes
+    activeScollableEntities.add(new NumberAxis(
+        TIMELINE_GROUP_START_X + 20,
+        bodyStartY,
+        endScaleX - startScaleX + barWidth,
+        xScale,
+        0,
+        maxDiff,
+        50
+    ));
+
+    return new PVector(5, 30 * (i + 1) + bodyStartY);
 }
 
 
@@ -173,8 +193,14 @@ void enterEpisodeTimeline () {
     // Create and display differences
     PVector lastEnd = createPostingDifferencesDisplay();
 
-    // Place elements
-    lastEnd = placeAllEpisodes(lastEnd.y);
+    // Create yearly display
+    activeScollableEntities.add(new Title(
+        5,
+        lastEnd.y,
+        WIDTH,
+        "Episodes by year"
+    ));
+    lastEnd = placeAllEpisodes(lastEnd.y + EPISODE_DIAMETER + 5);
 
     // Create slider
     curScrollSlider = new Slider(

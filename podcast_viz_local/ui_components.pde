@@ -215,3 +215,97 @@ class StaticRect implements GraphicEntity {
 
     void onRelease () { }
 };
+
+
+class Title implements GraphicEntity {
+    private float x;
+    private float y;
+    private float titleWidth;
+    private String content;
+
+    Title (float newX, float newY, float newWidth, String newContent) {
+        x = newX;
+        y = newY;
+        titleWidth = newWidth;
+        content = newContent;
+    }
+
+    void draw () {
+        pushStyle();
+        pushMatrix();
+
+        rectMode(CORNER);
+        noStroke();
+        fill(MID_GREY);
+
+        rect(x, y + 15, titleWidth, 1);
+
+        textFont(FONT_14);
+        textAlign(LEFT);
+        text(content, x, y + 14);
+
+        popStyle();
+        popMatrix();
+    }
+
+    void update () { }
+
+    void onPress () { }
+
+    void onRelease () { }
+};
+
+
+class NumberAxis implements GraphicEntity {
+    private LinearScale targetScale;
+    private float x;
+    private float y;
+    private float axisWidth;
+    private float startVal;
+    private float endVal;
+    private float interval;
+
+    NumberAxis (float newX, float newY, float newWidth, LinearScale newScale,
+        float newStart, float newEnd, float newInterval) {
+
+        x = newX;
+        y = newY;
+        axisWidth = newWidth;
+        targetScale = newScale;
+        startVal = newStart;
+        endVal = newEnd;
+        interval = newInterval;
+    }
+
+    void drawDottedRule (float y) {
+        for (float dotX = 0; dotX < axisWidth; dotX += 4) {
+            rect(x + dotX, y, 2, 1);
+        }
+    }
+
+    void draw () {
+        pushStyle();
+        pushMatrix();
+
+        rectMode(CORNER);
+        noStroke();
+        fill(MID_GREY);
+
+        drawDottedRule(y + 14);
+
+        textFont(FONT_10);
+        textAlign(LEFT);
+        for (float val = startVal; val <= endVal; val += interval) {
+            text(round(val), targetScale.scale(val), y + 11);
+        }
+
+        popStyle();
+        popMatrix();
+    }
+
+    void update () { }
+
+    void onPress () { }
+
+    void onRelease () { }
+};

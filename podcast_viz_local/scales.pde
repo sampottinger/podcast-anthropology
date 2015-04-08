@@ -10,4 +10,8 @@ class LinearScale {
     float scale(float input) {
         return input * slope + startX;
     }
+
+    float invert(float input) {
+        return (input - startX) / slope;
+    }
 };
