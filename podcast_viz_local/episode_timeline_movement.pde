@@ -66,7 +66,9 @@ PVector placeAllEpisodes (float startY) {
 
     int aggNum = 0;
     PVector targetLoc = null;
-    for (DateAggregationCategory aggregator : aggregators) {
+    int numAggregators = aggregators.size();
+    for (int i = numAggregators - 1; i >= 0; i--) {
+        DateAggregationCategory aggregator = aggregators.get(i);
         int innerGroupNum = 0;
         for (EpisodeGraphic episode : aggregator.getMatchedEpisodes()) {
             int targetX = EPISODE_DIAMETER * (innerGroupNum / 5);
@@ -87,18 +89,19 @@ PVector placeAllEpisodes (float startY) {
 }
 
 
-PVector createPostingDifferencesDisplay () {
+float createPostingDifferencesDisplay (float startY,
+    AggregationBarChartProto proto) {
+
+    HashMap<String, Aggregator> differences;
+    differences = new HashMap<String, Aggregator>();
+
     int i;
-    HashMap<String, DifferenceAggregator> differences;
-
-    differences = new HashMap<String, DifferenceAggregator>();
-
-    int bodyStartY = START_Y_MAIN + 18;
+    float bodyStartY = startY + 18;
 
     // Place legends and calculate aggregates
     i = 1;
     for (String showName : ORDERED_SHOW_NAMES) {
-        int y = 30 * i + bodyStartY;
+        float y = 30 * i + bodyStartY;
 
         activeScollableEntities.add(new TinyLegend(
             TIMELINE_GROUP_START_X,
@@ -116,70 +119,15 @@ PVector createPostingDifferencesDisplay () {
         i++;
     }
 
-    // Build scales
-    int maxDiff = 0;
-    int maxBucketSize = 0;
-    for (DifferenceAggregator agg : differences.values()) {
-        int aggMax = agg.getMaxBucket();
-        int sizeMax = agg.getMaxBucketSize();
-        maxDiff = maxDiff > aggMax ? maxDiff : aggMax;
-        maxBucketSize = maxBucketSize > sizeMax ? maxBucketSize : sizeMax;
-    }
+    // Create graphics
+    proto.setAggSettings(differences, 5, 50, true);
+    proto.setYCoord(bodyStartY);
+    proto.setText("0%", "50%", "Days between episodes");
 
-    float startScaleX = TIMELINE_GROUP_START_X + 20;
-    float endScaleX = WIDTH - 50 - TIMELINE_GROUP_START_X;
-    LinearScale xScale = new LinearScale(0, maxDiff, startScaleX, endScaleX);
+    AggregationBarChart barChart = new AggregationBarChart(proto);
+    activeScollableEntities.add(barChart);
 
-    LinearScale yScale = new LinearScale(
-        1,
-        100,
-        -1,
-        -30
-    );
-
-    float barWidth = xScale.scale(5) - xScale.scale(0);
-
-    // Create bars
-    i = 1;
-    for (String showName : ORDERED_SHOW_NAMES) {
-        int y = 30 * i + bodyStartY;
-        float numEpisdes = curDataset.getEpisodes().get(showName).size();
-
-        HashMap<Integer, Integer> counts = differences.get(
-            showName).getDifferences();
-
-        for (Integer diff : counts.keySet()) {
-            float x = xScale.scale(diff);
-            float barPercent = (counts.get(diff) / numEpisdes) * 100;
-            float barHeight = yScale.scale(barPercent);
-            activeScollableEntities.add(
-                new StaticRect(x, y, barWidth - 1, barHeight, MID_GREY)
-            );
-        }
-
-        i++;
-    }
-
-    // Create title
-    activeScollableEntities.add(new Title(
-        5,
-        START_Y_MAIN,
-        WIDTH,
-        "Days between episodes"
-    ));
-
-    // Create axes
-    activeScollableEntities.add(new NumberAxis(
-        TIMELINE_GROUP_START_X + 20,
-        bodyStartY,
-        endScaleX - startScaleX + barWidth,
-        xScale,
-        0,
-        maxDiff,
-        50
-    ));
-
-    return new PVector(5, 30 * (i + 1) + bodyStartY);
+    return barChart.getEndY();
 }
 
 
@@ -190,15 +138,24 @@ void enterEpisodeTimeline () {
     createNavArea();
     System.gc();
 
+    // Finds bounds for embedded bar charts
+    float startScaleX = TIMELINE_GROUP_START_X + 20;
+    float endScaleX = WIDTH - 50 - TIMELINE_GROUP_START_X;
+    AggregationBarChartProto proto = new AggregationBarChartProto();
+    proto.setXCoord(startScaleX, endScaleX);
+
     // Create and display differences
-    PVector lastEnd = createPostingDifferencesDisplay();
+    PVector lastEnd = new PVector(
+        0,
+        createPostingDifferencesDisplay(START_Y_MAIN, proto)
+    );
 
     // Create yearly display
     activeScollableEntities.add(new Title(
         5,
         lastEnd.y,
         WIDTH,
-        "Episodes by year"
+        "Detailed episodes by year"
     ));
     lastEnd = placeAllEpisodes(lastEnd.y + EPISODE_DIAMETER + 5);
 

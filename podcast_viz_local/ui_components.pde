@@ -4,12 +4,12 @@ interface ButtonListener {
 
 
 class TinyLegend implements GraphicEntity {
-    private int x;
-    private int y;
+    private float x;
+    private float y;
     private String content;
     private int boxColor;
 
-    TinyLegend(int newX, int newY, String newContent, int newColor) {
+    TinyLegend(float newX, float newY, String newContent, int newColor) {
 
         x = newX;
         y = newY;
@@ -298,6 +298,44 @@ class NumberAxis implements GraphicEntity {
         for (float val = startVal; val <= endVal; val += interval) {
             text(round(val), targetScale.scale(val), y + 11);
         }
+
+        popStyle();
+        popMatrix();
+    }
+
+    void update () { }
+
+    void onPress () { }
+
+    void onRelease () { }
+};
+
+
+class YMarker implements GraphicEntity {
+    float x;
+    float y;
+    String value;
+    float markerWidth;
+
+    YMarker (float newX, float newY, float newWidth, String newValue) {
+        x = newX;
+        y = newY;
+        value = newValue;
+        markerWidth = newWidth;
+    }
+
+    void draw () {
+        pushStyle();
+        pushMatrix();
+
+        rectMode(CORNER);
+        noStroke();
+        fill(LIGHT_GREY);
+        rect(x, y, markerWidth, 1);
+
+        textFont(FONT_10);
+        textAlign(LEFT, CENTER);
+        text(value, x + markerWidth + 2, y);
 
         popStyle();
         popMatrix();

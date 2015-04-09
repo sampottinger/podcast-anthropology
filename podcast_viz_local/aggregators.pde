@@ -2,7 +2,14 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 
-class DifferenceAggregator {
+interface Aggregator {
+    int getMaxBucket();
+    int getMaxBucketSize();
+    HashMap<Integer, Integer> getBuckets();
+}
+
+
+class DifferenceAggregator implements Aggregator {
     private HashMap<Integer, Integer> differences;
     private DateTime lastDatetime;
     private int bucketSize;
@@ -33,7 +40,7 @@ class DifferenceAggregator {
         lastDatetime = target;
     }
 
-    HashMap<Integer, Integer> getDifferences() {
+    HashMap<Integer, Integer> getBuckets() {
         return differences;
     }
 
