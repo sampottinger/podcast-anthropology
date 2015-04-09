@@ -190,11 +190,11 @@ float createPostingMonthDisplay (float startY,
     }
 
     // Create graphics
-    proto.setAggSettings(months, 1, 12, 1995 * 12 + 11, 0, false);
+    proto.setAggSettings(months, 1, 12, 1995 * 12 + 11, 3, false);
     proto.setYCoord(bodyStartY);
     proto.setText(
-        "",
-        "",
+        "0",
+        "3",
         "Episodes by month",
         new MonthNumToYearLabelStrategy()
     );
