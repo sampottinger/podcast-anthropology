@@ -2,6 +2,8 @@ class AggregationBarChartProto {
     private boolean aggSet;
     private HashMap<String, Aggregator> groups;
     private int bucketGranularity;
+    private int interval;
+    private float startVal;
     private float midVal;
     private boolean usePercent;
 
@@ -16,6 +18,7 @@ class AggregationBarChartProto {
     private String baselineText;
     private String midValText;
     private String titleText;
+    private AxisLabelStrategy labelStrategy;
 
     AggregationBarChartProto () {
         aggSet = false;
@@ -25,12 +28,15 @@ class AggregationBarChartProto {
     }
 
     void setAggSettings (HashMap<String, Aggregator> newGroups,
-        int newBucketGranularity, float newMidVal, boolean newUsePercent) {
+        int newBucketGranularity, int newInterval, float newStartVal,
+        float newMidVal, boolean newUsePercent) {
 
         groups = newGroups;
         bucketGranularity = newBucketGranularity;
         midVal = newMidVal;
         usePercent = newUsePercent;
+        startVal = newStartVal;
+        interval = newInterval;
         aggSet = true;
     }
 
@@ -45,10 +51,13 @@ class AggregationBarChartProto {
         xCoordSet = true;
     }
 
-    void setText (String newBaseline, String newMidVal, String newTitle) {
+    void setText (String newBaseline, String newMidVal, String newTitle,
+        AxisLabelStrategy newLabelStrategy) {
+
         baselineText = newBaseline;
         midValText = newMidVal;
         titleText = newTitle;
+        labelStrategy = newLabelStrategy;
         textSet = true;
     }
 
@@ -64,6 +73,20 @@ class AggregationBarChartProto {
             throw new RuntimeException("Aggregation settings not provided.");
         }
         return bucketGranularity;
+    }
+
+    int getInterval () {
+        if (!aggSet) {
+            throw new RuntimeException("Aggregation settings not provided.");
+        }
+        return interval;
+    }
+
+    float getStartVal () {
+        if (!aggSet) {
+            throw new RuntimeException("Aggregation settings not provided.");
+        }
+        return startVal;
     }
 
     float getMidVal () {
@@ -122,14 +145,19 @@ class AggregationBarChartProto {
         return titleText;
     }
 
+    AxisLabelStrategy getLabelStrategy () {
+        return labelStrategy;
+    }
 };
 
 
 class AggregationBarChart implements GraphicEntity {
     private HashMap<String, Aggregator> groups;
     private float startY;
+    private float startVal;
     private float startScaleX;
     private float endScaleX;
+    private int interval;
     private int bucketGranularity;
     private String baselineText;
     private float midVal;
@@ -137,12 +165,14 @@ class AggregationBarChart implements GraphicEntity {
     private String titleText;
     private boolean usePercent;
     private ArrayList<GraphicEntity> childrenEntities;
+    private AxisLabelStrategy labelStrategy;
     
     private float endYCoord;
 
     AggregationBarChart (AggregationBarChartProto proto) {
         groups = proto.getGroups();
         bucketGranularity = proto.getBucketGranularity();
+        startVal = proto.getStartVal();
         midVal = proto.getMidVal();
         usePercent = proto.getUsePercent();
         startY = proto.getStartY();
@@ -151,6 +181,8 @@ class AggregationBarChart implements GraphicEntity {
         baselineText = proto.getBaselineText();
         midValText = proto.getMidValText();
         titleText = proto.getTitleText();
+        labelStrategy = proto.getLabelStrategy();
+        interval = proto.getInterval();
 
         childrenEntities = new ArrayList<GraphicEntity>();
 
@@ -188,12 +220,17 @@ class AggregationBarChart implements GraphicEntity {
             maxBucketSize = maxBucketSize > sizeMax ? maxBucketSize : sizeMax;
         }
 
-        LinearScale xScale = new LinearScale(0, maxKey, startScaleX, endScaleX);
+        LinearScale xScale = new LinearScale(
+            startVal,
+            maxKey,
+            startScaleX,
+            endScaleX
+        );
         LinearScale yScale = new LinearScale(
             usePercent ? 1 : 0,
             usePercent ? 100 : maxBucketSize,
             -1,
-            -30
+            -25
         );
 
         float barWidth = xScale.scale(bucketGranularity) - xScale.scale(0);
@@ -254,9 +291,10 @@ class AggregationBarChart implements GraphicEntity {
             bodyStartY - 20,
             endScaleX - startScaleX + barWidth,
             xScale,
-            0,
+            startVal,
             maxKey,
-            50
+            interval,
+            labelStrategy
         ));
 
         endYCoord = 30 * (i + 1) + bodyStartY;

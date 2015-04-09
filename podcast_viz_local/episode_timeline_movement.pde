@@ -66,6 +66,7 @@ PVector placeAllEpisodes (float startY) {
 
     int aggNum = 0;
     PVector targetLoc = null;
+    int maxY = 0;
     int numAggregators = aggregators.size();
     for (int i = numAggregators - 1; i >= 0; i--) {
         DateAggregationCategory aggregator = aggregators.get(i);
@@ -81,11 +82,12 @@ PVector placeAllEpisodes (float startY) {
             targetLoc = new PVector(targetX, targetY);
             episode.goTo(targetLoc);
             innerGroupNum++;
+            maxY = maxY > targetY ? maxY : targetY;
         }
         aggNum++;
     }
 
-    return targetLoc;
+    return new PVector(0, maxY);
 }
 
 
@@ -105,7 +107,7 @@ float createPostingDifferencesDisplay (float startY,
 
         activeScollableEntities.add(new TinyLegend(
             TIMELINE_GROUP_START_X,
-            y - 7,
+            y - 3,
             showName,
             SHOW_COLORS.get(showName).getFill()
         ));
@@ -120,9 +122,61 @@ float createPostingDifferencesDisplay (float startY,
     }
 
     // Create graphics
-    proto.setAggSettings(differences, 5, 50, true);
+    proto.setAggSettings(differences, 5, 50, 0, 50, true);
     proto.setYCoord(bodyStartY);
-    proto.setText("0%", "50%", "Days between episodes");
+    proto.setText(
+        "0%",
+        "50%",
+        "Days between episodes",
+        new RawAxisLabelStrategy()
+    );
+
+    AggregationBarChart barChart = new AggregationBarChart(proto);
+    activeScollableEntities.add(barChart);
+
+    return barChart.getEndY();
+}
+
+
+float createPostingMonthDisplay (float startY,
+    AggregationBarChartProto proto) {
+
+    HashMap<String, Aggregator> months;
+    months = new HashMap<String, Aggregator>();
+
+    int i;
+    float bodyStartY = startY + 18;
+
+    // Place legends and calculate aggregates
+    i = 1;
+    for (String showName : ORDERED_SHOW_NAMES) {
+        float y = 30 * i + bodyStartY;
+
+        activeScollableEntities.add(new TinyLegend(
+            TIMELINE_GROUP_START_X,
+            y - 7,
+            showName,
+            SHOW_COLORS.get(showName).getFill()
+        ));
+
+        MonthAggregator diffAgg = new MonthAggregator();
+        for (Episode episode : curDataset.getEpisodes().get(showName)) {
+            diffAgg.processNewDate(episode.getPubDate());
+        }
+        months.put(showName, diffAgg);
+
+        i++;
+    }
+
+    // Create graphics
+    proto.setAggSettings(months, 1, 12, 1995 * 12 + 11, 0, false);
+    proto.setYCoord(bodyStartY);
+    proto.setText(
+        "",
+        "",
+        "Episodes by month",
+        new MonthNumToYearLabelStrategy()
+    );
 
     AggregationBarChart barChart = new AggregationBarChart(proto);
     activeScollableEntities.add(barChart);
@@ -140,14 +194,14 @@ void enterEpisodeTimeline () {
 
     // Finds bounds for embedded bar charts
     float startScaleX = TIMELINE_GROUP_START_X + 20;
-    float endScaleX = WIDTH - 50 - TIMELINE_GROUP_START_X;
+    float endScaleX = WIDTH - 50;
     AggregationBarChartProto proto = new AggregationBarChartProto();
     proto.setXCoord(startScaleX, endScaleX);
 
     // Create and display differences
     PVector lastEnd = new PVector(
         0,
-        createPostingDifferencesDisplay(START_Y_MAIN, proto)
+        createPostingMonthDisplay(START_Y_MAIN, proto)
     );
 
     // Create yearly display
@@ -159,6 +213,16 @@ void enterEpisodeTimeline () {
     ));
     lastEnd = placeAllEpisodes(lastEnd.y + EPISODE_DIAMETER + 5);
 
+
+    // Create and display differences
+    lastEnd = new PVector(
+        0,
+        createPostingDifferencesDisplay(
+            lastEnd.y + 30 + EPISODE_DIAMETER,
+            proto
+        )
+    );
+
     // Create slider
     curScrollSlider = new Slider(
         WIDTH - SCROLL_WIDTH,
@@ -166,7 +230,7 @@ void enterEpisodeTimeline () {
         START_Y_MAIN + 1,
         HEIGHT - DETAILS_AREA_HEIGHT - 2,
         0,
-        lastEnd.y + 50,
+        lastEnd.y + 10,
         HEIGHT - DETAILS_AREA_HEIGHT - START_Y_MAIN
     );
     activeNonScollableEntities.add(curScrollSlider);

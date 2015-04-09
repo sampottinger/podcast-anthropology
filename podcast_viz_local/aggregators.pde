@@ -2,14 +2,54 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 
-interface Aggregator {
-    int getMaxBucket();
-    int getMaxBucketSize();
-    HashMap<Integer, Integer> getBuckets();
-}
+abstract class Aggregator {
+    int getMaxBucket() {
+        int globMax = 0;
+        for (int localMax : getBuckets().keySet()) {
+            globMax = globMax > localMax ? globMax : localMax;
+        }
+        return globMax;
+    }
+
+    int getMaxBucketSize() {
+        int globMax = 0;
+        for (int localMax : getBuckets().values()) {
+            globMax = globMax > localMax ? globMax : localMax;
+        }
+        return globMax;
+    }
+
+    abstract HashMap<Integer, Integer> getBuckets();
+};
 
 
-class DifferenceAggregator implements Aggregator {
+class MonthAggregator extends Aggregator {
+    private HashMap<Integer, Integer> monthCount;
+
+    MonthAggregator () {
+        monthCount = new HashMap<Integer, Integer>();
+    }
+
+    void processNewDate (DateTime target) {
+        int monthNum = target.getYear() * 12 + target.getMonthOfYear();
+
+        if (!monthCount.containsKey(monthNum)) {
+            monthCount.put(monthNum, 0);
+        }
+
+        monthCount.put(
+            monthNum,
+            monthCount.get(monthNum) + 1
+        );
+    }
+
+    HashMap<Integer, Integer> getBuckets() {
+        return monthCount;
+    }
+};
+
+
+class DifferenceAggregator extends Aggregator {
     private HashMap<Integer, Integer> differences;
     private DateTime lastDatetime;
     private int bucketSize;
@@ -42,22 +82,6 @@ class DifferenceAggregator implements Aggregator {
 
     HashMap<Integer, Integer> getBuckets() {
         return differences;
-    }
-
-    int getMaxBucket() {
-        int globMax = 0;
-        for (int localMax : differences.keySet()) {
-            globMax = globMax > localMax ? globMax : localMax;
-        }
-        return globMax;
-    }
-
-    int getMaxBucketSize() {
-        int globMax = 0;
-        for (int localMax : differences.values()) {
-            globMax = globMax > localMax ? globMax : localMax;
-        }
-        return globMax;
     }
 };
 
