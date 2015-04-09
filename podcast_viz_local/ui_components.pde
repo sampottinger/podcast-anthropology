@@ -3,46 +3,6 @@ interface ButtonListener {
 }
 
 
-class TinyLegend implements GraphicEntity {
-    private float x;
-    private float y;
-    private String content;
-    private int boxColor;
-
-    TinyLegend(float newX, float newY, String newContent, int newColor) {
-
-        x = newX;
-        y = newY;
-        content = newContent;
-        boxColor = newColor;
-    }
-
-    void draw () {
-        pushStyle();
-        pushMatrix();
-
-        fill(boxColor);
-        noStroke();
-
-        rectMode(CORNER);
-        fill(boxColor);
-        rect(x + 2, y, 7, 7);
-
-        fill(MID_GREY);
-        textFont(FONT_10);
-        textAlign(RIGHT);
-        text(content, x - 1, y + 7);
-
-        popMatrix();
-        popStyle();
-    }
-
-    void update () {}
-    void onPress () {}
-    void onRelease () {}
-};
-
-
 class Button implements GraphicEntity {
     private int startX;
     private int startY;

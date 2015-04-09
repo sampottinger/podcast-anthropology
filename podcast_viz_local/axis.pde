@@ -116,3 +116,127 @@ class YMarker implements GraphicEntity {
 
     void onRelease () { }
 };
+
+
+class TinyLegend implements GraphicEntity {
+    private float x;
+    private float y;
+    private String content;
+    private int boxColor;
+
+    TinyLegend(float newX, float newY, String newContent, int newColor) {
+
+        x = newX;
+        y = newY;
+        content = newContent;
+        boxColor = newColor;
+    }
+
+    void draw () {
+        pushStyle();
+        pushMatrix();
+
+        fill(boxColor);
+        noStroke();
+
+        rectMode(CORNER);
+        fill(boxColor);
+        rect(x + 2, y, 7, 7);
+
+        fill(MID_GREY);
+        textFont(FONT_10);
+        textAlign(RIGHT);
+        text(content, x - 1, y + 7);
+
+        popMatrix();
+        popStyle();
+    }
+
+    void update () {}
+    void onPress () {}
+    void onRelease () {}
+};
+
+
+class SummaryLegendSection {
+
+    private String name;
+    private int boxColor;
+    private int count;
+
+    SummaryLegendSection (String newName, int newColor, int newCount) {
+        name = newName;
+        boxColor = newColor;
+        count = newCount;
+    }
+
+    String getName () {
+        return name;
+    }
+
+    int getColor () {
+        return boxColor;
+    }
+
+    int getCount () {
+        return count;
+    }
+};
+
+
+class SummaryLegend implements GraphicEntity {
+    private float x;
+    private float y;
+    private String content;
+    private ArrayList<SummaryLegendSection> sections;
+    private LinearScale innerScale;
+
+    SummaryLegend (float newX, float newY, String newContent,
+        ArrayList<SummaryLegendSection> newSections, LinearScale newScale) {
+
+        x = newX;
+        y = newY;
+        content = newContent;
+        sections = newSections;
+        innerScale = newScale;
+    }
+
+    void draw () {
+        pushMatrix();
+        pushStyle();
+
+        noStroke();
+
+        translate(x, y);
+
+        fill(MID_GREY);
+        textFont(FONT_14);
+        textAlign(RIGHT);
+        text(content, 0, 0);
+
+        int i = 0;
+        textFont(FONT_10);
+        rectMode(CORNER);
+        for (SummaryLegendSection section : sections) {
+            int y = i * 18 + 13;
+
+            fill(EXTRA_LIGHT_GREY);
+            rect(-6, y - 11, innerScale.scale(section.getCount()), 13);
+
+            fill(section.getColor());
+            rect(-4, y-6, 4, 4);
+
+            fill(MID_GREY);
+            text(section.getName(), -6, y);
+
+            i++;
+        }
+
+        popMatrix();
+        popStyle();
+    }
+
+    void update () {}
+    void onPress () {}
+    void onRelease () {}
+};

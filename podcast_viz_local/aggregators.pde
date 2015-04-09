@@ -129,3 +129,66 @@ class DateAggregationCategory implements Comparable<DateAggregationCategory> {
         return startDate.compareTo(other.getStartDate());
     }
 };
+
+
+ArrayList<SummaryLegend> createDateAggCategoriesLegends (float x, float y,
+    float targetWidth, ArrayList<DateAggregationCategory> categories,
+    float legendHeight, ArrayList<String> labels) {
+
+    ArrayList<ArrayList<SummaryLegendSection>> legendSectionSets;
+    legendSectionSets = new ArrayList<ArrayList<SummaryLegendSection>>();
+
+    int maxCount = 0;
+
+    for (DateAggregationCategory category : categories) {
+        ArrayList<SummaryLegendSection> legendSections;
+        legendSections = new ArrayList<SummaryLegendSection>();
+
+        HashMap<String, Integer> showCount;
+        showCount = new HashMap<String, Integer>();
+
+        for (String showName : ORDERED_SHOW_NAMES) {
+            showCount.put(showName, 0);
+        }
+
+        for (EpisodeGraphic episode : category.getMatchedEpisodes()) {
+            String showName = episode.getEpisode().getShow();
+            int newCount = showCount.get(showName) + 1;
+            showCount.put(showName, newCount);
+            maxCount = maxCount > newCount ? maxCount : newCount;
+        }
+
+        for (String showName : ORDERED_SHOW_NAMES) {
+            legendSections.add(new SummaryLegendSection(
+                showName,
+                SHOW_COLORS.get(showName).getFill(),
+                showCount.get(showName)
+            ));
+        }
+
+        legendSectionSets.add(legendSections);
+    }
+
+    LinearScale legendScale = new LinearScale(
+        0,
+        maxCount,
+        0,
+        targetWidth
+    );
+
+    int i = 0;
+    ArrayList<SummaryLegend> retLegends = new ArrayList<SummaryLegend>();
+    for (ArrayList<SummaryLegendSection> sectionSet : legendSectionSets) {
+        retLegends.add(new SummaryLegend(
+            x,
+            y + i * legendHeight,
+            labels.get(i),
+            sectionSet,
+            legendScale
+        ));
+
+        i++;
+    }
+
+    return retLegends;
+}

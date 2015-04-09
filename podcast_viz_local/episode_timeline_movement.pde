@@ -1,3 +1,4 @@
+import java.util.Collections;
 import org.joda.time.DateTime; 
 
 AggregationLevel curTimelineAggLevel = AggregationLevel.MONTH;
@@ -53,7 +54,9 @@ ArrayList<DateAggregationCategory> createYearAggregators () {
 
 
 PVector placeAllEpisodes (float startY) {
+    // Place episodes
     ArrayList<DateAggregationCategory> aggregators = createYearAggregators();
+    Collections.reverse(aggregators);
     
     for (String showName : ORDERED_SHOW_NAMES) {
         for (EpisodeGraphic episode : graphicEpisodes.get(showName)) {
@@ -68,8 +71,7 @@ PVector placeAllEpisodes (float startY) {
     PVector targetLoc = null;
     int maxY = 0;
     int numAggregators = aggregators.size();
-    for (int i = numAggregators - 1; i >= 0; i--) {
-        DateAggregationCategory aggregator = aggregators.get(i);
+    for (DateAggregationCategory aggregator : aggregators) {
         int innerGroupNum = 0;
         for (EpisodeGraphic episode : aggregator.getMatchedEpisodes()) {
             int targetX = EPISODE_DIAMETER * (innerGroupNum / 5);
@@ -85,6 +87,25 @@ PVector placeAllEpisodes (float startY) {
             maxY = maxY > targetY ? maxY : targetY;
         }
         aggNum++;
+    }
+
+    // Create legend
+    ArrayList<String> labels = new ArrayList<String>();
+    
+    for (DateAggregationCategory aggregator : aggregators) {
+        labels.add(str(aggregator.getStartDate().getYear()));
+    }
+    
+    ArrayList<SummaryLegend> legends = createDateAggCategoriesLegends(
+        TIMELINE_GROUP_START_X - 23,
+        startY + EPISODE_DIAMETER - 10,
+        -100,
+        aggregators,
+        TIMELINE_GROUP_HEIGHT,
+        labels
+    );
+    for (SummaryLegend legend : legends) {
+        activeScollableEntities.add(legend);
     }
 
     return new PVector(0, maxY);
@@ -212,7 +233,6 @@ void enterEpisodeTimeline () {
         "Detailed episodes by year"
     ));
     lastEnd = placeAllEpisodes(lastEnd.y + EPISODE_DIAMETER + 5);
-
 
     // Create and display differences
     lastEnd = new PVector(
