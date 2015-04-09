@@ -69,11 +69,6 @@ void createNavArea () {
         null
     ));
     navBarEntities.add(createNavButton(
-        NavSection.TOPIC_TIMELINE,
-        selectedSection == NavSection.TOPIC_TIMELINE,
-        null
-    ));
-    navBarEntities.add(createNavButton(
         NavSection.TOPIC_EXPLORER,
         selectedSection == NavSection.TOPIC_EXPLORER,
         null

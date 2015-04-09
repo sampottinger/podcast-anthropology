@@ -120,7 +120,7 @@ void loadSemiConstants () {
     );
     NAV_QUESTIONS.put(
         NavSection.TOPIC_EXPLORER,
-        "How are podcast\ntopics related?"
+        "What did podcasts dicuss and\nhow are topics related?"
     );
 
     // Create section placements
@@ -131,18 +131,14 @@ void loadSemiConstants () {
     );
     NAV_PLACEMENT.put(
         NavSection.SHOW_TIMELINE,
-        new NavButtonPlacement(120, 180)
+        new NavButtonPlacement(120, 200)
     );
     NAV_PLACEMENT.put(
         NavSection.SHOW_OVERVIEW,
-        new NavButtonPlacement(320, 180)
-    );
-    NAV_PLACEMENT.put(
-        NavSection.TOPIC_TIMELINE,
-        new NavButtonPlacement(520, 180)
+        new NavButtonPlacement(340, 220)
     );
     NAV_PLACEMENT.put(
         NavSection.TOPIC_EXPLORER,
-        new NavButtonPlacement(720, 180)
+        new NavButtonPlacement(560, 240)
     );
 }
