@@ -18,9 +18,9 @@ final PVector DEFAULT_POSITION = new PVector(-100, 300);
 
 final int DETAILS_AREA_HEIGHT = 47;
 
-final int EPISODE_HOVER_DISTANCE = 12;
+final int EPISODE_HOVER_DISTANCE = 10;
 
-final int EPISODE_DIAMETER = EPISODE_HOVER_DISTANCE * 2;
+final int EPISODE_DIAMETER = EPISODE_HOVER_DISTANCE * 2 + 2;
 
 HashMap<String, ColorSet> SHOW_COLORS = new HashMap<String, ColorSet>();
 
@@ -34,7 +34,7 @@ final LinearScale HALO_SCALE = new LinearScale(0, 3600, 0, 300);
 
 final int HEIGHT = 650;
 
-final int INTER_SUMMARY_GRP_PAD = 70;
+final int INTER_SUMMARY_GRP_PAD = 77;
 
 final int INTRO_ROW_SIZE = 43;
 
@@ -90,7 +90,7 @@ JSONObject TEXT_CONSTANTS;
 
 final int TIMELINE_GROUP_HEIGHT = EPISODE_DIAMETER * 5 + 40;
 
-final int DURATION_GROUP_HEIGHT = EPISODE_DIAMETER * 20 + 40;
+final int DURATION_GROUP_HEIGHT = EPISODE_DIAMETER * 21 + 40;
 
 final int TIMELINE_GROUP_START_X = 150;
 
@@ -124,7 +124,7 @@ void loadSemiConstants () {
     );
     NAV_QUESTIONS.put(
         NavSection.TOPIC_EXPLORER,
-        "What did podcasts dicuss and\nhow are topics related?"
+        "What did podcasts discuss and\nhow are topics related?"
     );
 
     // Create section placements

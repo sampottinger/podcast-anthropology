@@ -51,7 +51,12 @@ void createNavArea () {
     navBarEntities.add(createNavButton(
         NavSection.INTRO,
         selectedSection == NavSection.INTRO,
-        null
+        new ButtonListener () {
+            public void onPress () {
+                selectedSection = NavSection.INTRO;
+                runIntroFinalPage();
+            }
+        }
     ));
     navBarEntities.add(createNavButton(
         NavSection.SHOW_TIMELINE,

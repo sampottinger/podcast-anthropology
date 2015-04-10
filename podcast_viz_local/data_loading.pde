@@ -2,6 +2,7 @@ import org.joda.time.DateTime;
 import java.util.Arrays;
 
 Dataset curDataset;
+CoocurranceMatrix curCoocurranceMatrix;
 
 
 DateTime loadDate (String dateStr) {
@@ -89,4 +90,11 @@ void loadDataset() {
         loadTopics(datasetSource.getJSONArray("tags")),
         loadShows(datasetSource.getJSONArray("shows"))
     );
+
+    curCoocurranceMatrix = new CoocurranceMatrix();
+    for (String showName : ORDERED_SHOW_NAMES) {
+        for (Episode episode : curDataset.getEpisodes().get(showName)) {
+            curCoocurranceMatrix.processEpisode(episode);
+        }
+    }
 }

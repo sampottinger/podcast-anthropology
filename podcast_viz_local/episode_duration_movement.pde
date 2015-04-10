@@ -12,10 +12,10 @@ ArrayList<AggregationCategory> createDurationAggregators () {
         }
     }
 
-    for (int i=0; i * 30 * 60<=maxDuration; i += 1) {
+    for (int i=0; i * 20 * 60<=maxDuration; i += 1) {
         retList.add(new DurationAggregationCategory(
-            (i * 30) * 60,
-            ((i + 1) * 30) * 60
+            (i * 20) * 60 + 1,
+            ((i + 1) * 20) * 60 + 1
         ));
     }
 
@@ -43,12 +43,12 @@ PVector placeAllEpisodesByDuration (float startY) {
     for (AggregationCategory aggregator : aggregators) {
         int innerGroupNum = 0;
         for (EpisodeGraphic episode : aggregator.getMatchedEpisodes()) {
-            int targetX = EPISODE_DIAMETER * (innerGroupNum / 20);
+            int targetX = EPISODE_DIAMETER * (innerGroupNum / 21);
             targetX += TIMELINE_GROUP_START_X;
             
             int targetY = aggNum * DURATION_GROUP_HEIGHT;
             targetY += startY;
-            targetY += (innerGroupNum % 20) * EPISODE_DIAMETER;
+            targetY += (innerGroupNum % 21) * EPISODE_DIAMETER;
             
             targetLoc = new PVector(targetX, targetY);
             episode.goTo(targetLoc);
@@ -63,7 +63,7 @@ PVector placeAllEpisodesByDuration (float startY) {
     
     int i = 0;
     for (AggregationCategory aggregator : aggregators) {
-        labels.add(str(i * 30) + "-" + str((i+1) * 30 - 1) + " min");
+        labels.add(str(i * 20 + 1) + "-" + str((i+1) * 20) + " min");
         i++;
     }
     
