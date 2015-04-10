@@ -9,9 +9,9 @@ DateTime getToday () {
 }
 
 
-ArrayList<DateAggregationCategory> createMonthAggregators () {
-    ArrayList<DateAggregationCategory> retList;
-    retList = new ArrayList<DateAggregationCategory>();
+ArrayList<AggregationCategory> createMonthAggregators () {
+    ArrayList<AggregationCategory> retList;
+    retList = new ArrayList<AggregationCategory>();
     
     DateTime today = getToday();
 
@@ -31,9 +31,9 @@ ArrayList<DateAggregationCategory> createMonthAggregators () {
 }
 
 
-ArrayList<DateAggregationCategory> createYearAggregators () {
-    ArrayList<DateAggregationCategory> retList;
-    retList = new ArrayList<DateAggregationCategory>();
+ArrayList<AggregationCategory> createYearAggregators () {
+    ArrayList<AggregationCategory> retList;
+    retList = new ArrayList<AggregationCategory>();
     
     DateTime today = getToday();
 
@@ -53,14 +53,14 @@ ArrayList<DateAggregationCategory> createYearAggregators () {
 }
 
 
-PVector placeAllEpisodes (float startY) {
+PVector placeAllEpisodesByTime (float startY) {
     // Place episodes
-    ArrayList<DateAggregationCategory> aggregators = createYearAggregators();
+    ArrayList<AggregationCategory> aggregators = createYearAggregators();
     Collections.reverse(aggregators);
     
     for (String showName : ORDERED_SHOW_NAMES) {
         for (EpisodeGraphic episode : graphicEpisodes.get(showName)) {
-            for (DateAggregationCategory aggregator : aggregators) {
+            for (AggregationCategory aggregator : aggregators) {
                 aggregator.processEpisode(episode);
             }
             activeScollableEntities.add(episode);
@@ -71,7 +71,7 @@ PVector placeAllEpisodes (float startY) {
     PVector targetLoc = null;
     int maxY = 0;
     int numAggregators = aggregators.size();
-    for (DateAggregationCategory aggregator : aggregators) {
+    for (AggregationCategory aggregator : aggregators) {
         int innerGroupNum = 0;
         for (EpisodeGraphic episode : aggregator.getMatchedEpisodes()) {
             int targetX = EPISODE_DIAMETER * (innerGroupNum / 5);
@@ -92,11 +92,12 @@ PVector placeAllEpisodes (float startY) {
     // Create legend
     ArrayList<String> labels = new ArrayList<String>();
     
-    for (DateAggregationCategory aggregator : aggregators) {
-        labels.add(str(aggregator.getStartDate().getYear()));
+    for (AggregationCategory aggregator : aggregators) {
+        DateAggregationCategory castCat = ((DateAggregationCategory)aggregator);
+        labels.add(str(castCat.getStartDate().getYear()));
     }
     
-    ArrayList<SummaryLegend> legends = createDateAggCategoriesLegends(
+    ArrayList<SummaryLegend> legends = createAggCategoriesLegends(
         TIMELINE_GROUP_START_X - 23,
         startY + EPISODE_DIAMETER - 10,
         -100,
@@ -232,7 +233,7 @@ void enterEpisodeTimeline () {
         WIDTH,
         "Detailed episodes by year"
     ));
-    lastEnd = placeAllEpisodes(lastEnd.y + EPISODE_DIAMETER + 5);
+    lastEnd = placeAllEpisodesByTime(lastEnd.y + EPISODE_DIAMETER + 5);
 
     // Create and display differences
     lastEnd = new PVector(

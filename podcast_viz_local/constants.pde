@@ -90,6 +90,8 @@ JSONObject TEXT_CONSTANTS;
 
 final int TIMELINE_GROUP_HEIGHT = EPISODE_DIAMETER * 5 + 40;
 
+final int DURATION_GROUP_HEIGHT = EPISODE_DIAMETER * 20 + 40;
+
 final int TIMELINE_GROUP_START_X = 150;
 
 final int TIMELINE_GROUP_START_Y = 140;
@@ -137,7 +139,7 @@ void loadSemiConstants () {
     );
     NAV_PLACEMENT.put(
         NavSection.SHOW_OVERVIEW,
-        new NavButtonPlacement(340, 220)
+        new NavButtonPlacement(340, 170)
     );
     NAV_PLACEMENT.put(
         NavSection.TOPIC_EXPLORER,

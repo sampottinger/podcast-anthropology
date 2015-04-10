@@ -66,7 +66,12 @@ void createNavArea () {
     navBarEntities.add(createNavButton(
         NavSection.SHOW_OVERVIEW,
         selectedSection == NavSection.SHOW_OVERVIEW,
-        null
+        new ButtonListener () {
+            public void onPress () {
+                selectedSection = NavSection.SHOW_OVERVIEW;
+                enterEpisodeDurationView();
+            }
+        }
     ));
     navBarEntities.add(createNavButton(
         NavSection.TOPIC_EXPLORER,

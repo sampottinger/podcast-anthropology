@@ -86,7 +86,38 @@ class DifferenceAggregator extends Aggregator {
 };
 
 
-class DateAggregationCategory implements Comparable<DateAggregationCategory> {
+interface AggregationCategory {
+    void processEpisode (EpisodeGraphic episodeGraphic);
+    ArrayList<EpisodeGraphic> getMatchedEpisodes ();
+}
+
+
+class DurationAggregationCategory implements AggregationCategory{
+    private int minDuration;
+    private int maxDuration;
+    private ArrayList<EpisodeGraphic> episodes;
+
+    DurationAggregationCategory (int newMinDuration, int newMaxDuration) {
+        minDuration = newMinDuration;
+        maxDuration = newMaxDuration;
+        episodes = new ArrayList<EpisodeGraphic>();
+    }
+
+    void processEpisode (EpisodeGraphic episodeGraphic) {
+        int candidateDur = episodeGraphic.getEpisode().getDur();
+        if (candidateDur >= minDuration && candidateDur < maxDuration) {
+            episodes.add(episodeGraphic);
+        }
+    }
+    
+    ArrayList<EpisodeGraphic> getMatchedEpisodes () {
+        return episodes;
+    }
+};
+
+
+class DateAggregationCategory implements Comparable<DateAggregationCategory>,
+    AggregationCategory {
 
     private DateTime startDate;
     private DateTime endDate;
@@ -131,8 +162,8 @@ class DateAggregationCategory implements Comparable<DateAggregationCategory> {
 };
 
 
-ArrayList<SummaryLegend> createDateAggCategoriesLegends (float x, float y,
-    float targetWidth, ArrayList<DateAggregationCategory> categories,
+ArrayList<SummaryLegend> createAggCategoriesLegends (float x, float y,
+    float targetWidth, ArrayList<AggregationCategory> categories,
     float legendHeight, ArrayList<String> labels) {
 
     ArrayList<ArrayList<SummaryLegendSection>> legendSectionSets;
@@ -140,7 +171,7 @@ ArrayList<SummaryLegend> createDateAggCategoriesLegends (float x, float y,
 
     int maxCount = 0;
 
-    for (DateAggregationCategory category : categories) {
+    for (AggregationCategory category : categories) {
         ArrayList<SummaryLegendSection> legendSections;
         legendSections = new ArrayList<SummaryLegendSection>();
 
