@@ -81,6 +81,11 @@ void createNavArea () {
     navBarEntities.add(createNavButton(
         NavSection.TOPIC_EXPLORER,
         selectedSection == NavSection.TOPIC_EXPLORER,
-        null
+        new ButtonListener () {
+            public void onPress () {
+                selectedSection = NavSection.TOPIC_EXPLORER;
+                enterTopicMovement();
+            }
+        }
     ));
 }
