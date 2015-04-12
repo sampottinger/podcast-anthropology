@@ -93,13 +93,4 @@ void loadDataset() {
         loadTopics(datasetSource.getJSONArray("tags")),
         loadShows(datasetSource.getJSONArray("shows"))
     );
-
-    topicSet = new HashSet<String>();
-    curCoocurranceMatrix = new CoocurranceMatrix();
-    for (String showName : ORDERED_SHOW_NAMES) {
-        for (Episode episode : curDataset.getEpisodes().get(showName)) {
-            curCoocurranceMatrix.processEpisode(episode);
-            for (String topic : episode.getTopics()) { topicSet.add(topic); }
-        }
-    }
 }

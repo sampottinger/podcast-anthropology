@@ -2,6 +2,8 @@ import java.util.Collections;
 
 HashMap<String, PVector> topicMovementCenters;
 HashMap<String, PVector> topicPositions;
+String selectedTopic = null;
+boolean topicsDisplayDirty = true;
 
 
 void createTopicShowSources () {
@@ -37,11 +39,8 @@ ArrayList<CachedTopic> createCachedTopics () {
     ArrayList<CachedTopic> retList = new ArrayList<CachedTopic>();
 
     for (String topic : topicSet) {
-        ArrayList<Episode> overlap = curCoocurranceMatrix.getPair(topic, topic);
-        retList.add(new CachedTopic(
-            topic,
-            overlap == null ? 0 : overlap.size()
-        ));
+        int overlap = curCoocurranceMatrix.getPairSize(topic, topic);
+        retList.add(new CachedTopic(topic, overlap));
     }
 
     Collections.sort(retList);
@@ -72,6 +71,7 @@ PVector createTopicDisplays () {
 
     EntityRegion region = new EntityRegion(entities);
     region.setMinX(x - 100);
+    region.setMaxX(x + 100);
     region.setMinY(START_Y_MAIN);
     activeScollableEntities.add(region);
 
@@ -80,7 +80,7 @@ PVector createTopicDisplays () {
 
 
 void createArcs (float newHeight) {
-    LinearScale overlapScale = new LinearScale(0.08, 1, 0, 20);
+    LinearScale overlapScale = new LinearScale(0.08, 1, 1, 20);
     ArrayList<OverlapArc> arcsToCache = new ArrayList<OverlapArc>();
 
     for (String topic1 : topicSet) {
@@ -92,7 +92,9 @@ void createArcs (float newHeight) {
                     topicPositions.get(topic1).y + 5,
                     topicPositions.get(topic2).y + 5,
                     giniVal,
-                    overlapScale
+                    overlapScale,
+                    topic1,
+                    topic2
                 ));
             }
         }
@@ -124,4 +126,27 @@ void enterTopicMovement () {
         HEIGHT - DETAILS_AREA_HEIGHT - START_Y_MAIN
     );
     activeNonScollableEntities.add(curScrollSlider);
+}
+
+
+void selectTopic (String topic) {
+    int i = 0;
+    for (String showName : ORDERED_SHOW_NAMES) {
+        for (EpisodeGraphic episode : graphicEpisodes.get(showName)) {
+            PVector center = topicMovementCenters.get(showName);
+            episode.goTo(new PVector(
+                center.x,
+                center.y
+            ));
+        }
+    }
+
+    for (EpisodeGraphic episode : curCoocurranceMatrix.getPair(topic, topic)) {
+        int xNum = i % 10;
+        int yNum = i / 10;
+        int x = xNum * EPISODE_DIAMETER + 150;
+        int y = yNum * EPISODE_DIAMETER + START_Y_MAIN + 20;
+        episode.goTo(new PVector(x, y));
+        i++;
+    }
 }

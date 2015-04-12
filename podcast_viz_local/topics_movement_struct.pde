@@ -27,6 +27,7 @@ class GraphicalTopic implements GraphicEntity {
     private PVector pos;
     private float cachedBarWidth;
     private boolean isHovering;
+    private boolean isActive;
 
     GraphicalTopic (CachedTopic newTopic, LinearScale newBarScale,
         PVector newPos) {
@@ -36,6 +37,7 @@ class GraphicalTopic implements GraphicEntity {
         pos = newPos;
         cachedBarWidth = barScale.scale(topic.getCount());
         isHovering = false;
+        isActive = false;
     }
 
     void update () {
@@ -49,7 +51,14 @@ class GraphicalTopic implements GraphicEntity {
     }
 
     void onPress () {
+        update();
+        isActive = isHovering;
 
+        if (isActive) {
+            selectedTopic = topic.getTopic();
+            topicsDisplayDirty = true;
+            selectTopic(topic.getTopic());
+        }
     }
 
     void onRelease () {
@@ -62,7 +71,7 @@ class GraphicalTopic implements GraphicEntity {
 
         translate(pos.x, pos.y);
 
-        fill(isHovering ? DARK_GREY : MID_GREY);
+        fill(isHovering || isActive ? DARK_GREY : MID_GREY);
         noStroke();
 
         textFont(FONT_10);
@@ -70,7 +79,7 @@ class GraphicalTopic implements GraphicEntity {
         text(topic.getTopic(), 0, 10);
 
         rectMode(CORNER);
-        fill(isHovering ? MID_GREY : LIGHT_GREY);
+        fill(isHovering || isActive ? MID_GREY : LIGHT_GREY);
         rect(2, 6, 98, 1);
 
         rect(2, 4, cachedBarWidth, 5);
@@ -85,22 +94,36 @@ class CachedArcs implements GraphicEntity {
     float x;
     float y;
     PGraphics graphicsCache;
+    float cacheHeight;
+    ArrayList<OverlapArc> arcs;
 
     CachedArcs(float newX, float newY, float newHeight,
-        ArrayList<OverlapArc> arcs) {
+        ArrayList<OverlapArc> newArcs) {
 
         x = newX;
         y = newY;
+        graphicsCache = null;
+        cacheHeight = newHeight;
+        arcs = newArcs;
+    }
 
-        graphicsCache = createGraphics(WIDTH, int(newHeight) + 50);
+    private void updateCache () {
+        graphicsCache = createGraphics(WIDTH, int(cacheHeight) + 50);
         graphicsCache.beginDraw();
         for (OverlapArc newArc : arcs) {
-            newArc.draw(graphicsCache);
+            newArc.drawBg(graphicsCache);
+        }
+        for (OverlapArc newArc : arcs) {
+            newArc.drawFg(graphicsCache);
         }
         graphicsCache.endDraw();
+
+        topicsDisplayDirty = false;
     }
 
     void draw () {
+        if (topicsDisplayDirty || graphicsCache == null) { updateCache(); }
+
         image(graphicsCache, x, y);
     }
 
@@ -115,26 +138,48 @@ class OverlapArc {
     float endY;
     float overlapSize;
     LinearScale overlapScale;
+    String topic1;
+    String topic2;
 
     OverlapArc (float newStartY, float newEndY, float newOverlapSize,
-        LinearScale newOverlapScale) {
+        LinearScale newOverlapScale, String newTopic1, String newTopic2) {
 
         startY = newStartY;
         endY = newEndY;
         overlapSize = newOverlapSize;
         overlapScale = newOverlapScale;
+        topic1 = newTopic1;
+        topic2 = newTopic2;
     }
 
-    void draw (PGraphics targetContext) {
+    boolean isSelected () {
+        boolean isSelected;
+        if (selectedTopic == null) {
+            isSelected = false;
+        } else {
+            isSelected = selectedTopic.equals(topic1);
+            isSelected = isSelected || selectedTopic.equals(topic2);
+        }
+
+        return isSelected;
+    }
+
+    void drawFg (PGraphics targetContext) {
+        if (isSelected()) {
+            drawArc(targetContext, NEAR_BLACK);
+        }
+    }
+
+    void drawArc (PGraphics targetContext, int targetColor) {
         targetContext.pushMatrix();
         targetContext.pushStyle();
 
         targetContext.noFill();
         targetContext.ellipseMode(CENTER);
 
-        targetContext.stroke(NEAR_BLACK_EXTRA_TRANSPARENT);
-        targetContext.strokeWeight(overlapScale.scale(overlapSize));
+        targetContext.stroke(targetColor);
 
+        targetContext.strokeWeight(overlapScale.scale(overlapSize));
         targetContext.arc(
             WIDTH - 250,
             (startY + endY) / 2.0,
@@ -146,5 +191,11 @@ class OverlapArc {
 
         targetContext.popMatrix();
         targetContext.popStyle();
+    }
+
+    void drawBg (PGraphics targetContext) {
+        if (!isSelected()) {
+            drawArc(targetContext, MID_GREY_TRANSPARENT);
+        }
     }
 };

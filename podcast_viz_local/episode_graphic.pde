@@ -180,4 +180,15 @@ void loadGraphicEpisodes () {
 
         graphicEpisodes.put(showName, graphics);
     }
+
+    topicSet = new HashSet<String>();
+    curCoocurranceMatrix = new CoocurranceMatrix();
+    for (String showName : ORDERED_SHOW_NAMES) {
+        for (EpisodeGraphic episode : graphicEpisodes.get(showName)) {
+            curCoocurranceMatrix.processEpisode(episode);
+            for (String topic : episode.getEpisode().getTopics()) {
+                topicSet.add(topic);
+            }
+        }
+    }
 }

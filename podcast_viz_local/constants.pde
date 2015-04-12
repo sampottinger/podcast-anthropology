@@ -58,7 +58,7 @@ final int NEAR_BLACK = unhex("FF333333");
 
 final int NEAR_BLACK_TRANSPARENT = unhex("77333333");
 
-final int NEAR_BLACK_EXTRA_TRANSPARENT = unhex("44333333");
+final int MID_GREY_TRANSPARENT = unhex("55777777");
 
 final String[] ORDERED_SHOW_NAMES = {
     "This American Life",
