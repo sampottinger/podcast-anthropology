@@ -41,6 +41,7 @@ void draw () {
 
     preventDefaultCursor = false;
     highlightedEpisode = null;
+    curBottomText = null;
 
     for (GraphicEntity entity : activeScollableEntities) {
         entity.update(int(adjustedMouseX), int(adjustedMouseY));

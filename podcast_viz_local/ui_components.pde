@@ -3,6 +3,11 @@ interface ButtonListener {
 }
 
 
+interface HoverListener {
+    void hovering();
+}
+
+
 class Button implements GraphicEntity {
     private int startX;
     private int startY;
@@ -179,9 +184,16 @@ class NavButton implements GraphicEntity {
 class StaticRect implements GraphicEntity {
     private float startX;
     private float startY;
+    private float hoverEndX;
+    private float hoverEndY;
+    private float hoverStartX;
+    private float hoverStartY;
     private float rectWidth;
     private float rectHeight;
     private int rectColor;
+    private int hoverColor;
+    private HoverListener hoverListener;
+    private boolean inRegion;
 
     StaticRect(float newStartX, float newStartY, float newWidth,
         float newHeight, int newColor) {
@@ -191,6 +203,42 @@ class StaticRect implements GraphicEntity {
         rectWidth = newWidth;
         rectHeight = newHeight;
         rectColor = newColor;
+        hoverColor = newColor;
+
+        float endX = startX + rectWidth;
+        float endY = startY + rectHeight;
+
+        hoverStartX = min(startX, endX);
+        hoverStartY = min(startY, endY) - 5;
+        hoverEndX = max(startX, endX);
+        hoverEndY = max(startY, endY);
+
+        inRegion = false;
+    }
+
+    StaticRect(float newStartX, float newStartY, float newWidth,
+        float newHeight, int newColor, int newHoverColor) {
+
+        startX = newStartX;
+        startY = newStartY;
+        rectWidth = newWidth;
+        rectHeight = newHeight;
+        rectColor = newColor;
+        hoverColor = newHoverColor;
+
+        float endX = startX + rectWidth;
+        float endY = startY + rectHeight;
+
+        hoverStartX = min(startX, endX);
+        hoverStartY = min(startY, endY);
+        hoverEndX = max(startX, endX);
+        hoverEndY = max(startY, endY);
+
+        inRegion = false;
+    }
+
+    void setHoverListener (HoverListener newListener) {
+        hoverListener = newListener;
     }
 
     void draw () {
@@ -199,14 +247,24 @@ class StaticRect implements GraphicEntity {
 
         rectMode(CORNER);
         noStroke();
-        fill(rectColor);
+        fill(inRegion ? hoverColor : rectColor);
         rect(startX, startY, rectWidth, rectHeight);
 
         popStyle();
         popMatrix();
     }
 
-    void update (int x, int y) { }
+    void update (int localMouseX, int localMouseY) {
+
+        inRegion = (localMouseX > hoverStartX);
+        inRegion = inRegion && (localMouseX < hoverEndX);
+        inRegion = inRegion && (localMouseY > hoverStartY);
+        inRegion = inRegion && (localMouseY < hoverEndY);
+
+        if (inRegion && hoverListener != null) {
+            hoverListener.hovering();
+        }
+    }
 
     void onPress (int x, int y) { }
 

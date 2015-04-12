@@ -2,6 +2,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
 Episode highlightedEpisode = null;
+String curBottomText = null;
 DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd MMM, yyyy");
 
 
@@ -53,6 +54,11 @@ void drawDetailsArea () {
         text(highlightedEpisode.getShow(), 300, contentY);
         text(getDurTextLong(highlightedEpisode.getDur()), 500, contentY);
         text(getDateText(highlightedEpisode.getPubDate()), 700, contentY);
+    } else if (curBottomText != null) {
+        fill(NEAR_BLACK);
+        textFont(FONT_12);
+        int textY = HEIGHT - 20;
+        text(curBottomText, 10, textY);
     }
 
     popStyle();

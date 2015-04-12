@@ -275,9 +275,23 @@ class AggregationBarChart implements GraphicEntity {
                 }
                 float barHeight = yScale.scale(barVal);
                 
-                childrenEntities.add(
-                    new StaticRect(x, y, barWidth - 1, barHeight, MID_GREY)
+                final int visibleCounts = counts.get(diff);
+                HoverListener newListener = new HoverListener() {
+                    public void hovering () {
+                        curBottomText = nfc(visibleCounts);
+                    }
+                };
+
+                StaticRect newRect = new StaticRect(
+                    x,
+                    y,
+                    barWidth - 1,
+                    barHeight,
+                    MID_GREY,
+                    NEAR_BLACK
                 );
+                newRect.setHoverListener(newListener);
+                childrenEntities.add(newRect);
             }
 
             i++;
