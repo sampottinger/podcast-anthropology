@@ -193,16 +193,22 @@ class AggregationBarChart implements GraphicEntity {
         for (GraphicEntity e : childrenEntities) { e.draw(); }
     }
 
-    void update () {
-        for (GraphicEntity e : childrenEntities) { e.update(); }
+    void update (int localMouseX, int localMouseY) {
+        for (GraphicEntity e : childrenEntities) {
+            e.update(localMouseX, localMouseY);
+        }
     }
 
-    void onPress () {
-        for (GraphicEntity e : childrenEntities) { e.onPress(); }
+    void onPress (int localMouseX, int localMouseY) {
+        for (GraphicEntity e : childrenEntities) {
+            e.onPress(localMouseX, localMouseY);
+        }
     }
 
-    void onRelease () {
-        for (GraphicEntity e : childrenEntities) { e.onRelease(); }
+    void onRelease (int localMouseX, int localMouseY) {
+        for (GraphicEntity e : childrenEntities) {
+            e.onRelease(localMouseX, localMouseY);
+        }
     }
     
     private void createElements () {

@@ -51,23 +51,23 @@ class Button implements GraphicEntity {
         popMatrix();
     }
 
-    void update () {
+    void update (int localMouseX, int localMouseY) {
         boolean isOutside = false;
-        isOutside = isOutside || (adjustedMouseX < startX);
-        isOutside = isOutside || (adjustedMouseX > startX + buttonWidth);
-        isOutside = isOutside || (adjustedMouseY < startY);
-        isOutside = isOutside || (adjustedMouseY > startY + buttonHeight);
+        isOutside = isOutside || (localMouseX < startX);
+        isOutside = isOutside || (localMouseX > startX + buttonWidth);
+        isOutside = isOutside || (localMouseY < startY);
+        isOutside = isOutside || (localMouseY > startY + buttonHeight);
         hovering = !isOutside;
     }
 
-    void onPress () {
-        update();
+    void onPress (int localMouseX, int localMouseY) {
+        update(localMouseX, localMouseY);
         if (hovering && listener != null) {
             listener.onPress();
         }
     }
 
-    void onRelease () {}
+    void onRelease (int localMouseX, int localMouseY) {}
 };
 
 
@@ -121,21 +121,21 @@ class NavButton implements GraphicEntity {
         popMatrix();
     }
 
-    void update () {
-        hovering = mouseY < START_Y_MAIN;
-        hovering = hovering && mouseY > startY;
-        hovering = hovering && mouseX > startX;
-        hovering = hovering && mouseX < (startX + buttonWidth);
+    void update (int localMouseX, int localMouseY) {
+        hovering = localMouseY < START_Y_MAIN;
+        hovering = hovering && localMouseY > startY;
+        hovering = hovering && localMouseX > startX;
+        hovering = hovering && localMouseX < (startX + buttonWidth);
     }
 
-    void onPress () {
-        update();
+    void onPress (int localMouseX, int localMouseY) {
+        update(localMouseX, localMouseY);
         if (hovering && listener != null) {
             listener.onPress();
         }
     }
 
-    void onRelease () {}
+    void onRelease (int localMouseX, int localMouseY) {}
 };
 
 
@@ -169,11 +169,11 @@ class StaticRect implements GraphicEntity {
         popMatrix();
     }
 
-    void update () { }
+    void update (int x, int y) { }
 
-    void onPress () { }
+    void onPress (int x, int y) { }
 
-    void onRelease () { }
+    void onRelease (int x, int y) { }
 };
 
 
@@ -208,11 +208,11 @@ class Title implements GraphicEntity {
         popMatrix();
     }
 
-    void update () { }
+    void update (int x, int y) { }
 
-    void onPress () { }
+    void onPress (int x, int y) { }
 
-    void onRelease () { }
+    void onRelease (int x, int y) { }
 };
 
 
@@ -253,30 +253,36 @@ class EntityRegion implements GraphicEntity {
         for (GraphicEntity entity : entities) { entity.draw(); }
     }
 
-    void update () {
-        inRegion = (!minXSet || (adjustedMouseX > minX));
-        inRegion = inRegion && (!maxXSet || (adjustedMouseX < maxX));
-        inRegion = inRegion && (!minYSet || (adjustedMouseY > minY));
-        inRegion = inRegion && (!maxYSet || (adjustedMouseY < maxY));
+    void update (int localMouseX, int localMouseY) {
+        inRegion = (!minXSet || (localMouseX > minX));
+        inRegion = inRegion && (!maxXSet || (localMouseX < maxX));
+        inRegion = inRegion && (!minYSet || (localMouseY > minY));
+        inRegion = inRegion && (!maxYSet || (localMouseY < maxY));
 
         if (inRegion || prevInRegion) {
-            for (GraphicEntity entity : entities) { entity.update(); }
+            for (GraphicEntity entity : entities) {
+                entity.update(localMouseX, localMouseY);
+            }
         }
 
         prevInRegion = inRegion;
     }
 
-    void onPress () {
-        update();
+    void onPress (int localMouseX, int localMouseY) {
+        update(localMouseX, localMouseY);
 
         if (inRegion) {
-            for (GraphicEntity entity : entities) { entity.onPress(); }
+            for (GraphicEntity entity : entities) {
+                entity.onPress(localMouseX, localMouseY);
+            }
         }
     }
 
-    void onRelease () {
+    void onRelease (int localMouseX, int localMouseY) {
         if (inRegion) {
-            for (GraphicEntity entity : entities) { entity.onRelease(); }
+            for (GraphicEntity entity : entities) {
+                entity.onRelease(localMouseX, localMouseY);
+            }
         }
     }
 

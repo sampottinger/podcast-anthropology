@@ -72,11 +72,11 @@ class NumberAxis implements GraphicEntity {
         popMatrix();
     }
 
-    void update () { }
+    void update (int x, int y) { }
 
-    void onPress () { }
+    void onPress (int x, int y) { }
 
-    void onRelease () { }
+    void onRelease (int x, int y) { }
 };
 
 
@@ -110,11 +110,11 @@ class YMarker implements GraphicEntity {
         popMatrix();
     }
 
-    void update () { }
+    void update (int x, int y) { }
 
-    void onPress () { }
+    void onPress (int x, int y) { }
 
-    void onRelease () { }
+    void onRelease (int x, int y) { }
 };
 
 
@@ -152,9 +152,9 @@ class TinyLegend implements GraphicEntity {
         popStyle();
     }
 
-    void update () {}
-    void onPress () {}
-    void onRelease () {}
+    void update (int x, int y) {}
+    void onPress (int x, int y) {}
+    void onRelease (int x, int y) {}
 };
 
 
@@ -236,7 +236,7 @@ class SummaryLegend implements GraphicEntity {
         popStyle();
     }
 
-    void update () {}
-    void onPress () {}
-    void onRelease () {}
+    void update (int x, int y) {}
+    void onPress (int x, int y) {}
+    void onRelease (int x, int y) {}
 };

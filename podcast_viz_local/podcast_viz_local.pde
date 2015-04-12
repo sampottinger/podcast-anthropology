@@ -43,15 +43,15 @@ void draw () {
     highlightedEpisode = null;
 
     for (GraphicEntity entity : activeScollableEntities) {
-        entity.update();
+        entity.update(int(adjustedMouseX), int(adjustedMouseY));
     }
 
     for (GraphicEntity entity : activeNonScollableEntities) {
-        entity.update();
+        entity.update(mouseX, mouseY);
     }
 
     for (GraphicEntity entity : navBarEntities) {
-        entity.update();
+        entity.update(mouseX, mouseY);
     }
 
     background(BACKGROUND_COLOR);
@@ -86,29 +86,29 @@ void draw () {
 
 void mousePressed () {
     for (GraphicEntity entity : activeScollableEntities) {
-        entity.onPress();
+        entity.onPress(int(adjustedMouseX), int(adjustedMouseY));
     }
 
     for (GraphicEntity entity : activeNonScollableEntities) {
-        entity.onPress();
+        entity.onPress(mouseX, mouseY);
     }
 
     for (GraphicEntity entity : navBarEntities) {
-        entity.onPress();
+        entity.onPress(mouseX, mouseY);
     }
 }
 
 
 void mouseReleased () {
     for (GraphicEntity entity : activeScollableEntities) {
-        entity.onRelease();
+        entity.onRelease(int(adjustedMouseX), int(adjustedMouseY));
     }
 
     for (GraphicEntity entity : activeNonScollableEntities) {
-        entity.onRelease();
+        entity.onRelease(mouseX, mouseY);
     }
 
     for (GraphicEntity entity : navBarEntities) {
-        entity.onRelease();
+        entity.onRelease(mouseX, mouseY);
     }
 }

@@ -135,7 +135,7 @@ void selectTopic (String topic) {
         for (EpisodeGraphic episode : graphicEpisodes.get(showName)) {
             PVector center = topicMovementCenters.get(showName);
             episode.goTo(new PVector(
-                center.x,
+                center.x + 50,
                 center.y
             ));
         }

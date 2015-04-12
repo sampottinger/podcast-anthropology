@@ -14,11 +14,11 @@ class ShowBubble implements GraphicEntity {
         );
     }
 
-    void update () { }
+    void update (int x, int y) { }
 
-    void onPress () { }
+    void onPress (int x, int y) { }
 
-    void onRelease () { }
+    void onRelease (int x, int y) { }
 
     void draw () {
         pushStyle();
@@ -72,7 +72,7 @@ class EpisodeGraphic implements GraphicEntity, Comparable<EpisodeGraphic>{
         return new PVector(pos.x, pos.y);
     }
 
-    void update () {
+    void update (int localMouseX, int localMouseY) {
         if (idlingStrategy != null && idling) {
             idlingStrategy.update(this);
         }
@@ -81,7 +81,7 @@ class EpisodeGraphic implements GraphicEntity, Comparable<EpisodeGraphic>{
             moveToTargetPos();
         }
 
-        PVector distanceVec = new PVector(adjustedMouseX, adjustedMouseY);
+        PVector distanceVec = new PVector(localMouseX, localMouseY);
         distanceVec.sub(pos);
         hovering = distanceVec.mag() < EPISODE_HOVER_DISTANCE;
         if (hovering) {
@@ -148,9 +148,9 @@ class EpisodeGraphic implements GraphicEntity, Comparable<EpisodeGraphic>{
         popMatrix();
     }
 
-    void onPress () { }
+    void onPress (int x, int y) { }
 
-    void onRelease () { }
+    void onRelease (int x, int y) { }
 
     Episode getEpisode () {
         return episode;

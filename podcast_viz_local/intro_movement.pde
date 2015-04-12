@@ -275,7 +275,7 @@ class DescriptionMessage implements GraphicEntity {
         bodyKey = newBodyKey;
     }
 
-    void update() {}
+    void update(int x, int y) {}
 
     void draw() {
         pushStyle();
@@ -309,9 +309,9 @@ class DescriptionMessage implements GraphicEntity {
         popMatrix();
     }
 
-    void onRelease () { }
+    void onRelease (int localMouseX, int localMouseY) { }
 
-    void onPress () { }
+    void onPress (int localMouseX, int localMouseY) { }
 };
 
 

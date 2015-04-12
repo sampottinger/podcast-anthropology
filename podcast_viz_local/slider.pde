@@ -41,31 +41,31 @@ class Slider implements GraphicEntity{
         curPos = newStartY;
     }
 
-    void updateHovering () {
-        hovering = mouseX > startX;
-        hovering = hovering && mouseX < endX;
-        hovering = hovering && mouseY > startY;
-        hovering = hovering && mouseY < endY;
+    void updateHovering (int localMouseX, int localMouseY) {
+        hovering = localMouseX > startX;
+        hovering = hovering && localMouseX < endX;
+        hovering = hovering && localMouseY > startY;
+        hovering = hovering && localMouseY < endY;
     }
 
-    void onPress () {
-        updateHovering();
+    void onPress (int localMouseX, int localMouseY) {
+        updateHovering(localMouseX, localMouseY);
         if (hovering) {
             active = true;
         }
     }
 
-    void onRelease () {
+    void onRelease (int localMouseX, int localMouseY) {
         active = false;
     }
 
-    void update () {
-        updateHovering();
+    void update (int localMouseX, int localMouseY) {
+        updateHovering(localMouseX, localMouseY);
         if (!active) {
             return;
         }
 
-        curPos = mouseY - startY;
+        curPos = localMouseY - startY;
         if (curPos > endY - visiblePx) {
             curPos = endY - visiblePx;
         }

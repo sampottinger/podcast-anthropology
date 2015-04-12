@@ -40,18 +40,18 @@ class GraphicalTopic implements GraphicEntity {
         isActive = false;
     }
 
-    void update () {
-        isHovering = adjustedMouseX > pos.x - 70;
-        isHovering = isHovering && adjustedMouseX < pos.x + 100;
-        isHovering = isHovering && adjustedMouseY > pos.y;
-        isHovering = isHovering && adjustedMouseY < pos.y + 11;
+    void update (int localMouseX, int localMouseY) {
+        isHovering = localMouseX > pos.x - 70;
+        isHovering = isHovering && localMouseX < pos.x + 100;
+        isHovering = isHovering && localMouseY > pos.y;
+        isHovering = isHovering && localMouseY < pos.y + 11;
 
         preventDefaultCursor = true;
         cursor(HAND);
     }
 
-    void onPress () {
-        update();
+    void onPress (int localMouseX, int localMouseY) {
+        update(localMouseX, localMouseY);
         isActive = isHovering;
 
         if (isActive) {
@@ -61,7 +61,7 @@ class GraphicalTopic implements GraphicEntity {
         }
     }
 
-    void onRelease () {
+    void onRelease (int localMouseX, int localMouseY) {
 
     }
 
@@ -127,9 +127,9 @@ class CachedArcs implements GraphicEntity {
         image(graphicsCache, x, y);
     }
 
-    void update () {}
-    void onPress () {}
-    void onRelease () {}
+    void update (int x, int y) {}
+    void onPress (int x, int y) {}
+    void onRelease (int x, int y) {}
 };
 
 

@@ -1,8 +1,8 @@
 interface GraphicEntity {
     void draw ();
-    void update ();
-    void onPress ();
-    void onRelease ();
+    void update (int localMouseX, int localMouseY);
+    void onPress (int localMouseX, int localMouseY);
+    void onRelease (int localMouseX, int localMouseY);
 }
 
 
