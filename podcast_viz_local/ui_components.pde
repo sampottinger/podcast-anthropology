@@ -214,3 +214,89 @@ class Title implements GraphicEntity {
 
     void onRelease () { }
 };
+
+
+class EntityRegion implements GraphicEntity {
+    private boolean minXSet;
+    private boolean minYSet;
+    private boolean maxXSet;
+    private boolean maxYSet;
+
+    private boolean inRegion;
+    private boolean prevInRegion;
+
+    private int minX;
+    private int minY;
+    private int maxX;
+    private int maxY;
+
+    private ArrayList<GraphicEntity> entities;
+
+    EntityRegion (ArrayList<GraphicEntity> newEntities) {
+        entities = newEntities;
+
+        minX = 0;
+        minY = 0;
+        maxX = 0;
+        maxY = 0;
+
+        minXSet = false;
+        minYSet = false;
+        maxXSet = false;
+        maxYSet = false;
+
+        inRegion = false;
+        prevInRegion = false;
+    }
+
+    void draw () {
+        for (GraphicEntity entity : entities) { entity.draw(); }
+    }
+
+    void update () {
+        inRegion = (!minXSet || (adjustedMouseX > minX));
+        inRegion = inRegion && (!maxXSet || (adjustedMouseX < maxX));
+        inRegion = inRegion && (!minYSet || (adjustedMouseY > minY));
+        inRegion = inRegion && (!maxYSet || (adjustedMouseY < maxY));
+
+        if (inRegion || prevInRegion) {
+            for (GraphicEntity entity : entities) { entity.update(); }
+        }
+
+        prevInRegion = inRegion;
+    }
+
+    void onPress () {
+        update();
+
+        if (inRegion) {
+            for (GraphicEntity entity : entities) { entity.onPress(); }
+        }
+    }
+
+    void onRelease () {
+        if (inRegion) {
+            for (GraphicEntity entity : entities) { entity.onRelease(); }
+        }
+    }
+
+    void setMinX (int newMinX) {
+        minX = newMinX;
+        minXSet = true;
+    }
+
+    void setMinY (int newMinY) {
+        minY = newMinY;
+        minYSet = true;
+    }
+
+    void setMaxX (int newMaxX) {
+        maxX = newMaxX;
+        maxXSet = true;
+    }
+
+    void setMaxY (int newMaxY) {
+        maxY = newMaxY;
+        maxYSet = true;
+    }
+};

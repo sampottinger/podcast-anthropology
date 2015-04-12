@@ -54,6 +54,7 @@ ArrayList<CachedTopic> createCachedTopics () {
 PVector createTopicDisplays () {
     PVector newPos = null;
     ArrayList<CachedTopic> cachedTopics = createCachedTopics();
+    ArrayList<GraphicEntity> entities = new ArrayList<GraphicEntity>();
     topicPositions = new HashMap<String, PVector>();
 
     int maxCount = cachedTopics.get(0).getCount();
@@ -64,10 +65,15 @@ PVector createTopicDisplays () {
     for (CachedTopic topic : cachedTopics) {
         newPos = new PVector(x, y);
         GraphicalTopic newGraphic = new GraphicalTopic(topic, barScale, newPos);
-        activeScollableEntities.add(newGraphic);
+        entities.add(newGraphic);
         topicPositions.put(topic.getTopic(), new PVector(x, y));
         y += 14;
     }
+
+    EntityRegion region = new EntityRegion(entities);
+    region.setMinX(x - 100);
+    region.setMinY(START_Y_MAIN);
+    activeScollableEntities.add(region);
 
     return newPos;
 }

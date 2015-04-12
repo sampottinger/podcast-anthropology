@@ -26,6 +26,7 @@ class GraphicalTopic implements GraphicEntity {
     private LinearScale barScale;
     private PVector pos;
     private float cachedBarWidth;
+    private boolean isHovering;
 
     GraphicalTopic (CachedTopic newTopic, LinearScale newBarScale,
         PVector newPos) {
@@ -34,10 +35,17 @@ class GraphicalTopic implements GraphicEntity {
         barScale = newBarScale;
         pos = newPos;
         cachedBarWidth = barScale.scale(topic.getCount());
+        isHovering = false;
     }
 
     void update () {
+        isHovering = adjustedMouseX > pos.x - 70;
+        isHovering = isHovering && adjustedMouseX < pos.x + 100;
+        isHovering = isHovering && adjustedMouseY > pos.y;
+        isHovering = isHovering && adjustedMouseY < pos.y + 11;
 
+        preventDefaultCursor = true;
+        cursor(HAND);
     }
 
     void onPress () {
@@ -54,7 +62,7 @@ class GraphicalTopic implements GraphicEntity {
 
         translate(pos.x, pos.y);
 
-        fill(MID_GREY);
+        fill(isHovering ? DARK_GREY : MID_GREY);
         noStroke();
 
         textFont(FONT_10);
@@ -62,7 +70,7 @@ class GraphicalTopic implements GraphicEntity {
         text(topic.getTopic(), 0, 10);
 
         rectMode(CORNER);
-        fill(LIGHT_GREY);
+        fill(isHovering ? MID_GREY : LIGHT_GREY);
         rect(2, 6, 98, 1);
 
         rect(2, 4, cachedBarWidth, 5);
