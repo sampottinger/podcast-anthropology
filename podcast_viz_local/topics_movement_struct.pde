@@ -58,10 +58,14 @@ class GraphicalTopic implements GraphicEntity {
         noStroke();
 
         textFont(FONT_10);
-        text(topic.getTopic(), 2, 10);
+        textAlign(RIGHT);
+        text(topic.getTopic(), 0, 10);
 
         rectMode(CORNER);
-        rect(0, 5, cachedBarWidth, 3);
+        fill(LIGHT_GREY);
+        rect(2, 6, 98, 1);
+
+        rect(2, 4, cachedBarWidth, 5);
 
         popMatrix();
         popStyle();

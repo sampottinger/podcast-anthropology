@@ -57,7 +57,7 @@ PVector createTopicDisplays () {
     topicPositions = new HashMap<String, PVector>();
 
     int maxCount = cachedTopics.get(0).getCount();
-    LinearScale barScale = new LinearScale(0, maxCount, 0, -100);
+    LinearScale barScale = new LinearScale(0, maxCount, 0, 90);
 
     int x = WIDTH - 350;
     int y = START_Y_MAIN + 10;
@@ -81,7 +81,7 @@ void createArcs (float newHeight) {
         for (String topic2 : topicSet) {
             float giniVal = curCoocurranceMatrix.getGini(topic1, topic2);
             int overlapSize = curCoocurranceMatrix.getPairSize(topic1, topic2);
-            if (overlapSize > 1 && giniVal > 0.1 && topic1.compareTo(topic2) < 0) {
+            if (overlapSize > 1 && giniVal > 0.08 && topic1.compareTo(topic2) < 0) {
                 arcsToCache.add(new OverlapArc(
                     topicPositions.get(topic1).y + 5,
                     topicPositions.get(topic2).y + 5,
