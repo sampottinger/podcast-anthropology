@@ -71,6 +71,43 @@ class Button implements GraphicEntity {
 };
 
 
+class NavFlasher implements GraphicEntity {
+    private int x;
+    private int y;
+    private float curFlashLoc;
+
+    NavFlasher(int newX, int newY) {
+        x = newX;
+        y = newY;
+    }
+
+    void draw () {
+        pushMatrix();
+        pushStyle();
+
+        noStroke();
+
+        fill(NEAR_BLACK);
+        textFont(FONT_12);
+        text("Navigation:", x, y);
+
+        rectMode(CORNER);
+        rect(x + curFlashLoc, y + 3, 5, 2);
+
+        popMatrix();
+        popStyle();
+    }
+
+    void update (int localMouseX, int localMouseY) {
+        curFlashLoc = curFlashLoc + 1;
+        curFlashLoc %= 70;
+    }
+
+    void onPress (int localMouseX, int localMouseY) {}
+    void onRelease (int localMouseX, int localMouseY) {}
+};
+
+
 class NavButton implements GraphicEntity {
     private boolean hovering;
     private boolean selected;

@@ -60,7 +60,7 @@ PVector createTopicDisplays () {
     LinearScale barScale = new LinearScale(0, maxCount, 0, 90);
 
     int x = WIDTH - 350;
-    int y = START_Y_MAIN + 10;
+    int y = START_Y_MAIN + 30;
     for (CachedTopic topic : cachedTopics) {
         newPos = new PVector(x, y);
         GraphicalTopic newGraphic = new GraphicalTopic(topic, barScale, newPos);
@@ -74,6 +74,20 @@ PVector createTopicDisplays () {
     region.setMaxX(x + 100);
     region.setMinY(START_Y_MAIN);
     activeScollableEntities.add(region);
+
+    activeScollableEntities.add(new Title(
+        WIDTH - 450,
+        START_Y_MAIN + 10,
+        190,
+        "Topics"
+    ));
+
+    activeScollableEntities.add(new Title(
+        WIDTH - 255,
+        START_Y_MAIN + 10,
+        200,
+        "Topic Connections"
+    ));
 
     return newPos;
 }

@@ -137,18 +137,18 @@ void loadSemiConstants () {
     NAV_PLACEMENT = new HashMap<NavSection, NavButtonPlacement>();
     NAV_PLACEMENT.put(
         NavSection.INTRO,
-        new NavButtonPlacement(20, 40)
+        new NavButtonPlacement(130, 40)
     );
     NAV_PLACEMENT.put(
         NavSection.SHOW_TIMELINE,
-        new NavButtonPlacement(120, 200)
+        new NavButtonPlacement(230, 200)
     );
     NAV_PLACEMENT.put(
         NavSection.SHOW_OVERVIEW,
-        new NavButtonPlacement(340, 170)
+        new NavButtonPlacement(450, 170)
     );
     NAV_PLACEMENT.put(
         NavSection.TOPIC_EXPLORER,
-        new NavButtonPlacement(560, 240)
+        new NavButtonPlacement(670, 240)
     );
 }

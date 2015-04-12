@@ -48,6 +48,8 @@ void createNavArea () {
         WHITE
     ));
 
+    navBarEntities.add(new NavFlasher(5, 25));
+
     navBarEntities.add(createNavButton(
         NavSection.INTRO,
         selectedSection == NavSection.INTRO,
