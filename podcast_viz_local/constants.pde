@@ -52,6 +52,8 @@ final int LIGHT_GREY = unhex("FFC0C0C0");
 
 final float MAX_SPEED = 1000;
 
+final float MIN_SPEED = 10;
+
 final int MID_GREY = unhex("FF777777");
 
 final int NEAR_BLACK = unhex("FF333333");

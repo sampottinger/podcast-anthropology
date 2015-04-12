@@ -97,9 +97,9 @@ class EpisodeGraphic implements GraphicEntity, Comparable<EpisodeGraphic>{
 
         PVector diff = new PVector(targetPos.x, targetPos.y);
         diff.sub(pos);
-        if (diff.mag() < 3) {
+        if (diff.mag() < 1) {
             idling = true;
-            pos = targetPos;
+            setPos(targetPos);
         }
 
         float secDiff = (millis() - lastMillis) / 1000.0;
@@ -112,7 +112,7 @@ class EpisodeGraphic implements GraphicEntity, Comparable<EpisodeGraphic>{
 
         if (diff.mag() < 120) {
             speed = min(
-                map(diff.mag(), 120, 0, MAX_SPEED, 0),
+                map(diff.mag(), 120, 0, MAX_SPEED, MIN_SPEED),
                 speed
             );
         }

@@ -54,7 +54,7 @@ void runIntroSecondPage () {
     introSampleEpisode.goTo(center);
     introSampleEpisode.setIdlingStrategy(new CirclingIdlingStrategy(
         center,
-        5,
+        3,
         5000
     ));
     activeScollableEntities.add(introSampleEpisode);
