@@ -112,3 +112,9 @@ void mouseReleased () {
         entity.onRelease(mouseX, mouseY);
     }
 }
+
+
+void mouseWheel(MouseEvent event) {
+  float e = event.getCount();
+  curScrollSlider.addVal(e);
+}

@@ -11,6 +11,7 @@ class Slider implements GraphicEntity{
     private float visiblePx;
     private boolean active;
     private boolean hovering;
+    private float maxVal;
 
     Slider (float newStartX, float newEndX, float newStartY, float newEndY,
         float startMap, float endMap, float newVisible) {
@@ -20,6 +21,7 @@ class Slider implements GraphicEntity{
         startY = newStartY;
         endY = newEndY;
         active = false;
+        maxVal = endMap;
 
         pxToVal = new LinearScale(
             startY,
@@ -95,5 +97,19 @@ class Slider implements GraphicEntity{
 
     float getVal() {
         return curVal;
+    }
+
+    void addVal (float delta) {
+        curVal += delta;
+        
+        if (curVal < 0) {
+            curVal = 0;
+        }
+
+        if (curVal > maxVal) {
+            curVal = maxVal;
+        }
+
+        curPos = valToPx.scale(curVal);
     }
 };
