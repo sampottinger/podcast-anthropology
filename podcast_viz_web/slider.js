@@ -73,16 +73,16 @@ function Slider (newStartX, newEndX, newStartY, newEndY, startMap, endMap,
 
     var addVal = function (delta) {
         curVal += delta;
-        
-        if (curVal < 0) {
-            curVal = 0;
-        }
-
-        if (curVal > maxVal) {
-            curVal = maxVal;
-        }
-
         curPos = valToPx.scale(curVal);
+        
+        if (curPos > endY - visiblePx) {
+            curPos = endY - visiblePx;
+        }
+        if (curPos < startY) {
+            curPos = startY;
+        }
+
+        curVal = pxToVal.scale(curPos);
     };
 
     // Init

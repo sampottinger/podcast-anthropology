@@ -19,7 +19,7 @@ var getDurTextLong = function (seconds) {
 
 
 var getDateText = function (dateTime) {
-    return dateTime.format("dd MMM, yyyy");
+    return dateTime.format("DD MMM, YYYY");
 };
 
 
