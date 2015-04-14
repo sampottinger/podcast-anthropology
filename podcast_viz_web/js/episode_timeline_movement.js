@@ -11,7 +11,7 @@ var createMonthAggregators = function () {
     var offset = 0;
     var lastDate = START_DATE;
     while (lastDate === null || today.valueOf() - lastDate.valueOf() >= 0) {
-        var newDate = START_DATE.push(offset, 'month');
+        var newDate = START_DATE.push(offset, "month");
         offset++;
         retList.push(new DateAggregationCategory(
             lastDate,
@@ -86,7 +86,7 @@ var placeAllEpisodesByTime = function (startY) {
     var labels = [];
     
     aggregators.forEach(function (aggregator) {
-        labels.push(str(aggregator.getStartDate().year));
+        labels.push(str(aggregator.getStartDate().year()));
     });
     
     var legends = createAggCategoriesLegends(

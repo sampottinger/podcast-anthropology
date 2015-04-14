@@ -185,7 +185,9 @@ function NavButton (newStartX, newStartY, newWidth, newText, newListener) {
 }
 
 
-function StaticRect (newStartX, newStartY, newWidth, newHeight, newColor) {
+function StaticRect (newStartX, newStartY, newWidth, newHeight, newColor,
+    newHoverColor) {
+
     // Private vars
     var startX;
     var startY;
@@ -218,10 +220,10 @@ function StaticRect (newStartX, newStartY, newWidth, newHeight, newColor) {
 
     var update = function (localMouseX, localMouseY) {
 
-        inRegion = (localMouseX > hoverStartX);
-        inRegion = inRegion && (localMouseX < hoverEndX);
-        inRegion = inRegion && (localMouseY > hoverStartY);
-        inRegion = inRegion && (localMouseY < hoverEndY);
+        inRegion = (localMouseX >= hoverStartX);
+        inRegion = inRegion && (localMouseX <= hoverEndX);
+        inRegion = inRegion && (localMouseY >= hoverStartY);
+        inRegion = inRegion && (localMouseY <= hoverEndY);
 
         if (inRegion && hoverListener !== null) {
             hoverListener.hovering();
@@ -238,7 +240,7 @@ function StaticRect (newStartX, newStartY, newWidth, newHeight, newColor) {
     rectWidth = newWidth;
     rectHeight = newHeight;
     rectColor = newColor;
-    hoverColor = newColor;
+    hoverColor = newHoverColor === undefined ? newColor : newHoverColor;
 
     var endX = startX + rectWidth;
     var endY = startY + rectHeight;

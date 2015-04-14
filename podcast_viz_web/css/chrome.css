@@ -1,0 +1,47 @@
+body {
+    background-color: #EEEEEE;
+    font-family: "League Spartan", sans-serif;
+    width: 950px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.section {
+    border-bottom: #777777 1px solid;
+}
+
+
+#header {
+    font-size: 24px;
+    margin-top: 15px;
+}
+
+
+#nav {
+    float: right;
+    margin-right: 20px;
+    padding: 10px 0 5px 0;
+    padding-top: 10px;
+    font-size: 11px;
+    color: #777777;
+}
+
+#nav a {
+    color: #777777;
+}
+
+#nav a:hover {
+    color: #333333;
+}
+
+#nav .nav-link {
+    margin-right: 40px;
+}
+
+
+#subheader {
+    font-size: 11px;
+    color: #777777;
+    padding: 10px 0;
+}

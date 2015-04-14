@@ -122,9 +122,10 @@ var mouseReleased = function () {
 
 
 var mouseWheel = function(event) {
-    if (mouseX > 0 && mouseX < WIDTH && mouseY > 0 && mouseY < HEIGHT) {
+    if (mouseX > 0 && mouseX < WIDTH && mouseY > 0 && mouseY < HEIGHT && navActive) {
         var e = event.detail? event.detail*(-120) : event.wheelDelta;
         e /= 10;
+        e *= -1;
         if (curScrollSlider) {
             curScrollSlider.addVal(e);
         }
@@ -166,7 +167,8 @@ var preloadData = function (callback) {
 };
 
 var setup = function () {
-    createCanvas(WIDTH, HEIGHT);
+    var canvas = createCanvas(WIDTH, HEIGHT);
+    canvas.parent("main-viz-holder");
     frameRate(30);
     preloadData(setupCallback);
     textFont("League Spartan");

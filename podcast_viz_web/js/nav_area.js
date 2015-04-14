@@ -29,7 +29,7 @@ var createNavButton = function (section, selected, listener) {
 
     var retButton = new NavButton (
         startX,
-        0,
+        2,
         newWidth,
         targetText,
         listener
@@ -51,7 +51,7 @@ var createNavArea = function () {
         WHITE
     ));
 
-    navBarEntities.push(new NavFlasher(5, 25));
+    navBarEntities.push(new NavFlasher(5, 27));
 
     navBarEntities.push(createNavButton(
         NavSection.INTRO,

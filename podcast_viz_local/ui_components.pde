@@ -256,10 +256,10 @@ class StaticRect implements GraphicEntity {
 
     void update (int localMouseX, int localMouseY) {
 
-        inRegion = (localMouseX > hoverStartX);
-        inRegion = inRegion && (localMouseX < hoverEndX);
-        inRegion = inRegion && (localMouseY > hoverStartY);
-        inRegion = inRegion && (localMouseY < hoverEndY);
+        inRegion = (localMouseX >= hoverStartX);
+        inRegion = inRegion && (localMouseX <= hoverEndX);
+        inRegion = inRegion && (localMouseY >= hoverStartY);
+        inRegion = inRegion && (localMouseY <= hoverEndY);
 
         if (inRegion && hoverListener != null) {
             hoverListener.hovering();

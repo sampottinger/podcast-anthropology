@@ -86,7 +86,7 @@ var SCROLL_WIDTH = 10;
 
 var START_DATE = moment({year: 1995, month: 1, day: 1});
 
-var START_Y_MAIN = 40;
+var START_Y_MAIN = 42;
 
 var WHITE = "#FFFFFF";
 
