@@ -328,14 +328,19 @@ var updateIntro = function () {
 
     if (introPage == 1) {
         runIntroFirstPage();
+        reportUsage("intro-1");
     } else if (introPage == 2) {
         runIntroSecondPage();
+        reportUsage("intro-2");
     } else if (introPage == 3) {
         runIntroThirdPage();
+        reportUsage("intro-3");
     } else if (introPage == 4) {
         runIntroFourthPage();
+        reportUsage("intro-4");
     } else {
         runIntroFinalPage();
+        reportUsage("intro-5");
     }
 
     introDirty = false;

@@ -82,6 +82,8 @@ var placeAllEpisodesByDuration = function (startY) {
 
 
 var enterEpisodeDurationView = function () {
+    reportUsage("duration");
+
     var lastEnd;
 
     // Clear old elements

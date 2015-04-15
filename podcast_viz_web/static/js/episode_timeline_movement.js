@@ -205,6 +205,8 @@ var createPostingMonthDisplay = function (startY, proto) {
 
 
 var enterEpisodeTimeline = function () {
+    reportUsage("timeline");
+
     // Clear old elements
     activeNonScollableEntities = [];
     activeScollableEntities = [];

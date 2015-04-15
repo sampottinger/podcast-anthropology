@@ -125,6 +125,8 @@ var createArcs = function (newHeight) {
 
 
 var enterTopicMovement = function () {
+    reportUsage("topic");
+
     // Clear old elements
     activeNonScollableEntities = [];
     activeScollableEntities = [];
@@ -152,6 +154,8 @@ var enterTopicMovement = function () {
 
 
 var selectTopic = function (topic) {
+    reportUsage("topic-" + topic);
+
     topicsRegion.setActive(false);
     arcCache.setActive(false);
 

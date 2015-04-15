@@ -12,4 +12,12 @@ var loadJSONObject = function (fileName) {
 
 var str = function (target) {
     return String(target);
-}
+};
+
+var reportUsage = function (action) {
+    $.ajax({
+        type: "POST",
+        url: "/usage",
+        data: {"action": action}
+    })
+};
