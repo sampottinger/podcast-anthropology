@@ -141,6 +141,11 @@ var createPostingDifferencesDisplay = function (startY, proto) {
         "Days between episodes",
         new RawAxisLabelStrategy()
     );
+    proto.setContextStrategy({
+        generateMessage: function (xVal, yVal) {
+            return nfc(int(yVal)) + "% with " + nfc(int(xVal)) + " days between episodes";
+        }
+    });
 
     var barChart = new AggregationBarChart(proto);
     activeScollableEntities.push(barChart);
@@ -185,6 +190,12 @@ var createPostingMonthDisplay = function (startY, proto) {
         "Episodes by month",
         new MonthNumToYearLabelStrategy()
     );
+    proto.setContextStrategy({
+        generateMessage: function (xVal, yVal) {
+            var offsetTime = START_DATE.clone().add(Math.floor(xVal), "months");
+            return nfc(Math.floor(yVal)) + " episodes in " + offsetTime.format("MMM, YYYY");
+        }
+    });
 
     var barChart = new AggregationBarChart(proto);
     activeScollableEntities.push(barChart);

@@ -21,6 +21,7 @@ function AggregationBarChartProto () {
     var midValText;
     var titleText;
     var labelStrategy;
+    var contextStrategy;
 
     // Method declaration
     var setAggSettings = function (newGroups, newBucketGranularity,
@@ -33,6 +34,10 @@ function AggregationBarChartProto () {
         startVal = newStartVal;
         interval = newInterval;
         aggSet = true;
+    };
+
+    var setContextStrategy = function (newTextStrategy) {
+        contextStrategy = newTextStrategy;
     };
 
     var setYCoord = function (newStartY) {
@@ -54,6 +59,10 @@ function AggregationBarChartProto () {
         titleText = newTitle;
         labelStrategy = newLabelStrategy;
         textSet = true;
+    };
+
+    var getContextStrategy = function () {
+        return contextStrategy;
     };
 
     var getGroups = function () {
@@ -168,6 +177,8 @@ function AggregationBarChartProto () {
     this.getMidValText = getMidValText;
     this.getTitleText = getTitleText;
     this.getLabelStrategy = getLabelStrategy;
+    this.setContextStrategy = setContextStrategy;
+    this.getContextStrategy = getContextStrategy;
 }
 
 
@@ -189,6 +200,7 @@ function AggregationBarChart (proto) {
     var childrenEntities;
     var labelStrategy;
     var endYCoord;
+    var contextStrategy;
 
     // Method declaration
     var draw = function () {
@@ -281,7 +293,14 @@ function AggregationBarChart (proto) {
                 var visibleCounts = counts.get(diff);
                 var newListener = {
                     hovering: function () {
-                        curBottomText = nfc(visibleCounts);
+                        if (contextStrategy == null) {
+                            curBottomText = nfc(visibleCounts);
+                        } else {
+                            curBottomText = contextStrategy.generateMessage(
+                                diff - startVal,
+                                barVal
+                            );
+                        }
                     }
                 };
 
@@ -341,6 +360,7 @@ function AggregationBarChart (proto) {
     labelStrategy = proto.getLabelStrategy();
     interval = proto.getInterval();
     childrenEntities = [];
+    contextStrategy = proto.getContextStrategy();
     createElements();
 
     // Attach public properties
