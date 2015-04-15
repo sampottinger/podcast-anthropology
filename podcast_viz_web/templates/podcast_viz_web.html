@@ -1,52 +1,38 @@
-<html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="/static/font/leaguespartan.css">
-        <link rel="stylesheet" type="text/css" href="/static/css/chrome.css">
+{% extends "base.html" %}
 
-        <script type="text/javascript" src="/static/contrib/p5.min.js"></script>
-        <script type="text/javascript" src="/static/contrib/moment.min.js"></script>
-        <script type="text/javascript" src="/static/contrib/dict.js"></script>
-        <script type="text/javascript" src="/static/contrib/setjs.min.js"></script>
-        <script type="text/javascript" src="/static/contrib/jquery-1.11.2.min.js"></script>
+{% block head %}
+<script type="text/javascript" src="/static/contrib/p5.min.js"></script>
+<script type="text/javascript" src="/static/contrib/moment.min.js"></script>
+<script type="text/javascript" src="/static/contrib/dict.js"></script>
+<script type="text/javascript" src="/static/contrib/setjs.min.js"></script>
+<script type="text/javascript" src="/static/contrib/jquery-1.11.2.min.js"></script>
 
-        <script type="text/javascript" src="/static/js/agg_bar_chart.js"></script>
-        <script type="text/javascript" src="/static/js/aggregators.js"></script>
-        <script type="text/javascript" src="/static/js/axis.js"></script>
-        <script type="text/javascript" src="/static/js/color_set.js"></script>
-        <script type="text/javascript" src="/static/js/coocurrance_matrix.js"></script>
-        <script type="text/javascript" src="/static/js/data_loading.js"></script>
-        <script type="text/javascript" src="/static/js/data_structures.js"></script>
-        <script type="text/javascript" src="/static/js/details_area.js"></script>
-        <script type="text/javascript" src="/static/js/episode_duration_movement.js"></script>
-        <script type="text/javascript" src="/static/js/episode_graphic.js"></script>
-        <script type="text/javascript" src="/static/js/episode_timeline_movement.js"></script>
-        <script type="text/javascript" src="/static/js/intro_movement.js"></script>
-        <script type="text/javascript" src="/static/js/nav_area.js"></script>
-        <script type="text/javascript" src="/static/js/scales.js"></script>
-        <script type="text/javascript" src="/static/js/slider.js"></script>
-        <script type="text/javascript" src="/static/js/text.js"></script>
-        <script type="text/javascript" src="/static/js/topics_movement.js"></script>
-        <script type="text/javascript" src="/static/js/topics_movement_struct.js"></script>
-        <script type="text/javascript" src="/static/js/ui_components.js"></script>
-        <script type="text/javascript" src="/static/js/util.js"></script>
+<script type="text/javascript" src="/static/js/agg_bar_chart.js"></script>
+<script type="text/javascript" src="/static/js/aggregators.js"></script>
+<script type="text/javascript" src="/static/js/axis.js"></script>
+<script type="text/javascript" src="/static/js/color_set.js"></script>
+<script type="text/javascript" src="/static/js/coocurrance_matrix.js"></script>
+<script type="text/javascript" src="/static/js/data_loading.js"></script>
+<script type="text/javascript" src="/static/js/data_structures.js"></script>
+<script type="text/javascript" src="/static/js/details_area.js"></script>
+<script type="text/javascript" src="/static/js/episode_duration_movement.js"></script>
+<script type="text/javascript" src="/static/js/episode_graphic.js"></script>
+<script type="text/javascript" src="/static/js/episode_timeline_movement.js"></script>
+<script type="text/javascript" src="/static/js/intro_movement.js"></script>
+<script type="text/javascript" src="/static/js/nav_area.js"></script>
+<script type="text/javascript" src="/static/js/scales.js"></script>
+<script type="text/javascript" src="/static/js/slider.js"></script>
+<script type="text/javascript" src="/static/js/text.js"></script>
+<script type="text/javascript" src="/static/js/topics_movement.js"></script>
+<script type="text/javascript" src="/static/js/topics_movement_struct.js"></script>
+<script type="text/javascript" src="/static/js/ui_components.js"></script>
+<script type="text/javascript" src="/static/js/util.js"></script>
 
-        <script type="text/javascript" src="/static/js/constants.js"></script>
+<script type="text/javascript" src="/static/js/constants.js"></script>
 
-        <script type="text/javascript" src="/static/js/podcast_viz_web.js"></script>
-    </head>
-    <body>
-        <div class="section">
-            <div id="nav">
-                <a class="nav-link" href="">Web Tool</a>
-                <a class="nav-link" href="">Desktop App</a>
-                <a class="nav-link" href="">About</a>
-                <a class="nav-link" href="">Contribute</a>
-            </div>
-            <div id="header">Podcast anthropology.</div>
-        </div>
-        <div class="section" id="main-viz-holder"></div>
-        <div class="section" id="subheader">
-            Visualization for understanding podcasts and seeing their human listeners through topic analysis.
-        </div>
-    </body>
-</html>
+<script type="text/javascript" src="/static/js/podcast_viz_web.js"></script>
+{% endblock %}
+
+{% block body %}
+<div class="section" id="main-viz-holder"></div>
+{% endblock %}

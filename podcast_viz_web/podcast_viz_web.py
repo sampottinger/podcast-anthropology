@@ -55,7 +55,42 @@ def web_tool():
     flask.session['user_id'] = flask.session.get('user_id', generate_id())
 
     # Render homepage
-    return flask.render_template('podcast_viz_web.html')
+    return flask.render_template(
+        'podcast_viz_web.html',
+        page='web'
+    )
+
+
+@app.route('/desktop')
+def desktop_tool():
+    return flask.render_template(
+        'desktop.html',
+        page='desktop'
+    )
+
+
+@app.route('/about')
+def about():
+    return flask.render_template(
+        'about.html',
+        page='about'
+    )
+
+
+@app.route('/contribute')
+def contribute():
+    return flask.render_template(
+        'contribute.html',
+        page='contribute'
+    )
+
+
+@app.route('/terms')
+def terms():
+    return flask.render_template(
+        'terms.html',
+        page='terms'
+    )
 
 
 @app.route('/usage', methods=['POST'])

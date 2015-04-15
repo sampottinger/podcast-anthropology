@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="/static/font/leaguespartan.css">
+        <link href='http://fonts.googleapis.com/css?family=Fanwood+Text' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="/static/css/chrome.css">
+
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        <div class="section">
+            <div id="nav">
+                <a class="nav-link {% if page == "web" %}active{% endif %}" href="/">
+                    {% if page == "web" %}[{% endif %}
+                    Web Tool
+                    {% if page == "web" %}]{% endif %}
+                </a>
+                <a class="nav-link {% if page == "desktop" %}active{% endif %}" href="/desktop">
+                    {% if page == "desktop" %}[{% endif %}
+                    Desktop App
+                    {% if page == "desktop" %}]{% endif %}
+                </a>
+                <a class="nav-link {% if page == "about" %}active{% endif %}" href="/about">
+                    {% if page == "about" %}[{% endif %}
+                    About
+                    {% if page == "about" %}]{% endif %}
+                </a>
+                <a class="nav-link {% if page == "contribute" %}active{% endif %}" href="/contribute">
+                    {% if page == "contribute" %}[{% endif %}
+                    Contribute
+                    {% if page == "contribute" %}]{% endif %}
+                </a>
+                <a class="nav-link" href="http://gleap.org">Author</a>
+            </div>
+            <div id="header">Podcast anthropology.</div>
+        </div>
+        {% block body %}{% endblock %}
+        <div class="section tos">(c) <a href="http://gleap.org">Sam Pottinger</a>, 2015. <a href="/terms">Terms of service</a>.</div>
+    </body>
+</html>

@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="section body-area">
+    <div class="body-section">
+        <div class="body-head">What is this?</div>
+        <div class="body-content">
+            In short, this is a visualization and natural language processing project for understanding the "nature of podcasts" and seeing their human listeners through topic analysis.<br><br>
+            Podcasts are typically periodic audio-only Internet 'radio shows' that, like any media, act as a lens into the cultures producing and consuming them. Once niche, around 25% of Internet users listen to podcasts <a href="http://www.pewresearch.org/fact-tank/2013/12/27/over-a-quarter-of-internet-users-download-or-listen-to-podcasts/">according to the Pew Research Center</a>. Although, being online they also reach an international community and some also play on typical radio stations.<br><br>
+            What is the nature of these podcasts? Can they say anything about their audiences? Can they let us see into emerging cultural trends? This project tries to take a first stab at answering those questions.
+        </div>
+    </div>
+
+    <div class="body-section">
+        <div class="body-head">Who are you? Why did you do this?</div>
+        <div class="body-content">
+            This is a quick (week long) personal project designed and developed by <a href="http://gleap.org">Sam Pottinger</a> done out of personal curiosity while between jobs (not employed at any organization). Sam Pottinger does not have any formal connection to the podcasts included (see below).
+        </div>
+    </div>
+
+    <div class="body-section">
+        <div class="body-head">How did you determine the topics for each episode?</div>
+        <div class="body-content">
+            <a href="http://radiolab.org">Radiolab</a>, <a href="http://www.thisamericanlife.org">This American Life</a>, and <a href="http://thememorypalace.us">The Memory Palace</a> tag their own episodes. Very simple natural language processing via <a href="http://www.nltk.org">NLTK's</a> tokenizer and SnowballStemmer generate tags for <a href="http://99percentinvisible.org">99% Invisible</a> and <a href="http://www.hellointernet.fm">Hello Internet</a> based off their text episode descriptions. There was some manual merging and re-naming of tags to keep coherency across shows.
+        </div>
+    </div>
+
+    <div class="body-section">
+        <div class="body-head">Is this updated?</div>
+        <div class="body-content">
+            Yep. There is an automated process that runs about once a month to collect new data.
+        </div>
+    </div>
+
+    <div class="body-section">
+        <div class="body-head">Do you have a relationship to any of the podcasts?</div>
+        <div class="body-content">Nope. Just a fan who tried to choose a broad-ish set of podcasts to visualize. Please see <a href="http://www.thisamericanlife.org">This American Life</a>, <a href="http://radiolab.org">Radiolab</a>, <a href="http://99percentinvisible.org">99% Invisible</a>, <a href="http://thememorypalace.us">The Memory Palace</a>, and <a href="http://www.hellointernet.fm">Hello Internet</a> for information about the podcasts themselves.</div>
+    </div>
+
+    <div class="body-section">
+        <div class="body-head">How did you come up with the visual representation?</div>
+        <div class="body-content">All work is a little derivative right? This project didn't set out with any other work in mind but I always make an attempt to reflect on the influences behind my work after I get to a release. So... the sense of "tactile" data enjoys a long history but arguably builds from ideas presented by <a href="https://vimeo.com/67076984">Bret Victor</a> and <a href="http://natureofcode.com">Daniel Shiffman</a>. The idea of "exposing the individual in the aggregate" comes from a number of sources including <a href="https://www.youtube.com/watch?v=7TY-6YcZvgc">Kim Rees</a>, <a href="http://www.number27.org/wefeelfine">Jonathan Harris</a>, and <a href="http://archive.stefaner.eu/projects/elastic-lists/">Moritz Stefaner</a>. Alternative network visualizations like the arc diagram go back a long ways but <a href="https://www.youtube.com/watch?v=lDltGVQp8bE">Tamara Munzner</a>, <a href="http://steinweber.net">Philipp Steinweber</a>, and <a href="http://andreaskoller.com">Andreas Koller</a> have done <a href="http://gastonsanchez.com/blog/got-plot/crunching-data/2013/02/03/Star-Wars-Arc-Diagram.html">much in exploring that space</a>.</div>
+    </div>
+
+    <div class="body-section">
+        <div class="body-head">Open source?</div>
+        <div class="body-content">
+            Yep, under the <a href="https://www.gnu.org/licenses/gpl.html">GNU GPL v3</a>. See our <a href="https://github.com/Samnsparky/podcastanthropology">Github project</a>. Written with:
+            <ul>
+                <li><a href="https://processing.org">Processing</a></li>
+                <li><a href="http://p5js.org">p5js</a></li>
+                <li><a href="http://www.joda.org/joda-time/">Joda-Time</a></li>
+                <li><a href="https://github.com/domenic/dict">Domenic's dict</a></li>
+                <li><a href="http://jquery.com">jQuery</a></li>
+                <li><a href="http://momentjs.com">moment.js</a></li>
+                <li><a href="https://github.com/bebraw/setjs">setjs</a></li>
+                <li><a href="http://www.nltk.org">nltk</a></li>
+                <li><a href="http://www.crummy.com/software/BeautifulSoup/">Beautiful Soup</a></li>
+                <li><a href="https://www.theleagueofmoveabletype.com/fanwood">Fanwood Text</a></li>
+                <li><a href="https://www.theleagueofmoveabletype.com/league-spartan">League Spartan</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="body-section">
+        <div class="body-head">Is this a podcast listener?</div>
+        <div class="body-content">
+            Nope. Hold on to your Instacast licensees and your iTunes accounts. Please do not use this project to subscribe to podcasts. This is not meant to be a distribution channel.
+        </div>
+    </div>
+
+    <div class="body-section">
+        <div class="body-head">Are there terms of use? Any data being collected?</div>
+        <div class="body-content">
+            Yep but no more invasive than Apache Logs. We collect very basic usage statistics (which parts of the visualization are being clicking on) and, on top of that, we have a <a href="/terms">run of the mill terms of service</a>. This is effectively an hit-level log which includes an IP address, a non-identifying randomly generated user ID, the button clicked on within the visualization, and the time. The <a href="/desktop">desktop application</a> does not report usage statistics if you would prefer not to have those logs collected during your session.
+        </div>
+    </div>
+
+    <div class="body-section">
+        <div class="body-head">Works cited?</div>
+        <div class="body-content">
+            Always.
+            <ul>
+                <li>Colebourne, Stephen. "Joad-Time." Joda.org. Joda Project, n.d. Web. 15 Apr. 2015.</li>
+                <li>Denicola, Domenic. "Domenic/dict." Github. N.p., n.d. Web. 15 Apr. 2015.</li>
+                <li>DiMeo, Nate. "Episodes." The Memory Palace. Nate DiMeo, n.d. Web. 15 Apr. 2015.</li>
+                <li>Glass, Ira. "Radio Archive by Date." This American Life. Chicago Public Media, n.d. Web. 15 Apr. 2015.</li>
+                <li>Grey, CGP, and Brady Haran. "Hello Internet." Hello Internet RSS Feed. N.p., n.d. Web. 15 Apr. 2015.</li>
+                <li>Harris, Jonathan. "We Feel Fine." Number 27. N.p., 2006. Web. 15 Apr. 2015.</li>
+                <li>"JQuery." JQuery. JQuery Foundation, n.d. Web. 15 Apr. 2015.</li>
+                <li>Kamvar, Sep, Sep Kamvar, and Jonathan Jennings Harris. We Feel Fine: An Almanac of Human Emotion. New York: Scribner, 2009. Print.</li>
+                <li>Mars, Roman. "Episode." 99% Invisible. PRX, n.d. Web. 15 Apr. 2015.</li>
+                <li>Munzner, Tamara. "15 Views of a Node Link Graph." YouTube. Google Inc, 22 Aug. 2012. Web. 15 Apr. 2015.</li>
+                <li>"NLTK 3.0 Documentation." Natural Language Toolkit. NLTK Project, n.d. Web. 15 Apr. 2015.</li>
+                <li>"P5.js." P5.js. Processing Foundation, n.d. Web. 15 Apr. 2015.</li>
+                <li>"Podcasts." Radiolab. WYNC, n.d. Web. 15 Apr. 2015.</li>
+                <li>"Processing.org." Procesing.org. Processing Foundation, n.d. Web. 15 Apr. 2015.</li>
+                <li>"Radiolab Archive." Radiolab. WNYC, n.d. Web. 15 Apr. 2015.</li>
+                <li>Rees, Kim. "Living, Breathing Data." YouTube. Bocoup LLC, 5 June 2013. Web. 15 Apr. 2015.</li>
+                <li>Rich, Micah, Caroline Hadilaksono, and Tyler Finck. "League Spartan." The League of Moveable Type. A Good Company, n.d. Web. 15 Apr. 2015.</li>
+                <li>Richardson, Leonard. "Beautiful Soup." Beautiful Soup. N.p., n.d. Web. 15 Apr. 2015.</li>
+                <li>Sanchez, Gaston. "Star Wars Arc Diagram." N.p., 3 Feb. 2013. Web. 15 Apr. 2015.</li>
+                <li>Schwartz, Barry. "Fanwood." The League of Moveable Type. A Good Company, n.d. Web. 15 Apr. 2015.</li>
+                <li>Shiffman, Daniel, Shannon Fry, and Zannah Marsh. The Nature of Code. New York: Interactive Telecommunications Program at New York U, 2012. Print.</li>
+                <li>Stefaner, Moritz. "Elastic Lists." Http://archive.stefaner.eu. N.p., n.d. Web. 15 Apr. 2015.</li>
+                <li>Vepsäläinen, Juho. "Bebraw/setjs." GitHub. N.p., n.d. Web. 15 Apr. 2015.</li>
+                <li>Victor, Bret. "Media for Thinking the Unthinkable." Vimeo. MIT Media Lab, 4 Apr. 2013. Web. 15 Apr. 2015.</li>
+                <li>Wood, Tim, and Iskren Cherne. "Moment.js." Moment.js. N.p., n.d. Web. 15 Apr. 2015.</li>
+                <li>Zickuhr, Kathryn. "Over a Quarter of Internet Users Download or Listen to Podcasts." Fact Tank. Pew Research Center, 27 Dec. 2013. Web. 15 Apr. 2015.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

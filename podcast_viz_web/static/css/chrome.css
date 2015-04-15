@@ -7,8 +7,57 @@ body {
 }
 
 
+.body-area {
+    font-size: 13px;
+    color: #333333;
+    font-family: "Fanwood Text"
+}
+
+.body-area a {
+    color: #777777;
+}
+
+.body-section {
+    margin-bottom: 40px;
+    margin-top: 10px;
+}
+
+.body-content {
+    color: #777777;
+}
+
+.body-head {
+    color: #333333;
+    padding-bottom: 7px;
+    font-size: 16px;
+}
+
+.image-holder {
+    text-align: center;
+}
+
+
+.image-holder img {
+    max-height: 400px;
+}
+
+
 .section {
     border-bottom: #777777 1px solid;
+}
+
+
+.tos {
+    padding-top: 15px;
+    text-align: center;
+    font-size: 10px;
+    color: #C0C0C0;
+    border-bottom: none;
+}
+
+
+.tos a {
+    color: #C0C0C0;
 }
 
 
@@ -31,8 +80,14 @@ body {
     color: #777777;
 }
 
+#nav a.active {
+    color: #333333;
+    text-decoration: none;
+}
+
 #nav a:hover {
     color: #333333;
+    text-decoration: underline;
 }
 
 #nav .nav-link {
