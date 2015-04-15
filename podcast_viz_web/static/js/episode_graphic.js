@@ -38,7 +38,7 @@ function ShowBubble (newPos, newShow) {
     pos = newPos;
     show = newShow;
     bubbleImage = loadImage(
-        "/data/" + newShow.getName().replace(/ /g, "").replace(/\%/g, "") + ".png"
+        "/static/data/" + newShow.getName().replace(/ /g, "").replace(/\%/g, "") + ".png"
     );
 
     // Attach public members

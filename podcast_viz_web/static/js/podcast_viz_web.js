@@ -141,19 +141,19 @@ var preloadData = function (callback) {
     var textLoaded = false;
     var colorsLoaded = false;
     
-    loadJSON("/data/" + DATASET_JSON_LOC, function (dataset) {
+    loadJSON("/static/data/" + DATASET_JSON_LOC, function (dataset) {
         dataSources[DATASET_JSON_LOC] = dataset;
         datasetLoaded = true;
         tryToMove();
     });
     
-    loadJSON("/data/" + TEXT_SOURCE_LOC, function (textSource) {
+    loadJSON("/static/data/" + TEXT_SOURCE_LOC, function (textSource) {
         dataSources[TEXT_SOURCE_LOC] = textSource;
         textLoaded = true;
         tryToMove();
     });
 
-    loadJSON("/data/show_colors.json", function (showColors) {
+    loadJSON("/static/data/show_colors.json", function (showColors) {
         dataSources["show_colors.json"] = showColors;
         colorsLoaded = true;
         tryToMove();
