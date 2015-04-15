@@ -1,3 +1,8 @@
+interface BarChartTextStrategy {
+    String generateMessage(float xVal, float yVal);
+};
+
+
 class AggregationBarChartProto {
     private boolean aggSet;
     private HashMap<String, Aggregator> groups;
@@ -19,12 +24,18 @@ class AggregationBarChartProto {
     private String midValText;
     private String titleText;
     private AxisLabelStrategy labelStrategy;
+    private BarChartTextStrategy contextStrategy;
 
     AggregationBarChartProto () {
         aggSet = false;
         yCoordSet = false;
         xCoordSet = false;
         textSet = false;
+        contextStrategy = null;
+    }
+
+    void setContextStrategy (BarChartTextStrategy newTextStrategy) {
+        contextStrategy = newTextStrategy;
     }
 
     void setAggSettings (HashMap<String, Aggregator> newGroups,
@@ -59,6 +70,10 @@ class AggregationBarChartProto {
         titleText = newTitle;
         labelStrategy = newLabelStrategy;
         textSet = true;
+    }
+
+    BarChartTextStrategy getContextStrategy () {
+        return contextStrategy;
     }
 
     HashMap<String, Aggregator> getGroups () {
@@ -166,6 +181,7 @@ class AggregationBarChart implements GraphicEntity {
     private boolean usePercent;
     private ArrayList<GraphicEntity> childrenEntities;
     private AxisLabelStrategy labelStrategy;
+    private BarChartTextStrategy contextStrategy;
     
     private float endYCoord;
 
@@ -183,6 +199,7 @@ class AggregationBarChart implements GraphicEntity {
         titleText = proto.getTitleText();
         labelStrategy = proto.getLabelStrategy();
         interval = proto.getInterval();
+        contextStrategy = proto.getContextStrategy();
 
         childrenEntities = new ArrayList<GraphicEntity>();
 
@@ -276,9 +293,19 @@ class AggregationBarChart implements GraphicEntity {
                 float barHeight = yScale.scale(barVal);
                 
                 final int visibleCounts = counts.get(diff);
+                final BarChartTextStrategy innerCntxtStrategy = contextStrategy;
+                final float diffSnap = diff - startVal;
+                final float barValSnap = barVal;
                 HoverListener newListener = new HoverListener() {
                     public void hovering () {
-                        curBottomText = nfc(visibleCounts);
+                        if (innerCntxtStrategy == null) {
+                            curBottomText = nfc(visibleCounts);
+                        } else {
+                            curBottomText = innerCntxtStrategy.generateMessage(
+                                diffSnap,
+                                barValSnap
+                            );
+                        }
                     }
                 };
 

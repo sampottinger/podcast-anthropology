@@ -2,6 +2,7 @@ import java.util.Collections;
 import org.joda.time.DateTime; 
 
 AggregationLevel curTimelineAggLevel = AggregationLevel.MONTH;
+DateTimeFormatter monthDateFormatter = DateTimeFormat.forPattern("MMM, yyyy");
 
 
 DateTime getToday () {
@@ -152,6 +153,11 @@ float createPostingDifferencesDisplay (float startY,
         "Days between episodes",
         new RawAxisLabelStrategy()
     );
+    proto.setContextStrategy( new BarChartTextStrategy () {
+        public String generateMessage (float xVal, float yVal) {
+            return nfc(int(yVal)) + "% with " + nfc(int(xVal)) + " days between episodes";
+        }
+    });
 
     AggregationBarChart barChart = new AggregationBarChart(proto);
     activeScollableEntities.add(barChart);
@@ -199,6 +205,12 @@ float createPostingMonthDisplay (float startY,
         "Episodes by month",
         new MonthNumToYearLabelStrategy()
     );
+    proto.setContextStrategy( new BarChartTextStrategy () {
+        public String generateMessage (float xVal, float yVal) {
+            DateTime offsetTime = START_DATE.plusMonths(int(xVal));
+            return nfc(int(yVal)) + " episodes in " + monthDateFormatter.print(offsetTime);
+        }
+    });
 
     AggregationBarChart barChart = new AggregationBarChart(proto);
     activeScollableEntities.add(barChart);
