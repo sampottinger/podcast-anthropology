@@ -1,3 +1,22 @@
+"""Logic and structures to download podcast information for 99pi.
+
+Logic and structures to download and parse podcast information for 99 Percent
+Invisible. This can be run from the command line with the following usage:
+
+    python nintyninepi.py [OUTPUT JSON FILE]
+
+The script will write the parsed episode information to the provided disk
+location, overwriting any existing contents in that target file.
+
+Note that 99 Percent Invisible is an external service (c) 99 Percent Invisible.
+We love our podcasters and you should too. This is a tool meant for
+anthropological research. Please use with the utmost love and care. <3
+
+@author: Sam Pottinger
+@license: MIT License
+"""
+
+
 import datetime
 import sys
 
@@ -144,6 +163,11 @@ MAPPED_PHRASES = {
 
 
 def load_tracks():
+    """Load information about the 99pi episodes from Sound Cloud.
+
+    @return: List of episodes from Sound Cloud with their episode metadata.
+    @rtype: List of dict
+    """
     with open('soundcloudkey.txt') as f:
         client_id = f.read().replace('\n', '')
         client = soundcloud.Client(client_id=client_id)
@@ -169,6 +193,15 @@ def load_tracks():
 
 
 def interpret_99pi_date(target):
+    """Interpret the date of episode posting.
+
+    @param target: String describing the posting date as parsed from Sound
+        Cloud.
+    @type target: basestring
+    @return: Date representing the posting date of the episode as parsed from
+        Sound Cloud.
+    @rtype: datetime.date
+    """
     major_components = target.split(' ')
     date_components = map(lambda x: int(x), major_components[0].split('/'))
     return datetime.date(
@@ -179,6 +212,15 @@ def interpret_99pi_date(target):
 
 
 def process_track(target, stem_mapping):
+    """Process a single episode from the 99pi Sound Cloud listing.
+
+    @param target: The track listing returned from the Sound Cloud API.
+    @type target: dict
+    @return: Dictionary describing the episode. Contains keys name (str value),
+        date (datetime.date), loc (url - str value), duration (seconds - int),
+        and orig_tags (tags applied to episode - list of str)
+    @rtype: dict
+    """
     name = target['title'].replace('99% Invisible-', '')
     date = interpret_99pi_date(target['created_at'])
     loc = target['permalink']
@@ -200,6 +242,7 @@ def process_track(target, stem_mapping):
 
 
 def main():
+    """Driver for the 99 Percent Invisible parser."""
     if len(sys.argv) != 2:
         print USAGE_STR
         return

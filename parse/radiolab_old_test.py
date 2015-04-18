@@ -1,3 +1,9 @@
+"""Unit tests for the RadioLab website parser.
+
+@author: Sam Pottinger
+@license: MIT License
+"""
+
 import datetime
 import unittest
 

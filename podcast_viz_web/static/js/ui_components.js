@@ -1,5 +1,45 @@
+/**
+ * Common UI elements used across the podcast anthrpology visualization.
+ *
+ * @author Sam Pottinger
+ * @license MIT License
+ */
+
+
+/**
+ * Event listener for when a button is pressed.
+ *
+ * @typedef {Object} ButtonListener
+ * @property {function} onPress - Function without return value or parameters
+ *      called when the button is pressed.
+ */
+
+
+/**
+ * Event listener for when a button is hovered over by the user's cursor..
+ *
+ * @typedef {Object} HoverListener
+ * @property {function} hovering - Function without return value or parameters
+ *      called when the button is hovered.
+ */
+
+
+/**
+ * Simple push button.
+ *
+ * @constructor
+ * @implements {GraphicEntity}
+ * @param {Number} newX - The x coordiante of the left side of the button.
+ * @param {Number} newY - The y coordinate of the top of the button.
+ * @param {Number} newWidth - The width of the button in pixels.
+ * @param {Number} newHeight - The height of the button in pixels.
+ * @param {String} newText - The text to appear on the body of the button.
+ * @param {ButtonListener} newListener - Listener to call when the button is
+ *      pressed.
+ */
 function Button (newX, newY, newWidth, newHeight, newText, newListener) {
-    // Private vars
+
+    // -- Private vars --
     var startX;
     var startY;
     var buttonWidth;
@@ -8,8 +48,12 @@ function Button (newX, newY, newWidth, newHeight, newText, newListener) {
     var buttonText;
     var listener;
 
-    // Method declarations
-    var draw = function () {
+    // -- Method declarations --
+
+    /**
+     * @inheritDoc
+     */
+    var draw = function() {
         push();
 
         if (hovering) {
@@ -34,7 +78,10 @@ function Button (newX, newY, newWidth, newHeight, newText, newListener) {
         pop();
     };
 
-    var update = function (localMouseX, localMouseY) {
+    /**
+     * @inheritDoc
+     */
+    var update = function(localMouseX, localMouseY) {
         var isOutside = false;
         isOutside = isOutside || (localMouseX < startX);
         isOutside = isOutside || (localMouseX > startX + buttonWidth);
@@ -43,16 +90,22 @@ function Button (newX, newY, newWidth, newHeight, newText, newListener) {
         hovering = !isOutside;
     };
 
-    var onPress = function (localMouseX, localMouseY) {
+    /**
+     * @inheritDoc
+     */
+    var onPress = function(localMouseX, localMouseY) {
         update(localMouseX, localMouseY);
         if (hovering && listener !== null) {
             listener.onPress();
         }
     };
 
-    var onRelease = function (localMouseX, localMouseY) {};
+    /**
+     * @inheritDoc
+     */
+    var onRelease = function(localMouseX, localMouseY) {};
 
-    // Init
+    // -- Constructor --
     startX = newX;
     startY = newY;
     buttonWidth = newWidth;
@@ -61,7 +114,7 @@ function Button (newX, newY, newWidth, newHeight, newText, newListener) {
     buttonText = newText;
     listener = newListener;
 
-    // Attach public members
+    // -- Attach public members --
     this.draw = draw;
     this.update = update;
     this.onPress = onPress;
@@ -69,14 +122,27 @@ function Button (newX, newY, newWidth, newHeight, newText, newListener) {
 }
 
 
-function NavFlasher (newX, newY) {
-    // Private vars
+/**
+ * Simple graphic trying to show that the nav bar is interact-able.
+ *
+ * @constructor
+ * @implements {GraphicEntity}
+ * @param {Number} newX - The x coordinate of the flasher.
+ * @param {Number} newY - The y coordinate of the flasher.
+ */
+function NavFlasher(newX, newY) {
+
+    // -- Private vars --
     var x;
     var y;
     var curFlashLoc;
 
-    // Method declarations
-    var draw = function () {
+    // -- Method declarations --
+    
+    /**
+     * @inheritDoc
+     */
+    var draw = function() {
         push();
 
         noStroke();
@@ -91,20 +157,30 @@ function NavFlasher (newX, newY) {
         pop();
     };
 
-    var update = function (localMouseX, localMouseY) {
+    /**
+     * @inheritDoc
+     */
+    var update = function(localMouseX, localMouseY) {
         curFlashLoc = curFlashLoc + 1;
         curFlashLoc %= 70;
     };
 
-    var onPress = function (localMouseX, localMouseY) {};
-    var onRelease = function (localMouseX, localMouseY) {};
+    /**
+     * @inheritDoc
+     */
+    var onPress = function(localMouseX, localMouseY) {};
+    
+    /**
+     * @inheritDoc
+     */
+    var onRelease = function(localMouseX, localMouseY) {};
 
-    // Init
+    // -- Constructor --
     x = newX;
     y = newY;
     curFlashLoc = 0;
 
-    // Attach public members
+    // -- Attach public members --
     this.draw = draw;
     this.update = update;
     this.onPress = onPress;
@@ -112,8 +188,23 @@ function NavFlasher (newX, newY) {
 }
 
 
+/**
+ * Button appearing in the navigation bar at the top of the visualization.
+ *
+ * @constructor
+ * @implements {GraphicEntity}
+ * @param {Number} newStartX - The x coordinate in pixels of the left side of
+ *      this button.
+ * @param {Number} newStartY - The y coordinate in pixels of the top of this
+ *      button.
+ * @param {Number} newWidth - The width of this button in pixels.
+ * @param {String} newText - The text to appear upon this button.
+ * @param {ButtonListener} newListener - Listener to call when the button
+ *      is pressed.
+ */
 function NavButton (newStartX, newStartY, newWidth, newText, newListener) {
-    // Private vars
+
+    // -- Private vars --
     var hovering;
     var selected;
     var startX;
@@ -122,12 +213,22 @@ function NavButton (newStartX, newStartY, newWidth, newText, newListener) {
     var lines;
     var listener;
 
-    // Method declarations
-    var setSelected = function (newState) {
+    // -- Method declarations --
+
+    /**
+     * Indicate if this button should display as selected or not.
+     *
+     * @param {boolean} newState - Flag indicating if this button should display
+     *      as having been selected or not.
+     */
+    var setSelected = function(newState) {
         selected = newState;
     };
 
-    var draw = function () {
+    /**
+     * @inheritDoc
+     */
+    var draw = function() {
         push();
 
         if (hovering) {
@@ -153,30 +254,39 @@ function NavButton (newStartX, newStartY, newWidth, newText, newListener) {
         pop();
     };
 
-    var update = function (localMouseX, localMouseY) {
+    /**
+     * @inheritDoc
+     */
+    var update = function(localMouseX, localMouseY) {
         hovering = localMouseY < START_Y_MAIN;
         hovering = hovering && localMouseY > startY;
         hovering = hovering && localMouseX > startX;
         hovering = hovering && localMouseX < (startX + buttonWidth);
     };
 
-    var onPress = function (localMouseX, localMouseY) {
+    /**
+     * @inheritDoc
+     */
+    var onPress = function(localMouseX, localMouseY) {
         update(localMouseX, localMouseY);
         if (hovering && listener !== null) {
             listener.onPress();
         }
     };
 
-    var onRelease = function (localMouseX, localMouseY) {};
+    /**
+     * @inheritDoc
+     */
+    var onRelease = function(localMouseX, localMouseY) {};
 
-    // Init
+    // -- Constructor --
     startX = newStartX;
     startY = newStartY;
     buttonWidth = newWidth;
     lines = newText.split("\n");
     listener = newListener;
 
-    // Attach public members
+    // -- Attach public members --
     this.setSelected = setSelected;
     this.draw = draw;
     this.update = update;
@@ -185,10 +295,26 @@ function NavButton (newStartX, newStartY, newWidth, newText, newListener) {
 }
 
 
+/**
+ * Simple rectangle that can respond to mouse hover events.
+ *
+ * @constructor
+ * @implements {GraphicEntity}
+ * @param {Number} newStartX - The x coordinate in pixels of this rectangle's
+ *      left side.
+ * @param {Number} newStartY - The y coordinate in pixels of this rectangle's
+ *      top.
+ * @param {Number} newWidth - The width of this rectangle in pixels.
+ * @param {Number} newHeight - The height of this rectangle in pixels.
+ * @param {p5js.color} newColor - The color of htis rectangle when not being
+ *      hovered.
+ * @param {p5js.color} newColor - The color of htis rectangle when the user is
+ *      hovering upon the graphic.
+ */
 function StaticRect (newStartX, newStartY, newWidth, newHeight, newColor,
     newHoverColor) {
 
-    // Private vars
+    // -- Private vars --
     var startX;
     var startY;
     var hoverEndX;
@@ -202,12 +328,22 @@ function StaticRect (newStartX, newStartY, newWidth, newHeight, newColor,
     var hoverListener;
     var inRegion;
 
-    // Method declarations
-    var setHoverListener = function (newListener) {
+    // -- Method declarations --
+
+    /**
+     * Update the listener to call if the user hovers upon this rectangle.
+     *
+     * @param {HoverListener} newListener - Listener to inform when the
+     *      rectangle is hovered over.
+     */
+    var setHoverListener = function(newListener) {
         hoverListener = newListener;
     };
 
-    var draw = function () {
+    /**
+     * @inheritDoc
+     */
+    var draw = function() {
         push();
 
         rectMode(CORNER);
@@ -218,7 +354,10 @@ function StaticRect (newStartX, newStartY, newWidth, newHeight, newColor,
         pop();
     };
 
-    var update = function (localMouseX, localMouseY) {
+    /**
+     * @inheritDoc
+     */
+    var update = function(localMouseX, localMouseY) {
 
         inRegion = (localMouseX >= hoverStartX);
         inRegion = inRegion && (localMouseX <= hoverEndX);
@@ -230,11 +369,17 @@ function StaticRect (newStartX, newStartY, newWidth, newHeight, newColor,
         }
     };
 
-    var onPress = function (x, y) { };
+    /**
+     * @inheritDoc
+     */
+    var onPress = function(x, y) { };
 
-    var onRelease = function (x, y) { };
+    /**
+     * @inheritDoc
+     */
+    var onRelease = function(x, y) { };
 
-    // Init
+    // -- Constructor --
     startX = newStartX;
     startY = newStartY;
     rectWidth = newWidth;
@@ -254,7 +399,7 @@ function StaticRect (newStartX, newStartY, newWidth, newHeight, newColor,
 
     hoverListener = null;
 
-    // Attach public members
+    // -- Attach public members --
     this.setHoverListener = setHoverListener;
     this.draw = draw;
     this.update = update;
@@ -263,15 +408,31 @@ function StaticRect (newStartX, newStartY, newWidth, newHeight, newColor,
 }
 
 
+/**
+ * Simple text element acting as a title to section within the visualization.
+ *
+ * @constructor
+ * @impelements {GraphicEntity}
+ * @param {Number} newX - The x coordinate in pixels of the left side of the
+ *      title.
+ * @param {Number} newY - The y coordinate in pixels of the top of the title.
+ * @param {Number} newWidth - The width of the title in pixels.
+ * @param {String} newContent - The text to display within the title.
+ */
 function Title (newX, newY, newWidth, newContent) {
-    // Private vars
+
+    // -- Private vars --
     var x;
     var y;
     var titleWidth;
     var content;
 
-    // Method declarations
-    var draw = function () {
+    // -- Method declarations --
+
+    /**
+     * @inheritDoc
+     */
+    var draw = function() {
         push();
 
         rectMode(CORNER);
@@ -287,19 +448,28 @@ function Title (newX, newY, newWidth, newContent) {
         pop();
     };
 
-    var update = function (x, y) { };
+    /**
+     * @inheritDoc
+     */
+    var update = function(x, y) { };
 
-    var onPress = function (x, y) { };
+    /**
+     * @inheritDoc
+     */
+    var onPress = function(x, y) { };
 
-    var onRelease = function (x, y) { };
+    /**
+     * @inheritDoc
+     */
+    var onRelease = function(x, y) { };
 
-    // Init
+    // -- Constructor --
     x = newX;
     y = newY;
     titleWidth = newWidth;
     content = newContent;
 
-    // Attach public members
+    // -- Attach public members --
     this.draw = draw;
     this.update = update;
     this.onPress = onPress;
@@ -307,7 +477,19 @@ function Title (newX, newY, newWidth, newContent) {
 }
 
 
-function EntityRegion (newEntities) {
+/**
+ * Region in which mouse events are propogated.
+ *
+ * Region of {GraphicEntities} that stops propogation of mouse events unless the
+ * user's cursor appears within region, increasing efficiency of mouse event
+ * propogation.
+ *
+ * @constructor
+ * @implements {GraphicEntity}
+ * @param {Array<GraphicEntity>} newEntities - The entities within the region.
+ */
+function EntityRegion(newEntities) {
+    
     // Private vars
     var minXSet;
     var minYSet;
@@ -326,14 +508,21 @@ function EntityRegion (newEntities) {
 
     var entities;
 
-    // Method declarations
-    var draw = function () {
-        entities.forEach(function (entity) {
+    // -- Method declarations --
+
+    /**
+     * @inheritDoc
+     */
+    var draw = function() {
+        entities.forEach(function(entity) {
             entity.draw();
         });
     };
 
-    var update = function (localMouseX, localMouseY) {
+    /**
+     * @inheritDoc
+     */
+    var update = function(localMouseX, localMouseY) {
         if (!active) {
             return;
         }
@@ -344,7 +533,7 @@ function EntityRegion (newEntities) {
         inRegion = inRegion && (!maxYSet || (localMouseY < maxY));
 
         if (inRegion || prevInRegion) {
-            entities.forEach(function (entity) {
+            entities.forEach(function(entity) {
                 entity.update(localMouseX, localMouseY);
             });
         }
@@ -352,49 +541,87 @@ function EntityRegion (newEntities) {
         prevInRegion = inRegion;
     };
 
-    var onPress = function (localMouseX, localMouseY) {
+    /**
+     * @inheritDoc
+     */
+    var onPress = function(localMouseX, localMouseY) {
         update(localMouseX, localMouseY);
 
         if (inRegion) {
-            entities.forEach(function (entity) {
+            entities.forEach(function(entity) {
                 entity.onPress(localMouseX, localMouseY);
             });
         }
     };
 
-    var onRelease = function (localMouseX, localMouseY) {
+    /**
+     * @inheritDoc
+     */
+    var onRelease = function(localMouseX, localMouseY) {
         if (inRegion) {
-            entities.forEach(function (entity) {
+            entities.forEach(function(entity) {
                 entity.onRelease(localMouseX, localMouseY);
             });
         }
     };
 
-    var setMinX = function (newMinX) {
+    /**
+     * Set the minimum x value covered by this region's bounding box.
+     *
+     * @param {Number} newMinX - The new x coordinate in pixels of the region's
+     *      bouding box's left hand side.
+     */
+    var setMinX = function(newMinX) {
         minX = newMinX;
         minXSet = true;
     };
 
-    var setMinY = function (newMinY) {
+    /**
+     * Set the minimum y value covered by this region's bounding box.
+     *
+     * @param {Number} newMinX - The new y coordinate in pixels of the region's
+     *      bouding box's top side.
+     */
+    var setMinY = function(newMinY) {
         minY = newMinY;
         minYSet = true;
     };
 
-    var setMaxX = function (newMaxX) {
+    /**
+     * Set the maximum x value covered by this region's bounding box.
+     *
+     * @param {Number} newMaxX - The new x coordinate in pixels of the region's
+     *      bouding box's right hand side.
+     */
+    var setMaxX = function(newMaxX) {
         maxX = newMaxX;
         maxXSet = true;
     };
 
-    var setMaxY = function (newMaxY) {
+    /**
+     * Set the minimum y value covered by this region's bounding box.
+     *
+     * @param {Number} newMaxY - The new y coordinate in pixels of the region's
+     *      bouding box's lower side.
+     */
+    var setMaxY = function(newMaxY) {
         maxY = newMaxY;
         maxYSet = true;
     };
 
-    var setActive = function (newActive) {
+    /**
+     * Indicate if this region is active or not.
+     *
+     * @param {boolean} newActive - Flag indicating if this region should
+     *      propogate events or not. True will start event propogation fired
+     *      when the user's cursor is within the region and False will stop
+     *      event propogation even if the user's cursor appears in the region.
+     */
+    var setActive = function(newActive) {
         active = newActive;
     };
 
-    // Init
+    // -- Constructor --
     entities = newEntities;
 
     minX = 0;
@@ -411,7 +638,7 @@ function EntityRegion (newEntities) {
     prevInRegion = false;
     active = true;
 
-    // Attach public members
+    // -- Attach public members --
     this.draw = draw;
     this.update = update;
     this.onPress = onPress;

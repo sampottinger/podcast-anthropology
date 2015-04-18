@@ -1,3 +1,17 @@
+/**
+ * Visualization "movement" introducing the user to the tool.
+ *
+ * Visualization "movement" (view or mode) which introduces the user to how
+ * the tool works.
+ *
+ * @author Sam Pottinger
+ * @license MIT License
+ */
+
+
+// TODO(apottinger): Refactor movements into classes (one class per movement).
+
+
 var introSampleEpisode;
 var talEnd;
 var talBubble;
@@ -5,7 +19,13 @@ var introDirty = true;
 var introPage = 1;
 
 
-var runIntroFirstPage = function () {
+/**
+ * Driver to start the "introduction" movement.
+ *
+ * The introduction movement requires the user to step through a short tutorial
+ * and this driver function starts that sequence of steps.
+ */
+var runIntroFirstPage = function() {
     var numLines = getTextLines("intro_body_1").length;
     numLines += getTextLines("intro_head_1").length;
     
@@ -21,7 +41,7 @@ var runIntroFirstPage = function () {
         24,
         "Next",
         {
-            onPress: function () {
+            onPress: function() {
                 introPage = 2;
                 introDirty = true;
             }
@@ -39,7 +59,10 @@ var runIntroFirstPage = function () {
 };
 
 
-var runIntroSecondPage = function () {
+/**
+ * Transition the "introduction" movement to the second tutorial step.
+ */
+var runIntroSecondPage = function() {
     detailsAreaActive = true;
 
     var numLines = getTextLines("intro_body_2").length;
@@ -66,7 +89,7 @@ var runIntroSecondPage = function () {
         24,
         "Next",
         {
-            onPress: function () { 
+            onPress: function() { 
                 introPage = 3;
                 introDirty = true;
             }
@@ -75,11 +98,19 @@ var runIntroSecondPage = function () {
 };
 
 
-var placeEpisodeCluster = function (showName, centerPos) {
+/**
+ * Place the episodes for a podcast next to its ShowBubble.
+ *
+ * @param {String} showName - The name of the show 
+ * @param {p5js.Vector} centerPos - The position at which {EpisodeGraphic}
+ *      instances will start. They will move from this starting position into
+ *      a cluster display.
+ */
+var placeEpisodeCluster = function(showName, centerPos) {
     var i = 0;
     var rowNum = 0;
     var finalVector = null;
-    graphicEpisodes.get(showName).forEach(function (episode) {
+    graphicEpisodes.get(showName).forEach(function(episode) {
         var newPos = new p5.Vector(
             i % INTRO_ROW_SIZE * 20,
             Math.floor(i / INTRO_ROW_SIZE) * 20
@@ -94,7 +125,10 @@ var placeEpisodeCluster = function (showName, centerPos) {
 };
 
 
-var runIntroThirdPage = function () {
+/**
+ * Transition the "introduction" movement to the third tutorial step.
+ */
+var runIntroThirdPage = function() {
     activeScollableEntities = [];
     activeScollableEntities.push(
         new DescriptionMessage("intro_head_3", "intro_body_3")
@@ -108,7 +142,7 @@ var runIntroThirdPage = function () {
 
     // Place all of the episodes
     talEnd = placeEpisodeCluster("This American Life", center);
-    graphicEpisodes.get("This American Life").forEach(function (episode) {
+    graphicEpisodes.get("This American Life").forEach(function(episode) {
         episode.setPos(center);
         activeScollableEntities.push(episode);
     });
@@ -132,7 +166,7 @@ var runIntroThirdPage = function () {
         24,
         "Next",
         {
-            onPress: function () {
+            onPress: function() {
                 introPage = 4;
                 introDirty = true;
             }
@@ -141,8 +175,12 @@ var runIntroThirdPage = function () {
 };
 
 
-var runIntroFourthPage = function () {
+/**
+ * Transition the "introduction" movement to the fourth tutorial step.
+ */
+var runIntroFourthPage = function() {
     var showBubble;
+    navActive = true;
 
     activeScollableEntities = [];
     activeScollableEntities.push(
@@ -150,7 +188,7 @@ var runIntroFourthPage = function () {
     );
 
     // Place this american life
-    graphicEpisodes.get("This American Life").forEach(function (episode) {
+    graphicEpisodes.get("This American Life").forEach(function(episode) {
         activeScollableEntities.push(episode);
     });
     activeScollableEntities.push(talBubble);
@@ -162,7 +200,7 @@ var runIntroFourthPage = function () {
 
         var showName = ORDERED_SHOW_NAMES[i];
         lastEnd = placeEpisodeCluster(showName, center);
-        graphicEpisodes.get(showName).forEach(function (episode) {
+        graphicEpisodes.get(showName).forEach(function(episode) {
             episode.setPos(center);
             activeScollableEntities.push(episode);
         });
@@ -184,19 +222,34 @@ var runIntroFourthPage = function () {
         24,
         "Finish",
         {
-            onPress: function () {
+            onPress: function() {
                 introPage = 5;
                 introDirty = true;
             }
         }
-    ));   
+    ));
+
+    createNavArea();
+
+    curScrollSlider = new Slider(
+        WIDTH - SCROLL_WIDTH,
+        WIDTH,
+        START_Y_MAIN + 1,
+        HEIGHT - DETAILS_AREA_HEIGHT - 2,
+        0,
+        lastEnd.y + 50,
+        HEIGHT - DETAILS_AREA_HEIGHT - START_Y_MAIN
+    );
+    activeNonScollableEntities.push(curScrollSlider);
 };
 
 
-var runIntroFinalPage = function () {
+/**
+ * Transition the "introduction" movement to the fifth and final tutorial step.
+ */
+var runIntroFinalPage = function() {
     activeNonScollableEntities = [];
     activeScollableEntities = [];
-    navActive = true;
 
     var lastEnd = new p5.Vector(0, START_Y_MAIN - 50);
     for (var i=0; i<ORDERED_SHOW_NAMES.length; i++) {
@@ -204,7 +257,7 @@ var runIntroFinalPage = function () {
 
         var showName = ORDERED_SHOW_NAMES[i];
         lastEnd = placeEpisodeCluster(showName, center);
-        graphicEpisodes.get(showName).forEach(function (episode) {
+        graphicEpisodes.get(showName).forEach(function(episode) {
             activeScollableEntities.push(episode);
         });
 
@@ -230,16 +283,37 @@ var runIntroFinalPage = function () {
 };
 
 
-function CirclingIdlingStrategy (newCenterPos, newRadius, newNumMillis) {
-    // Private vars
+/**
+ * IdlingStrategy which has a podcast episode in a steady circular motion.
+ *
+ * Strategy which has podcast episodes represented as {EpisodeGraphic} instances
+ * making a steady circular motion while the user is reading intro text.
+ *
+ * @constructor
+ * @implements {IdlingStrategy}
+ * @param {p5js.Vector} newCenterPos - The center around which {EpisodeGraphic}
+ *      instances should orbit.
+ * @param {Number} newRadius - The radius {EpisodeGraphic} instances should
+ *      maintain from the center of the orbit at newCenterPos.
+ * @param {Number} newNumMillis - The oribital period for {EpisodeGraphic}
+ *      instances moving in this strategy. This is how many milliseconds it
+ *      will take an episode to make a full orbit.
+ */
+function CirclingIdlingStrategy(newCenterPos, newRadius, newNumMillis) {
+
+    // -- Private vars --
     var radius;
     var numMillis;
     var startMillis;
     var started;
     var centerPos;
 
-    // Method declarations
-    var update = function (target) {
+    // -- Method declarations --
+
+    /**
+     * @inheritDoc
+     */
+    var update = function(target) {
         if (!started) {
             startMillis = millis();
             started = true;
@@ -254,7 +328,7 @@ function CirclingIdlingStrategy (newCenterPos, newRadius, newNumMillis) {
         target.setPos(retVector);
     };
 
-    // Init
+    // -- Constructor --
     radius = newRadius;
     numMillis = newNumMillis;
     started = false;
@@ -262,20 +336,37 @@ function CirclingIdlingStrategy (newCenterPos, newRadius, newNumMillis) {
     centerPos = new p5.Vector(newCenterPos.x, newCenterPos.y);
     centerPos.sub(new p5.Vector(-radius, 0));
 
-    // Attach public members
+    // -- Attach public members --
     this.update = update;
 }
 
 
+/**
+ * Message showing the user tutorial information.
+ *
+ * @implements {GraphicEntity}
+ * @constructor
+ * @param {String} newIntroKey - The name of the text constant that should
+ *      appear in message's header.
+ * @param {STring} newBodyKey - The name of the text constant that should
+ *      appear in the message's body.
+ */
 function DescriptionMessage (newIntroKey, newBodyKey) {
-    // Private members
+    // -- Private members --
     var introKey;
     var bodyKey;
 
-    // Method declarations
-    var update = function (x, y) {};
+    // -- Method declarations --
 
-    var draw = function () {
+    /**
+     * @inheritDoc
+     */
+    var update = function(x, y) {};
+
+    /**
+     * @inheritDoc
+     */
+    var draw = function() {
         push();
 
         smooth();
@@ -305,15 +396,21 @@ function DescriptionMessage (newIntroKey, newBodyKey) {
         pop();
     };
 
-    var onRelease = function (localMouseX, localMouseY) { };
+    /**
+     * @inheritDoc
+     */
+    var onRelease = function(localMouseX, localMouseY) { };
 
-    var onPress = function (localMouseX, localMouseY) { };
+    /**
+     * @inheritDoc
+     */
+    var onPress = function(localMouseX, localMouseY) { };
 
-    // Init
+    // -- Constructor --
     introKey = newIntroKey;
     bodyKey = newBodyKey;
 
-    // Attach public members
+    // -- Attach public members --
     this.update = update;
     this.draw = draw;
     this.onRelease = onRelease;
@@ -321,7 +418,13 @@ function DescriptionMessage (newIntroKey, newBodyKey) {
 }
 
 
-var updateIntro = function () {
+/**
+ * Driver to transition the visualization to different intro steps.
+ *
+ * Driver funciton transitioning the visualization to different steps within
+ * the introduction movement of the visualization.
+ */
+var updateIntro = function() {
     if (!introDirty) {
         return;
     }

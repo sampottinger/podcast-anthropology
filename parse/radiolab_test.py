@@ -1,3 +1,9 @@
+"""Unit tests for the RadioLab RSS feed parser.
+
+@author: Sam Pottinger
+@license: MIT License
+"""
+
 import radiolab
 
 import datetime

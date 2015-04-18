@@ -47,6 +47,11 @@ body {
 }
 
 
+.thumb {
+    border: 1px solid black;
+}
+
+
 .tos {
     padding-top: 15px;
     text-align: center;

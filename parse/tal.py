@@ -5,16 +5,22 @@ part of the Podcast Anthropology research project. This gathers the publication
 date, location (URL), tags, and name of each podcast in the history of "TAL"
 from its first episode in 1995, serializing to a JSON file.
 
-Note that TAL is an external service (c) 1995 - 2015 Chicago Public Media & Ira
-Glass. Use with the utmost love and care. <3
+This program can be run stand-alone with the following:
 
-USAGE: python tal.py [json location] [all|new]
+    python tal.py [json location] [all|new]
+
+Parameters include:
     - json location: The file location where the serialization should be saved.
     - all|new: Pass "all" to download the entire history. Pass "new" to update
         the JSON file at json location. This will not download episodes already
         parsed to be a good net citizen.
 
-@author Sam Pottinger (2015)
+Note that TAL is an external service (c) 1995 - 2015 Chicago Public Media & Ira
+Glass. We love our podcasters and you should to. This is a tool meant for
+anthropological research. Please use with the utmost love and care. <3
+
+@author: Sam Pottinger
+@license: MIT License
 """
 
 import datetime
@@ -37,6 +43,20 @@ DEBUG = True
 
 
 def enumerate_index_page_locs(start_year=START_YEAR, this_year=None):
+    """Enumerate all episode index pages.
+
+    This American Life paginates their listing of epsiodes and this function
+    gets the URL for all pages in that pagination series.
+
+    @keyword start_year: The year in which the crawler should start its search.
+        Defaults to START_YEAR.
+    @type start_year: int
+    @keyword this_year: The year in which the crawler should end its search. If
+        None, uses the current year. Defaults to None.
+    @type this_year: int
+    @return: List of URLs where episode listings can be found.
+    @rtype: list of str
+    """
     if not this_year: this_year = datetime.date.today().year
 
     return map(
@@ -46,6 +66,21 @@ def enumerate_index_page_locs(start_year=START_YEAR, this_year=None):
 
 
 def get_index_pages_raw(start_year=START_YEAR, this_year=None):
+    """Get the raw contents of episode index pages.
+
+    This American Life paginates their listing of epsiodes and this will
+    download the raw content for each of those pages.
+
+    @keyword start_year: The year in which the crawler should start its search.
+        Defaults to START_YEAR.
+    @type start_year: int
+    @keyword this_year: The year in which the crawler should end its search. If
+        None, uses the current year. Defaults to None.
+    @type this_year: int
+    @return: List where each element contains the contents of a single page
+        parsed.
+    @rtype: list of str
+    """
     locs = enumerate_index_page_locs(start_year, this_year)
 
     returned_requests = map(
@@ -62,6 +97,13 @@ def get_index_pages_raw(start_year=START_YEAR, this_year=None):
 
 
 def get_episode_locs_from_index(content):
+    """Get URLs for individual episodes from an episode index page's contents.
+
+    @param content: The raw text content of a single episode index page.
+    @type content: basestring
+    @return: List of URLs for pages describing individual episodes.
+    @rytpe: list of str
+    """
     soup = bs4.BeautifulSoup(content)
     episode_list = soup.find_all(class_='episode-archive')
     headers = map(lambda x: x.find('h3'), episode_list)
@@ -74,6 +116,13 @@ def get_episode_locs_from_index(content):
 
 
 def interpret_date(content):
+    """Interpret a single date string found on the TAL website.
+
+    @param content: The raw string encoding the desired date.
+    @type content: basestring
+    @return: Date parsed from the provided string.
+    @rytpe: datetime.date
+    """
     components = content.replace(',', '').split(' ')
     month = common.MONTH_ABBRV[components[0]]
     day = int(components[1])
@@ -82,6 +131,18 @@ def interpret_date(content):
 
 
 def get_episode_info(loc, content):
+    """Get information about a single podcast episode.
+
+    @param loc: The URL where infromation about the provided episode can be
+        found.
+    @type loc: basestring
+    @param content: The content of the page at the provided location.
+    @type content: basestring
+    @return: Dictionary describing the episode. Contains keys name (str value),
+        date (datetime.date), loc (url - str value), duration (seconds - int),
+        and orig_tags (tags applied to episode - list of str)
+    @rtype: dict
+    """
     soup = bs4.BeautifulSoup(content)
 
     episode_title = soup.find(class_='node-title').contents[0]
@@ -103,6 +164,12 @@ def get_episode_info(loc, content):
 
 
 def process_all_episodes():
+    """Gather information about all podcast epsiodes.
+
+    @return: List of dictionaries where each dictionary describes a single
+        podcast episode.
+    @rtype: list of dict
+    """
     if DEBUG:
         print 'downloading index pages...'
 
@@ -135,11 +202,24 @@ def process_all_episodes():
 
 
 def serialize_all_episodes():
+    """Gather information about all podcast epsiodes in a serializable form.
+
+    @return: Dictionary with a single episodes key whose value is a list of
+        dictionaries where each of those dictionaries describes a single podcast
+        episode.
+    @rtype: list of dict
+    """
     all_episode_info = process_all_episodes()
     return {'episodes': all_episode_info}
 
 
 def persist_all_episodes(file_location):
+    """Gether and save information about all podcast episodes.
+
+    @param file_location: Location to which episode information should be
+        persisted in JSON format.
+    @type file_location: basestring
+    """
     all_episodes = serialize_all_episodes()
     with open(file_location, 'w') as f:
         f.write(
@@ -148,10 +228,30 @@ def persist_all_episodes(file_location):
 
 
 def get_existing_locations_serailized(existing_info):
+    """Get the location of each podcast episode described in a collection.
+
+    @param existing_info: The information from which podcast episode location
+        should be returned. This should be a dictionary matching the return
+        format from serialize_all_episodes.
+    @type existing_info: dict
+    @return: URLs of podcast episodes described in existing_info.
+    @rtype: list of str
+    """
     return map(lambda x: x['loc'],  existing_info['episodes'])
 
 
 def update_episode_serialization(existing_info):
+    """Download information about TAL episodes not described in existing_info.
+
+    @param existing_info: Information about podcasts whose metadata already
+        exists in the podcast database. This should be a dictionary matching the
+        return format from serialize_all_episodes.
+    @type existing_info: dict
+    @return: Updated existing_info with new episodes added. Dictionary with a
+        single episodes key whose value is a list of dictionaries where each of
+        those dictionaries describes a single podcast episode.
+    @rtype: dict
+    """
     index_pages = get_index_pages_raw()
     episode_location_sets = map(
         lambda x: get_episode_locs_from_index(x),
@@ -178,6 +278,16 @@ def update_episode_serialization(existing_info):
 
 
 def update_and_persist_episodes(file_location):
+    """Load information about existing episodes and download new information.
+
+    Load information about TAL episodes that hvae already been parsed, find
+    and parse episodes not yet included in the database, and finally persist the
+    updated collection containing all TAL episode information.
+
+    @param file_location: Location of the JSON file with information about all
+        TAL epsiodes previously parsed.
+    @type file_location: basestring
+    """
     with open(file_location, 'r') as f:
         existing_info = json.load(f)
 
@@ -189,6 +299,7 @@ def update_and_persist_episodes(file_location):
 
 
 def main():
+    """Driver for the TAL parser."""
     if len(sys.argv) != 3:
         print USAGE_STR
         return

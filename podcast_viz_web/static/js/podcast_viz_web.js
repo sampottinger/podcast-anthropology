@@ -1,3 +1,11 @@
+/**
+ * Main entry point for the podcast anthropology visualization.
+ *
+ * @author Sam Pottinger
+ * @license MIT License
+ */
+
+
 var curScrollSlider = null;
 
 var activeScollableEntities = [];
@@ -16,6 +24,9 @@ var adjustedMouseY;
 var dataSources;
 
 
+/**
+ * Function to call after the visualization data has been downloaded.
+ */
 var setupCallback = function () {
     loadSemiConstants();
 
@@ -32,6 +43,9 @@ var setupCallback = function () {
 };
 
 
+/**
+ * Central loop draw function that performs ongoing calculations and redraws.
+ */
 var draw = function () {
     if (!loaded) {
         return;
@@ -91,6 +105,9 @@ var draw = function () {
 };
 
 
+/**
+ * Callback for when the mouse button is pressed.
+ */
 var mousePressed = function () {
     activeScollableEntities.forEach(function (entity) {
         entity.onPress(int(adjustedMouseX), int(adjustedMouseY));
@@ -106,6 +123,9 @@ var mousePressed = function () {
 };
 
 
+/**
+ * Callback function for when the mouse button is released.
+ */
 var mouseReleased = function () {
     activeScollableEntities.forEach(function (entity) {
         entity.onRelease(int(adjustedMouseX), int(adjustedMouseY));
@@ -121,6 +141,9 @@ var mouseReleased = function () {
 };
 
 
+/**
+ * Callback function for when the mouse wheel is incremented / updated.
+ */
 var mouseWheel = function(event) {
     if (mouseX > 0 && mouseX < WIDTH && mouseY > 0 && mouseY < HEIGHT && navActive) {
         var e = event.detail? event.detail*(-120) : event.wheelDelta;
@@ -135,6 +158,12 @@ var mouseWheel = function(event) {
 };
 
 
+/**
+ * Load visualization data including colors and long string constants.
+ *
+ * @param {function} callback - Function without parameters or return value to
+ *      call after visualization data has been loaded.
+ */
 var preloadData = function (callback) {
     dataSources = {};
     var datasetLoaded = false;
@@ -166,6 +195,10 @@ var preloadData = function (callback) {
     }
 };
 
+
+/**
+ * Initial setup routine that starts p5js and downloads source data.
+ */
 var setup = function () {
     var canvas = createCanvas(WIDTH, HEIGHT);
     canvas.parent("main-viz-holder");

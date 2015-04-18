@@ -1,3 +1,15 @@
+"""Short program renaming episode tags within a JSON file.
+
+Usage: python refine.py [TAG MAPPING] [TARGET FILE]
+
+Will open the JSON file at TARGET FILE and, in place, rename all tags matching
+keys in TAG MAPPING to the corresponding values in TAG MAPPING where TAG MAPPING
+is the location of a JSON file describing how tags should be renamed.
+
+@author: Sam Pottinger
+@license: MIT License
+"""
+
 import json
 import sys
 

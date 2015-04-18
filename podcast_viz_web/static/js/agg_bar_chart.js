@@ -1,6 +1,29 @@
-function AggregationBarChartProto () {
+/**
+ * Objects to build histograms or histogram-like graphics.
+ *
+ * Objects to build histograms or other graphics which show the size of groups
+ * (like number of 30 minute episodes) within a population (like all of the
+ * Radiolab podcasts).
+ *
+ * @author Sam Pottinger
+ * @license MIT License
+ */
 
-    // Private vars
+
+/**
+ * Prototype describing how to create a histogram or histogram-like graphic.
+ *
+ * An object describing how a future histogram should be created. For example,
+ * this prototype pattern will be read by another object like
+ * AggregationBarChart which will use this info to shows the counts for
+ * different groups (like number of 30 minute episodes) within a population
+ * (like all of the Radiolab podcasts).
+ *
+ * @constructor
+ */
+function AggregationBarChartProto() {
+
+    // -- Private vars --
     var aggSet;
     var groups;
     var bucketGranularity;
@@ -23,8 +46,39 @@ function AggregationBarChartProto () {
     var labelStrategy;
     var contextStrategy;
 
-    // Method declaration
-    var setAggSettings = function (newGroups, newBucketGranularity,
+    // -- Method declaration --
+
+    /**
+     * Indicate how entries in the collection should be aggregated.
+     *
+     * Specify how groups should be created within the population for which
+     * this chart is being generated. The aggregator will make a histogram
+     * from the values provided to it via DifferenceAggregator.
+     *
+     * @param {domenic.dict} newGroups - Dict whose values make up the
+     *      population that will be visualized by this prototype's reader. The
+     *      values should be of type {Aggregator}.
+     * @param {Number} newBucketGranularity - The range of the set of values
+     *      that map to each bucket. For example, an aggregator that has buckets
+     *      for values 15 through 25 and 25 through 35 would have a bucket
+     *      granularity of 10.
+     * @param {Number} newInterval - The range of values appearing in the
+     *      histogram. For example, an aggregator that has buckets
+     *      for values 15 through 25 and 25 through 35 would have an interval of
+     *      20.
+     * @param {Number} newStartVal - The smallest bucket value appearing in
+     *      the histogram. For example, an aggregator that has buckets
+     *      for values 15 through 25 and 25 through 35 would have a start value
+     *      of 15.
+     * @param {Number} newMidVal - The histogram axis will show the minimum,
+     *      mid, and possibly maximum value. This is the value that the
+     *      histogram should show for its "mid" point.
+     * @param {boolean} newUsePercent - Boolean flag indicating if the histogram
+     *      will show percentages or raw counts. Flag value of true indicates
+     *      that the histogram will show percentages. Value of false indicates
+     *      that raw counts will be displayed.
+     */
+    var setAggSettings = function(newGroups, newBucketGranularity,
         newInterval, newStartVal, newMidVal, newUsePercent) {
 
         groups = newGroups;
@@ -33,25 +87,63 @@ function AggregationBarChartProto () {
         usePercent = newUsePercent;
         startVal = newStartVal;
         interval = newInterval;
+        
         aggSet = true;
     };
 
-    var setContextStrategy = function (newTextStrategy) {
+    /**
+     * Indicate how hover user help messages should be generated.
+     *
+     * @param {ContextStrategy} newTextStrategy - Strategy which generates user
+     *      help text messages on mouse hover for data points within the
+     *      histogram.
+     */
+    var setContextStrategy = function(newTextStrategy) {
         contextStrategy = newTextStrategy;
     };
 
-    var setYCoord = function (newStartY) {
+    /**
+     * Indicate at what y coordinate the histrogram should be drawn.
+     *
+     * @param {Number} newStartY - The y coordinate in pixels where the
+     *      histogram should be drawn.
+     */
+    var setYCoord = function(newStartY) {
         startY = newStartY;
         yCoordSet = true;
     };
 
-    var setXCoord = function (newStartX, newEndX) {
+    /**
+     * Indicate at what x coordinate the histogram should be drawn.
+     *
+     * Indicate where the histogram should start and stop horizontally by
+     * providing the starting and ending x coordinates for the graphic.
+     *
+     * @param {Number} newStartX - The x coordinate at which the graph will
+     *      start.
+     * @param {Number} newEndX - The x coordinate to which the graph will
+     *      extend.
+     */
+    var setXCoord = function(newStartX, newEndX) {
         startScaleX = newStartX;
         endScaleX = newEndX;
         xCoordSet = true;
     };
 
-    var setText = function (newBaseline, newMidVal, newTitle,
+    /**
+     * Set the text of the labels appearing within the graph.
+     *
+     * @param {String} newBaseline - The text to appear at the "zero" position
+     *      within the graph axis. For a graph showing percentages, this might
+     *      be "0%".
+     * @param {String} newMidVal - The text to appear at the "mid" position
+     *      within the the graph axis. For a graph showing percentages, this
+     *      might be "50%".
+     * @param {String} newTitle - The title for the whole graphic.
+     * @param {LabelStrategy} newLabelStrategy - Strategy to build axis labels
+     *      for data points within the chart.
+     */
+    var setText = function(newBaseline, newMidVal, newTitle,
         newLabelStrategy) {
 
         baselineText = newBaseline;
@@ -61,52 +153,106 @@ function AggregationBarChartProto () {
         textSet = true;
     };
 
-    var getContextStrategy = function () {
+    /**
+     * Get the strategy to build axis labels for data points within the chart.
+     *
+     * @return {LabelStrategy} - Strategy to generate axis label text.
+     */
+    var getContextStrategy = function() {
         return contextStrategy;
     };
 
-    var getGroups = function () {
+    /**
+     * Get the groups to be visualized in the graphic.
+     *
+     * @return {domenic.dict} Dict whose values make up the population that will
+     *      be visualized by this prototype's reader. The values will be of
+     *      type {Aggregator}.
+     */
+    var getGroups = function() {
         if (!aggSet) {
             throw "Aggregation settings not provided.";
         }
         return groups;
     };
 
-    var getBucketGranularity = function () {
+    /**
+     * Get the range of each bucket's values within the histogram.
+     *
+     * @return {Number} The range of the set of values that map to each bucket.
+     *      For example, an aggregator that has buckets for values 15 through 25
+     *      and 25 through 35 would have a bucket granularity of 10.
+     */
+    var getBucketGranularity = function() {
         if (!aggSet) {
             throw "Aggregation settings not provided.";
         }
         return bucketGranularity;
     };
 
-    var getInterval = function () {
+    /**
+     * Get the range of all bucket values within the histogram.
+     *
+     * @return {Number} The range of values appearing in the histogram. For
+     *      example, an aggregator that has buckets for values 15 through 25 and
+     *      25 through 35 would have an interval of 20.
+     */
+    var getInterval = function() {
         if (!aggSet) {
             throw "Aggregation settings not provided.";
         }
         return interval;
     };
 
-    var getStartVal = function () {
+    /**
+     * Get the value of the first bucket appearing in the histogram.
+     *
+     * @return {Number} The smallest bucket value appearing in the histogram.
+     *      For example, an aggregator that has buckets for values 15 through 25
+     *      and 25 through 35 would have a start value of 15.
+     */
+    var getStartVal = function() {
         if (!aggSet) {
             throw "Aggregation settings not provided.";
         }
         return startVal;
     };
 
-    var getMidVal  = function () {
+    /**
+     * Get the value displayed in the axis as the histogram "mid" value.
+     *
+     * @return {Number} The histogram axis will show the minimum, mid, and
+     *      possibly maximum value. This is the value that the histogram should
+     *      show for its "mid" point.
+     */
+    var getMidVal  = function() {
         if (!aggSet) {
             throw "Aggregation settings not provided.";
         }
         return midVal;
     };
 
-    var getUsePercent = function () {
+    /**
+     * Determine if this histogram is showing counts as percentages or not.
+     *
+     * @return {boolean} - Flag indicating if the histogram will show
+     *      percentages or raw counts. Flag value of true indicates that the
+     *      histogram will show percentages. Value of false indicates that raw
+     *      counts will be displayed.
+     */
+    var getUsePercent = function() {
         if (!aggSet) {
             throw "Aggregation settings not provided.";
         }
         return usePercent;
     };
 
+    /**
+     * Get the y value at which this histogram should be drawn.
+     *
+     * @return {Number} The y coordinate in pixels where the histogram should be
+     *      drawn.
+     */
     var getStartY = function() {
         if (!yCoordSet) {
             throw "Y coordinates not provided.";
@@ -114,6 +260,12 @@ function AggregationBarChartProto () {
         return startY;
     };
 
+    /**
+     * The x coordinate at which this histogram starts.
+     *
+     * @return {Number} The x coordinate in pixels at which this histogram will
+     *      start.
+     */
     var getStartScaleX = function() {
         if (!xCoordSet) {
             throw "X coordinates not provided.";
@@ -121,45 +273,74 @@ function AggregationBarChartProto () {
         return startScaleX;
     };
 
-    var getEndScaleX = function () {
+    /**
+     * The x coordinate at which this histogram ends.
+     *
+     * @return {Number} The x coordinate in pixels to which this histogram will
+     *     extend.
+     */
+    var getEndScaleX = function() {
         if (!xCoordSet) {
             throw "X coordinates not provided.";
         }
         return endScaleX;
     };
 
-    var getBaselineText = function () {
+    /**
+     * Get the text to appear at the bottom of the histogram's axis.
+     *
+     * @return {String} Text for the label at the "zero" or "base" of the
+     *      histogram's axis.
+     */
+    var getBaselineText = function() {
         if (!textSet) {
             throw "Text not provided.";
         }
         return baselineText;
     };
 
-    var getMidValText = function () {
+    /**
+     * Get the text to appear in the middle of the histogram's axis.
+     *
+     * @return {String} Text for the label in the middle of the histogram's
+     *      axis.
+     */
+    var getMidValText = function() {
         if (!textSet) {
             throw "Text not provided.";
         }
         return midValText;
     };
 
-    var getTitleText = function () {
+    /**
+     * Get the text that should appear in the histogram's title.
+     *
+     * @return {String} Text to appear in the histogram's title.
+     */
+    var getTitleText = function() {
         if (!textSet) {
             throw "Text not provided.";
         }
         return titleText;
     };
 
-    var getLabelStrategy = function () {
+    /**
+     * Get the strategy for building axis labels.
+     *
+     * @return {LabelStrategy} The strategy for building axis labels for data
+     *      points within the chart.
+     */
+    var getLabelStrategy = function() {
         return labelStrategy;
     };
 
-    // Init
+    // -- Constructor --
     aggSet = false;
     yCoordSet = false;
     xCoordSet = false;
     textSet = false;
 
-    // Attach public properties
+    // -- Attach public properties --
     this.setAggSettings = setAggSettings;
     this.setYCoord = setYCoord;
     this.setXCoord = setXCoord;
@@ -182,9 +363,22 @@ function AggregationBarChartProto () {
 }
 
 
-function AggregationBarChart (proto) {
+/**
+ * Histogram showing the size of groups within a population.
+ *
+ * Histogram whose x axis shows buckets of values (like the length of a podcast)
+ * and whose y axis shows the number of members in each bucket (like the number
+ * of podcasts with the given length).
+ *
+ * @constructor
+ * @implements {GraphicEntity}
+ *
+ * @param {AggregationBarChartProto} proto - Prototype with information about
+ *      the histogram that should be drawn.
+ */
+function AggregationBarChart(proto) {
 
-    // Private vars
+    // -- Private vars --
     var groups;
     var startY;
     var startVal;
@@ -202,30 +396,52 @@ function AggregationBarChart (proto) {
     var endYCoord;
     var contextStrategy;
 
-    // Method declaration
-    var draw = function () {
+    // -- Method declaration --
+
+    /**
+     * @inheritdoc
+     */
+    var draw = function() {
         childrenEntities.forEach(function (e) { e.draw(); });
     };
 
-    var update = function (localMouseX, localMouseY) {
+    /**
+     * @inheritdoc
+     */
+    var update = function(localMouseX, localMouseY) {
         childrenEntities.forEach(function(e) {
             e.update(localMouseX, localMouseY);
         });
     };
 
-    var onPress = function (localMouseX, localMouseY) {
+    /**
+     * @inheritdoc
+     */
+    var onPress = function(localMouseX, localMouseY) {
         childrenEntities.forEach(function(e) {
              e.onPress(localMouseX, localMouseY);
         });
     };
 
+    /**
+     * @inheritdoc
+     */
     var onRelease = function(localMouseX, localMouseY) {
         childrenEntities.forEach(function(e) {
              e.onRelease(localMouseX, localMouseY);
         });
     };
     
-    var createElements = function () {
+    /**
+     * Initalize graph state with child (constituent) graphic elements.
+     *
+     * Initalize the graph's internal state when the drawing surface and data
+     * become available. This will also generate all of the "children" graphic
+     * elements that make up this graphic.
+     *
+     * @private
+     */
+    var createElements = function() {
         var i;
         var bodyStartY = startY + 18;
 
@@ -341,11 +557,16 @@ function AggregationBarChart (proto) {
         endYCoord = 30 * (i + 1) + bodyStartY;
     };
 
+    /**
+     * Get the y coordinate to which this graph extends.
+     *
+     * @return {Number} The y coordiante to which this graph extends.
+     */
     var getEndY = function() {
         return endYCoord;
     };
 
-    // Init
+    // -- Constructor --
     groups = proto.getGroups();
     bucketGranularity = proto.getBucketGranularity();
     startVal = proto.getStartVal();
@@ -363,11 +584,10 @@ function AggregationBarChart (proto) {
     contextStrategy = proto.getContextStrategy();
     createElements();
 
-    // Attach public properties
+    // -- Attach public properties --
     this.draw = draw;
     this.update = update;
     this.onPress = onPress;
     this.onRelease = onRelease;
-    this.createElements = createElements;
     this.getEndY = getEndY;
 }

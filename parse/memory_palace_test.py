@@ -1,3 +1,10 @@
+"""Unit tests for The Memory Palace parsing logic.
+
+@author: Sam Pottinger
+@license: MIT License
+"""
+
+
 import datetime
 import unittest
 

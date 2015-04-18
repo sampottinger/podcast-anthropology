@@ -1,22 +1,85 @@
-function RawAxisLabelStrategy () {
-    this.getLabel = function (inputVal) {
+/**
+ * Helper functions and objects to build axes.
+ *
+ * Helper functions and objects which help to build / draw lightweight axes for
+ * small embedded graphics like histograms.
+ *
+ * @author Sam Pottinger
+ * @license MIT License
+ */
+
+
+/**
+ * Interface for objects generating axis labels for data points within a graph.
+ *
+ * @typedef {Object} LabelStrategy
+ *
+ * @property {function(Number): String} getLabel - Generate a label for a data
+ *      point where the first and only parameter to this function is that
+ *      data point's numerical value.
+ */
+
+/**
+ * Axis label strategy which rounds numeric values.
+ *
+ * Axis label strategy which simply returns the rounded numeric value for a
+ * data point.
+ *
+ * @constructor
+ * @implements {LabelStrategy}
+ */
+function RawAxisLabelStrategy() {
+    
+    /**
+     * @inheritDoc
+     */
+    this.getLabel = function(inputVal) {
         return str(round(inputVal));
     };
 }
 
 
-function MonthNumToYearLabelStrategy () {
-    this.getLabel = function (inputVal) {
+/**
+ * Axis label strategy which returns the year for a data point.
+ *
+ * @constructor
+ * @implements {LabelStrategy}
+ */
+function MonthNumToYearLabelStrategy() {
+    
+    /**
+     * @inheritDoc
+     */
+    this.getLabel = function(inputVal) {
         var intInputVal = int(inputVal);
         return str(Math.floor(intInputVal / 12));
     };
 }
 
 
-function NumberAxis (newX, newY, newWidth, newScale, newStart, newEnd,
+/**
+ * Axis which for a horizontal axis of ordinal values.
+ *
+ * @constructor
+ * @implements {GraphicEntity}
+ *
+ * @param {Number} newX - The x coordinate in pixels at which this axis starts.
+ * @param {Number} newY - The y coordinate in pixels at which this axis should
+ *      be drawn.
+ * @param {Number} newWidth - The width of the axis in pixels.
+ * @param {Number} newStart - The minimum numeric value to be shown within this
+ *      axis.
+ * @param {Number} newEnd - The maximum numeric value to be shown within this
+ *      axis.
+ * @param {Number} newInterval - The range from the value of the first to
+ *      last bucket / value to be shown on this axis.
+ * @param {LabelStrategy} newLabelStrategy - Label strategy to use in generating
+ *      tick mark text.
+ */
+function NumberAxis(newX, newY, newWidth, newScale, newStart, newEnd,
     newInterval, newLabelStrategy) {
 
-    // Private vars
+    // -- Private vars --
     var targetScale;
     var x;
     var y;
@@ -26,15 +89,25 @@ function NumberAxis (newX, newY, newWidth, newScale, newStart, newEnd,
     var interval;
     var labelStrategy;
 
+    // -- Method declarations --
 
-    // Method declarations
-    var drawDottedRule = function (y) {
+    /**
+     * Draw a dotted horizontal line.
+     *
+     * @private
+     * @param {Number} y - The coordinate at which the dotted line should be
+     *      drawn.
+     */
+    var drawDottedRule = function(y) {
         for (var dotX = 0; dotX < axisWidth; dotX += 4) {
             rect(x + dotX, y, 2, 1);
         }
     };
 
-    var draw = function () {
+    /**
+     * @inheritDoc
+     */
+    var draw = function() {
         push();
 
         rectMode(CORNER);
@@ -56,13 +129,22 @@ function NumberAxis (newX, newY, newWidth, newScale, newStart, newEnd,
         pop();
     };
 
+    /**
+     * @inheritDoc
+     */
     var update = function (x, y) { };
 
+    /**
+     * @inheritDoc
+     */
     var onPress = function (x, y) { };
 
+    /**
+     * @inheritDoc
+     */
     var onRelease = function (x, y) { };
 
-    // Init
+    // -- Constructor --
     x = newX;
     y = newY;
     axisWidth = newWidth;
@@ -72,8 +154,7 @@ function NumberAxis (newX, newY, newWidth, newScale, newStart, newEnd,
     interval = newInterval;
     labelStrategy = newLabelStrategy;
 
-    // Attach public members
-    this.drawDottedRule = drawDottedRule;
+    // -- Attach public members --
     this.draw = draw;
     this.update = update;
     this.onPress = onPress;
@@ -81,13 +162,30 @@ function NumberAxis (newX, newY, newWidth, newScale, newStart, newEnd,
 }
 
 
-function YMarker (newX, newY, newWidth, newValue) {
-    // Private vars
+/**
+ * Axis label or "tick mark" on an axis.
+ *
+ * @constructor
+ * @implements {GraphicEntity}
+ *
+ * @param {Number} newX - The left x coordinate of the tick mark.
+ * @param {Number} newY - The mid y coordinate of the tick mark.
+ * @param {Number} newWidth - The width in pixels of the tick mark.
+ * @param {String} newValue - The text that should appear at the tick mark.
+ */
+function YMarker(newX, newY, newWidth, newValue) {
+
+    // -- Private vars --
     var x;
     var y;
     var value;
     var markerWidth;
 
+    // -- Method declarations --
+
+    /**
+     * @inheritDoc
+     */
     var draw = function () {
         push();
 
@@ -103,19 +201,28 @@ function YMarker (newX, newY, newWidth, newValue) {
         pop();
     };
 
+    /**
+     * @inheritDoc
+     */
     var update = function (x, y) { };
 
+    /**
+     * @inheritDoc
+     */
     var onPress = function (x, y) { };
 
+    /**
+     * @inheritDoc
+     */
     var onRelease = function (x, y) { };
 
-    // Init
+    // -- Constructor --
     x = newX;
     y = newY;
     value = newValue;
     markerWidth = newWidth;
 
-    // Attach public members
+    // -- Attach public members --
     this.draw = draw;
     this.update = update;
     this.onPress = onPress;
@@ -123,16 +230,38 @@ function YMarker (newX, newY, newWidth, newValue) {
 }
 
 
-function TinyLegend (newX, newY, newContent, newColor) {
+/**
+ * Small legend showing what colors coorespond to what series in a chart.
+ *
+ * Small display with a square showing a color and a text label appering
+ * immediately to the right of it. A sequence of these acts like a small
+ * lengend for an embedded chart within the visualization.
+ *
+ * @constructor
+ * @implements {GraphicEntity}
+ *
+ * @param {Number} newX - The x coordinate in pixels where the legend should be
+ *      drawn.
+ * @param {Number} newY - The y coordinate in pixels where the lengend should be
+ *      drawn.
+ * @param {String} newContent - The text of the label to appear to the right
+ *      of the chart.
+ * @param {String} newColor - The color of the series within the embedded chart.
+ */
+function TinyLegend(newX, newY, newContent, newColor) {
 
-    // Private vars
+    // -- Private vars --
     var x;
     var y;
     var content;
     var boxColor;
 
-    // Method declarations
-    var draw = function () {
+    // -- Method declarations --
+
+    /**
+     * @inheritDoc
+     */
+    var draw = function() {
         push();
 
         fill(boxColor);
@@ -150,17 +279,28 @@ function TinyLegend (newX, newY, newContent, newColor) {
         pop();
     };
 
-    var update = function (x, y) {};
-    var onPress = function (x, y) {};
-    var onRelease = function (x, y) {};
+    /**
+     * @inheritDoc
+     */
+    var update = function(x, y) {};
+    
+    /**
+     * @inheritDoc
+     */
+    var onPress = function(x, y) {};
+    
+    /**
+     * @inheritDoc
+     */
+    var onRelease = function(x, y) {};
 
-    // Init
+    // -- Constructor --
     x = newX;
     y = newY;
     content = newContent;
     boxColor = newColor;
 
-    // Attach public properties
+    // -- Attach public properties --
     this.draw = draw;
     this.update = update;
     this.onPress = onPress;
@@ -168,47 +308,101 @@ function TinyLegend (newX, newY, newContent, newColor) {
 }
 
 
-function SummaryLegendSection (newName, newColor, newCount) {
-    // Private vars
+/**
+ * Object describing a colored category within a series.
+ *
+ * @constructor
+ *
+ * @param {String} newName - The human-readable name of the series.
+ * @param {String} newColor - The color of the series within the visualization.
+ * @param {Number} newCount - The number of members that are in this group / 
+ *      series.
+ */
+function SummaryLegendSection(newName, newColor, newCount) {
+    // -- Private vars --
     var name;
     var boxColor;
     var count;
 
-    // Method declarations
-    var getName = function () {
+    // -- Method declarations --
+
+    /**
+     * Get the name of this series.
+     *
+     * @return {String} Human-readable name of this series.
+     */
+    var getName = function() {
         return name;
     };
 
-    var getColor = function () {
+    /**
+     * Get the color of this series within the visualization.
+     *
+     * @return {String} Hex value representing the color of this series within
+     *      the visualization.
+     */
+    var getColor = function() {
         return boxColor;
     };
 
-    var getCount = function () {
+    /**
+     * Get the number of members within this visualization.
+     *
+     * @return {Number} The number of members within this series.
+     */
+    var getCount = function() {
         return count;
     };
 
-    // Init
+    // -- Constructor --
     name = newName;
     boxColor = newColor;
     count = newCount;
 
-    // Attach public properties
+    // -- Attach public properties --
     this.getName = getName;
     this.getColor = getColor;
     this.getCount = getCount;
 }
 
 
-function SummaryLegend (newX, newY, newContent, newSections, newScale) {
-    // Private vars
+/**
+ * Small lengend showing the color and count for series within a graph.
+ *
+ * Small legend which shows the color and number of members for a set of series
+ * within the visualization.
+ *
+ * @constructor
+ * @implements {GraphicEntity}
+ *
+ * @param {Number} newX - The x coordinate in pixels where the lengend should
+ *      start when drawn.
+ * @param {Number} newY - The y coordinate in pixels where the lengend should
+ *      start when drawn.
+ * @param {String} newContent - The title to give to the legend. This can
+ *      describe the chart to which this legend is attached.
+ * @param {Array<SummaryLegendSection>} newSections - The series that this
+ *      legend should describe. These objects should include the name and color
+ *      of each series.
+ * @param {LinearScale} newScale - The scale to use when drawing bar charts
+ *      within this legend. Note that this scale does not need to match the
+ *      scale used in the grpahic to which this graphic is attached.
+ */
+function SummaryLegend(newX, newY, newContent, newSections, newScale) {
+
+    // -- Private vars
     var x;
     var y;
     var content;
     var sections;
     var innerScale;
 
-    // Method declarations
-    var draw = function () {
+    // -- Method declarations --
+
+    /**
+     * @inheritDoc
+     */
+    var draw = function() {
         push();
 
         noStroke();
@@ -241,18 +435,29 @@ function SummaryLegend (newX, newY, newContent, newSections, newScale) {
         pop();
     };
 
-    var update = function (x, y) {};
-    var onPress = function (x, y) {};
-    var onRelease = function (x, y) {};
+    /**
+     * @inheritDoc
+     */
+    var update = function(x, y) {};
+    
+    /**
+     * @inheritDoc
+     */
+    var onPress = function(x, y) {};
+    
+    /**
+     * @inheritDoc
+     */
+    var onRelease = function(x, y) {};
 
-    // Init 
+    // -- Constructor --
     x = newX;
     y = newY;
     content = newContent;
     sections = newSections;
     innerScale = newScale;
 
-    // Attach public properties
+    // -- Attach public properties --
     this.draw = draw;
     this.update = update;
     this.onPress = onPress;

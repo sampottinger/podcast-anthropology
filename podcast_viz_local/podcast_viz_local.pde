@@ -19,7 +19,7 @@ void setup () {
     loadColors();
     loadDataset();
     loadGraphicEpisodes();
-    size(WIDTH, HEIGHT);
+    size(950, 650);
 
     introPage = 1;
     introDirty = true;

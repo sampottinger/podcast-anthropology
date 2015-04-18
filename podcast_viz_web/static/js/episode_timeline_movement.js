@@ -1,9 +1,35 @@
-var getToday = function () {
+/**
+ * Logic and structures for the "timeline movement".
+ *
+ * Logic and structures for running a view into the data describing when each
+ * podcast posted episodes.
+ *
+ * @author Sam Pottinger
+ * @license MIT License
+ */
+
+
+// TODO(apottinger): Refactor movements into classes (one class per movement).
+
+
+/**
+ * Get today's date.
+ *
+ * @return {Moment} Moment instance describing today's date according to the
+ *      user's browser.
+ */
+var getToday = function() {
     return moment();
 };
 
 
-var createMonthAggregators = function () {
+/**
+ * Create date aggregators which group episodes by month and year.
+ *
+ * @return {Array<DateAggregationCategory>} List of categories grouping episodes
+ *      together by month and year.
+ */
+var createMonthAggregators = function() {
     var retList = [];
     
     var today = getToday();
@@ -24,7 +50,13 @@ var createMonthAggregators = function () {
 };
 
 
-var createYearAggregators = function () {
+/**
+ * Create date aggreagors which group episodes by yaer.
+ *
+ * @return {Array<DateAggregationCategory>} List of categories grouping episodes
+ *      together by month.
+ */
+var createYearAggregators = function() {
     var retList = [];
     
     var today = getToday();
@@ -46,14 +78,23 @@ var createYearAggregators = function () {
 };
 
 
-var placeAllEpisodesByTime = function (startY) {
+/**
+ * Update the positions of all episode particles for timeline movement.
+ *
+ * Set the target position for all episode particles such that they create
+ * a timeline showing when each episode was released.
+ *
+ * @param {Number} startY - The y coordinate at which the first month of the
+ *      timeline should appear.
+ */
+var placeAllEpisodesByTime = function(startY) {
     // Place episodes
     var aggregators = createYearAggregators();
     aggregators.reverse();
     
-    ORDERED_SHOW_NAMES.forEach(function (showName) {
-        graphicEpisodes.get(showName).forEach(function (episode) {
-            aggregators.forEach(function (aggregator) {
+    ORDERED_SHOW_NAMES.forEach(function(showName) {
+        graphicEpisodes.get(showName).forEach(function(episode) {
+            aggregators.forEach(function(aggregator) {
                 aggregator.processEpisode(episode);
             });
             activeScollableEntities.push(episode);
@@ -64,9 +105,9 @@ var placeAllEpisodesByTime = function (startY) {
     var targetLoc = null;
     var maxY = 0;
     var numAggregators = aggregators.length;
-    aggregators.forEach(function (aggregator) {
+    aggregators.forEach(function(aggregator) {
         var innerGroupNum = 0;
-        aggregator.getMatchedEpisodes().forEach(function (episode) {
+        aggregator.getMatchedEpisodes().forEach(function(episode) {
             var targetX = EPISODE_DIAMETER * Math.floor(innerGroupNum / 5);
             targetX += TIMELINE_GROUP_START_X;
             
@@ -85,7 +126,7 @@ var placeAllEpisodesByTime = function (startY) {
     // Create legend
     var labels = [];
     
-    aggregators.forEach(function (aggregator) {
+    aggregators.forEach(function(aggregator) {
         labels.push(str(aggregator.getStartDate().year()));
     });
     
@@ -97,7 +138,7 @@ var placeAllEpisodesByTime = function (startY) {
         TIMELINE_GROUP_HEIGHT,
         labels
     );
-    legends.forEach(function (legend) {
+    legends.forEach(function(legend) {
         activeScollableEntities.push(legend);
     });
 
@@ -105,7 +146,21 @@ var placeAllEpisodesByTime = function (startY) {
 };
 
 
-var createPostingDifferencesDisplay = function (startY, proto) {
+/**
+ * Create a summary bar chart describing the duration between episode postings.
+ *
+ * Create a bar chart which shows the distribution of how much time passed
+ * between episode postings for a podcast.
+ *
+ * @param {Number} startY - The y coordinate in pixels where the top of this
+ *      chart should appear.
+ * @param {AggregationBarChartProto} proto - Prototype describing how the bar
+ *      chart should be drawn.
+ * @return {Number} The y coordinate to which this bar chart extends. The
+ *      bouding box for this chart would vertically extend from startY to this
+ *      return value.
+ */
+var createPostingDifferencesDisplay = function(startY, proto) {
     var differences = dict();
 
     var i;
@@ -113,7 +168,7 @@ var createPostingDifferencesDisplay = function (startY, proto) {
 
     // Place legends and calculate aggregates
     i = 1;
-    ORDERED_SHOW_NAMES.forEach(function (showName) {
+    ORDERED_SHOW_NAMES.forEach(function(showName) {
         var y = 30 * i + bodyStartY;
 
         activeScollableEntities.push(new TinyLegend(
@@ -124,8 +179,8 @@ var createPostingDifferencesDisplay = function (startY, proto) {
         ));
 
         var diffAgg = new DifferenceAggregator(5);
-        curDataset.getEpisodes().get(showName).forEach(function (episode) {
-            diffAgg.processNewDate(episode.getPubDate());
+        curDataset.getEpisodes().get(showName).forEach(function(episode) {
+            diffAgg.processNewDataPoint(episode.getPubDate());
         });
         differences.set(showName, diffAgg);
 
@@ -142,7 +197,7 @@ var createPostingDifferencesDisplay = function (startY, proto) {
         new RawAxisLabelStrategy()
     );
     proto.setContextStrategy({
-        generateMessage: function (xVal, yVal) {
+        generateMessage: function(xVal, yVal) {
             return nfc(int(yVal)) + "% with " + nfc(int(xVal)) + " days between episodes";
         }
     });
@@ -154,7 +209,18 @@ var createPostingDifferencesDisplay = function (startY, proto) {
 };
 
 
-var createPostingMonthDisplay = function (startY, proto) {
+/**
+ * Create bar chart showing number of episodes per podcast per month.
+ *
+ * @param {Number} startY - The y coordinate in pixels where the top of this bar
+ *      should start.
+ * @param {AggregationBarChartProto} proto - Prototype describing how the bar
+ *      chart should be drawn.
+ * @return {Number} The y coordinate to which this bar chart extends. The
+ *      bouding box for this chart would vertically extend from startY to this
+ *      return value.
+ */
+var createPostingMonthDisplay = function(startY, proto) {
     var months = dict();
 
     var i;
@@ -162,7 +228,7 @@ var createPostingMonthDisplay = function (startY, proto) {
 
     // Place legends and calculate aggregates
     i = 1;
-    ORDERED_SHOW_NAMES.forEach(function (showName) {
+    ORDERED_SHOW_NAMES.forEach(function(showName) {
         var y = 30 * i + bodyStartY;
 
         activeScollableEntities.push(new TinyLegend(
@@ -173,8 +239,8 @@ var createPostingMonthDisplay = function (startY, proto) {
         ));
 
         var diffAgg = new MonthAggregator();
-        curDataset.getEpisodes().get(showName).forEach(function (episode) {
-            diffAgg.processNewDate(episode.getPubDate());
+        curDataset.getEpisodes().get(showName).forEach(function(episode) {
+            diffAgg.processNewDataPoint(episode.getPubDate());
         });
         months.set(showName, diffAgg);
 
@@ -190,8 +256,10 @@ var createPostingMonthDisplay = function (startY, proto) {
         "Episodes by month",
         new MonthNumToYearLabelStrategy()
     );
+
+    // TODO(apottinger): This is pretty fragile kludge-tastic.
     proto.setContextStrategy({
-        generateMessage: function (xVal, yVal) {
+        generateMessage: function(xVal, yVal) {
             var offsetTime = START_DATE.clone().add(Math.floor(xVal), "months");
             return nfc(Math.floor(yVal)) + " episodes in " + offsetTime.format("MMM, YYYY");
         }
@@ -204,7 +272,10 @@ var createPostingMonthDisplay = function (startY, proto) {
 };
 
 
-var enterEpisodeTimeline = function () {
+/**
+ * Driver to transition the visualization into the timeline movement.
+ */
+var enterEpisodeTimeline = function() {
     reportUsage("timeline");
 
     // Clear old elements

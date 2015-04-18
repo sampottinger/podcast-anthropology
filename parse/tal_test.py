@@ -1,3 +1,10 @@
+"""Unit tests for the TAL podcast parser.
+
+@author: Sam Pottinger
+@license: MIT License
+"""
+
+
 import collections
 import datetime
 import unittest
