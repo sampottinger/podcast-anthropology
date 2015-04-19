@@ -8,12 +8,12 @@ var introPage = 1;
 var runIntroFirstPage = function () {
     var numLines = getTextLines("intro_body_1").length;
     numLines += getTextLines("intro_head_1").length;
-    
+
     activeScollableEntities = [];
     activeScollableEntities.push(
         new DescriptionMessage("intro_head_1", "intro_body_1")
     );
-    
+
     activeScollableEntities.push(new Button(
         800,
         INTRO_TEXT_Y + 18 * numLines,
@@ -44,7 +44,7 @@ var runIntroSecondPage = function () {
 
     var numLines = getTextLines("intro_body_2").length;
     numLines += getTextLines("intro_head_2").length;
-    
+
     activeScollableEntities = [];
     activeScollableEntities.push(
         new DescriptionMessage("intro_head_2", "intro_body_2")
@@ -66,7 +66,7 @@ var runIntroSecondPage = function () {
         24,
         "Next",
         {
-            onPress: function () { 
+            onPress: function () {
                 introPage = 3;
                 introDirty = true;
             }
@@ -172,7 +172,7 @@ var runIntroFourthPage = function () {
             curDataset.getShows().get(showName)
         );
         activeScollableEntities.push(showBubble);
-    } 
+    }
 
     // Add next button
     var numLines = getTextLines("intro_body_4").length;
@@ -182,21 +182,33 @@ var runIntroFourthPage = function () {
         INTRO_TEXT_Y + 18 * numLines,
         100,
         24,
-        "Finish",
+        "Next",
         {
             onPress: function () {
                 introPage = 5;
                 introDirty = true;
             }
         }
-    ));   
+    ));
+
+    curScrollSlider = new Slider(
+        WIDTH - SCROLL_WIDTH,
+        WIDTH,
+        START_Y_MAIN + 1,
+        HEIGHT - DETAILS_AREA_HEIGHT - 2,
+        0,
+        lastEnd.y + 50,
+        HEIGHT - DETAILS_AREA_HEIGHT - START_Y_MAIN
+    );
+    activeNonScollableEntities.push(curScrollSlider);
+
+    navActive = true;
 };
 
 
 var runIntroFinalPage = function () {
     activeNonScollableEntities = [];
     activeScollableEntities = [];
-    navActive = true;
 
     var lastEnd = new p5.Vector(0, START_Y_MAIN - 50);
     for (var i=0; i<ORDERED_SHOW_NAMES.length; i++) {
@@ -214,18 +226,6 @@ var runIntroFinalPage = function () {
         );
         activeScollableEntities.push(showBubble);
     }
-
-    curScrollSlider = new Slider(
-        WIDTH - SCROLL_WIDTH,
-        WIDTH,
-        START_Y_MAIN + 1,
-        HEIGHT - DETAILS_AREA_HEIGHT - 2,
-        0,
-        lastEnd.y + 50,
-        HEIGHT - DETAILS_AREA_HEIGHT - START_Y_MAIN
-    );
-    activeNonScollableEntities.push(curScrollSlider);
-
     createNavArea();
 };
 
@@ -258,7 +258,7 @@ function CirclingIdlingStrategy (newCenterPos, newRadius, newNumMillis) {
     radius = newRadius;
     numMillis = newNumMillis;
     started = false;
-    
+
     centerPos = new p5.Vector(newCenterPos.x, newCenterPos.y);
     centerPos.sub(new p5.Vector(-radius, 0));
 

@@ -35,7 +35,7 @@ var drawDetailsArea = function () {
     if (highlightedEpisode !== null) {
         fill(MID_GREY);
         textSize(12);
-        
+
         var headerY = HEIGHT - 30;
         text("Episode", 10, headerY);
         text("Show", 300, headerY);
@@ -43,9 +43,14 @@ var drawDetailsArea = function () {
         text("Date", 700, headerY);
 
         var contentY = headerY + 18;
+
+        var episodeName = highlightedEpisode.getName();
+        if (episodeName.length > 30) {
+            episodeName = episodeName.substring(0, 30) + "...";
+        }
         textSize(14);
         fill(NEAR_BLACK);
-        text(highlightedEpisode.getName(), 10, contentY);
+        text(episodeName, 10, contentY);
         text(highlightedEpisode.getShow(), 300, contentY);
         text(getDurTextLong(highlightedEpisode.getDur()), 500, contentY);
         text(getDateText(highlightedEpisode.getPubDate()), 700, contentY);

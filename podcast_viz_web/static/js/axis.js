@@ -98,7 +98,7 @@ function YMarker (newX, newY, newWidth, newValue) {
 
         textSize(10);
         textAlign(LEFT, CENTER);
-        text(value, x + markerWidth + 2, y);
+        text(value, x + markerWidth + 2, y + 4);
 
         pop();
     };
@@ -245,7 +245,7 @@ function SummaryLegend (newX, newY, newContent, newSections, newScale) {
     var onPress = function (x, y) {};
     var onRelease = function (x, y) {};
 
-    // Init 
+    // Init
     x = newX;
     y = newY;
     content = newContent;
