@@ -196,7 +196,7 @@ function YMarker(newX, newY, newWidth, newValue) {
 
         textSize(10);
         textAlign(LEFT, CENTER);
-        text(value, x + markerWidth + 2, y);
+        text(value, x + markerWidth + 2, y + 4);
 
         pop();
     };
