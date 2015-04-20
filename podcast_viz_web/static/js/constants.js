@@ -39,7 +39,7 @@ var BLACK = "#000000";
 
 /**
  * Color to use for "dark grey" geometries and text.
- * 
+ *
  * @const
  */
 var DARK_GREY = "#555555";
@@ -341,7 +341,7 @@ var TIMELINE_GROUP_HEIGHT;
 var TIMELINE_GROUP_START_X = 150;
 
 /**
- * 
+ *
  */
 var TIMELINE_GROUP_START_Y = 140;
 
@@ -367,7 +367,7 @@ var WIDTH = 950;
  */
 var loadSemiConstants = function() {
 
-    EPISODE_DIAMETER =  = EPISODE_HOVER_DISTANCE * 2 + 2;
+    EPISODE_DIAMETER = EPISODE_HOVER_DISTANCE * 2 + 2;
     TIMELINE_GROUP_HEIGHT = EPISODE_DIAMETER * 5 + 40;
     DURATION_GROUP_HEIGHT = EPISODE_DIAMETER * 21 + 40;
 

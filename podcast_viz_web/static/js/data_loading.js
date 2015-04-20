@@ -142,7 +142,7 @@ var loadTopicNamesSet = function(topics) {
     topicSet = [];
 
     topics.forEach(function(topic) {
-        topicSet.push(topic.getName());
+        topicSet.push(topic["name"]);
     });
 };
 
