@@ -115,3 +115,9 @@ Works Cited / Sources
  - Victor, Bret. "Media for Thinking the Unthinkable." Vimeo. MIT Media Lab, 4 Apr. 2013. Web. 15 Apr. 2015.
  - Wood, Tim, and Iskren Cherne. "Moment.js." Moment.js. N.p., n.d. Web. 15 Apr. 2015.
  - Zickuhr, Kathryn. "Over a Quarter of Internet Users Download or Listen to Podcasts." Fact Tank. Pew Research Center, 27 Dec. 2013. Web. 15 Apr. 2015.
+ 
+<br>
+
+Ongoing work
+------------------------------------------------------------------------------------------------------------------------
+I love this project dearly but, unfortunately, I wrote this while between jobs and my new gig precludes my continued involvement. I uploaded lingering changes to help future work but alas I have written my last for now. If you are interested in picking up the baton, shoot me a note or fork. :)
