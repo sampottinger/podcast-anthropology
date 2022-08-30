@@ -7,9 +7,10 @@ import flask
 
 CANDIDATE_QUERY_STR = 'select count(*) from `usage-domain` where user_id="%s"'
 CANDIDATE_CHARS = string.digits + string.letters
+MASK_IP = True
 
 app = flask.Flask(__name__)
-app.debug = True
+app.debug = False
 app.config.from_pyfile('application.cfg', silent=False)
 
 sdb_conn = boto.sdb.connect_to_region(
@@ -24,7 +25,7 @@ def generate_id():
     sdb_domain = sdb_conn.get_domain(app.config['DOMAIN'])
     candidate = None
     while not candidate_accepted:
-        candidate = ''.join(random.choice(CANDIDATE_CHARS) for _ in range(10)) 
+        candidate = ''.join(random.choice(CANDIDATE_CHARS) for _ in range(10))
         query_str = CANDIDATE_QUERY_STR % candidate
         rs = sdb_domain.select(query_str)
         count_info = rs.next()
@@ -36,6 +37,10 @@ def generate_id():
 def report_action(user_id, ip_addr, agent, action):
     domain_meta = sdb_conn.domain_metadata(app.config['DOMAIN'])
     overall_count = domain_meta.item_count
+
+    ip_addr = '.'.join(ip_addr.split('.')[:2])[:7]
+    if MASK_IP:
+        ip_addr = 'mask'
 
     sdb_domain = sdb_conn.get_domain(app.config['DOMAIN'])
     key = str(user_id) + '_' + ip_addr + '_' + str(overall_count)
@@ -59,6 +64,11 @@ def web_tool():
         'podcast_viz_web.html',
         page='web'
     )
+
+@app.route('/logo.jpg')
+def logo():
+    print(flask.request.headers)
+    return 'Not Found', 404
 
 
 @app.route('/desktop')
