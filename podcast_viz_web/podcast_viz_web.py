@@ -56,10 +56,6 @@ def report_action(user_id, ip_addr, agent, action):
 
 @app.route('/')
 def web_tool():
-    # Assign an ID if not already provided
-    flask.session['user_id'] = flask.session.get('user_id', generate_id())
-
-    # Render homepage
     return flask.render_template(
         'podcast_viz_web.html',
         page='web'
@@ -105,7 +101,7 @@ def terms():
 
 @app.route('/usage', methods=['POST'])
 def usage():
-    user_id = flask.session.get('user_id', generate_id())
+    user_id = generate_id()
     ip_addr = flask.request.remote_addr
     agent = flask.request.headers.get('User-Agent')
     action = flask.request.form['action']
