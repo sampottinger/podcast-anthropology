@@ -2,6 +2,8 @@ Podcast Anthropology
 ================================================================================
 Visualization and natural language processing project for understanding the "nature of podcasts" and seeing their human listeners through topic analysis.
 
+**Note that this project is now effectively in archive.**
+
 <br>
 
 Purpose
